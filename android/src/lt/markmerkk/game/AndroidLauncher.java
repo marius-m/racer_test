@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import lt.markmerkk.game.MyGdxGame;
+import main.java.lt.markmerkk.app.MyGdxGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
