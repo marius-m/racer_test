@@ -36,14 +36,20 @@ allprojects {
 
 project(":desktop") {
     apply plugin: "java"
+    apply plugin: "kotlin"
 
     dependencies {
         compile project(":core")
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+
         compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+
+        testCompile 'junit:junit:4.11'
+        testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
     }
 }
 
