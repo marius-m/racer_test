@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.BoxProperty
+import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
 
@@ -28,10 +29,13 @@ class GameScreen : Screen {
     lateinit var debugMatrix : Matrix4
     lateinit var debugRenderer: Box2DDebugRenderer
 
+    lateinit var car: Car // Should be extracted later
+
     fun create() {
         world = World(Vector2(0.0f, 0.0f), true)
 
         camera = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+        car = Car(world, Vector2(20f, 10f), Math.PI.toFloat())
 
         worldWidth = camera.viewportWidth.toFloat() / PIXELS_PER_METER
         worldHeight = camera.viewportHeight.toFloat() / PIXELS_PER_METER
