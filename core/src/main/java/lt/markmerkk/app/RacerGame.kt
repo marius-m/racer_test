@@ -12,7 +12,7 @@ class RacerGame : Game() {
 
     override fun create() {
         val gameScreen = GameScreen()
-        gameScreen.onCreate()
+        gameScreen.create()
         screen = gameScreen
     }
 }

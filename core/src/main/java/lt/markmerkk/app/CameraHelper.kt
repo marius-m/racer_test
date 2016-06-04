@@ -16,7 +16,7 @@ class CameraHelper(
 ) {
     var viewportWidth: Int = 0
     var viewportHeight: Int = 0
-    val cameraCombine : Matrix4
+    val combine: Matrix4
         get() = camera.combined
 
     private val screenWidth: Int
