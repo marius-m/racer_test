@@ -1,52 +1,27 @@
 package lt.markmerkk.app.box2d.temp_components
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.*
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef
+import com.badlogic.gdx.physics.box2d.Body
+import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.box2d.Car
 
 /**
  * @author mariusmerkevicius
- * @since 2016-06-05
+ * @since 2016-08-28
  */
-class Wheel(
-        val world: World,
-        val car: Car,
-        val posX: Float,
-        val posY: Float,
-        val width: Float,
-        val height: Float
-) {
+interface Wheel {
+    val world: World
     val body: Body
+    val car: Car
+    var posX: Float
+    var posY: Float
+    val width: Float
+    val height: Float
 
-    init {
-        //init body
-        val bodyDef = BodyDef()
-        bodyDef.type = BodyDef.BodyType.DynamicBody
-        bodyDef.position.set(car.body.getWorldPoint(Vector2(posX, posY)))
-        bodyDef.angle = car.body.angle
-        this.body = world.createBody(bodyDef)
+    val powered: Boolean
 
-        //init shape
-        val fixtureDef = FixtureDef()
-        fixtureDef.density = 1.0f
-        fixtureDef.isSensor = true //wheel does not participate in collision calculations: resulting complications are unnecessary
-
-        val wheelShape = PolygonShape()
-        wheelShape.setAsBox(width / 2, height / 2)
-        fixtureDef.shape = wheelShape
-
-        this.body.createFixture(fixtureDef)
-        wheelShape.dispose()
-
-        val jointdef = RevoluteJointDef()
-        jointdef.initialize(car.body, body, body.worldCenter)
-        jointdef.enableMotor = false
-        world.createJoint(jointdef)
-    }
-
-    companion object {
-        const val PIXELS_PER_METER = 60.0f
-    }
-
+    fun directionVector(): Vector2
+    fun localVelocity(): Vector2
+    fun changeAngle(angle: Float)
+    fun killSidewayVector()
 }
