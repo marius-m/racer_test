@@ -83,6 +83,13 @@ class GameScreen : Screen {
             car.steer = Car.STEER_NONE
         }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            car.accelerate = Car.ACC_FORWARD
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            car.accelerate = Car.ACC_BACKWARD
+        } else {
+            car.accelerate = Car.ACC_NONE
+        }
 
         world.step(Gdx.app.graphics.deltaTime, 3, 3)
         world.clearForces()
