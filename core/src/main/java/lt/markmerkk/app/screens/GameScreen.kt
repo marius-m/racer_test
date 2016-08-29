@@ -1,6 +1,7 @@
 package lt.markmerkk.app.screens
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -9,7 +10,6 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
-import lt.markmerkk.app.box2d.BoxProperty
 import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
@@ -35,7 +35,7 @@ class GameScreen : Screen {
         world = World(Vector2(0.0f, 0.0f), true)
 
         camera = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-        car = Car(world, Vector2(20f, 10f), Math.PI.toFloat())
+        car = Car(world, Vector2(20f, 10f))
 
         worldWidth = camera.viewportWidth.toFloat() / PIXELS_PER_METER
         worldHeight = camera.viewportHeight.toFloat() / PIXELS_PER_METER
@@ -66,7 +66,7 @@ class GameScreen : Screen {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        //camera.update(car.body.getPosition().x * PIXELS_PER_METER, car.body.getPosition().y * PIXELS_PER_METER)
+//        camera.update(car.body.position.x * PIXELS_PER_METER, car.body.position.y * PIXELS_PER_METER)
 
         world.step(Gdx.app.graphics.deltaTime, 3, 3)
         world.clearForces()
@@ -74,6 +74,20 @@ class GameScreen : Screen {
         spriteBatch.begin()
         debugRenderer.render(world, debugMatrix)
         spriteBatch.end()
+
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            car.steer = Car.STEER_LEFT
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            car.steer = Car.STEER_RIGHT
+        } else {
+            car.steer = Car.STEER_NONE
+        }
+
+
+        world.step(Gdx.app.graphics.deltaTime, 3, 3)
+        world.clearForces()
+
+        car.update(Gdx.app.graphics.deltaTime)
     }
 
     override fun resize(width: Int, height: Int) { }
