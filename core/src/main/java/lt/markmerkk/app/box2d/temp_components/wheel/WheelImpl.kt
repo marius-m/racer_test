@@ -15,9 +15,8 @@ class WheelImpl(
         posX: Float,
         posY: Float,
         width: Float,
-        height: Float,
-        powered: Boolean
-) : BaseWheelImpl(world, car, posX, posY, width, height, powered) {
+        height: Float
+) : BaseWheelImpl(world, car, posX, posY, width, height, false) {
 
     override fun initJoint(world: World, car: Car) {
         val jointdef = PrismaticJointDef()

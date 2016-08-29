@@ -3,6 +3,8 @@ package lt.markmerkk.app.box2d
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import lt.markmerkk.app.box2d.temp_components.wheel.RevolvingWheelImpl
+import lt.markmerkk.app.box2d.temp_components.wheel.Wheel
+import lt.markmerkk.app.box2d.temp_components.wheel.WheelImpl
 import java.util.*
 
 /**
@@ -35,17 +37,17 @@ class Car(
         fixtureDef.shape = carShape
         body.createFixture(fixtureDef)
 
-        val wheels = listOf<RevolvingWheelImpl>(
+        val wheels = listOf<Wheel>(
                 RevolvingWheelImpl(world = world, car = this,
                         posX = -0.5f, posY = -0.6f,
                         width = 0.2f, height = 0.4f),
                 RevolvingWheelImpl(world = world, car = this,
                         posX = 0.5f, posY = -0.6f,
                         width = 0.2f, height = 0.4f),
-                RevolvingWheelImpl(world = world, car = this,
+                WheelImpl(world = world, car = this,
                         posX = -0.5f, posY = 0.6f,
                         width = 0.2f, height = 0.4f),
-                RevolvingWheelImpl(world = world, car = this,
+                WheelImpl(world = world, car = this,
                         posX = 0.5f, posY = 0.6f,
                         width = 0.2f, height = 0.4f)
         )
