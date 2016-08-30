@@ -19,8 +19,8 @@ class Car(
     val height = 2f
     val maxSteerAngle = 25f
     val minSteerAngle = 15f
-    val power = 15f
-    val maxSpeed = 50f
+    val power = 5f
+    val maxSpeed = 15f
     val angle = Math.PI.toFloat()
     lateinit var wheels: List<Wheel>
 
