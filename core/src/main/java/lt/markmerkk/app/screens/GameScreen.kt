@@ -35,9 +35,9 @@ class GameScreen : Screen {
     lateinit var debugMatrix : Matrix4
     lateinit var debugRenderer: Box2DDebugRenderer
 
-    val screenViewport = ScreenViewport()
-    lateinit var stage: Stage
-    lateinit var touchpad: Touchpad
+//    val screenViewport = ScreenViewport()
+//    lateinit var stage: Stage
+//    lateinit var touchpad: Touchpad
 
     lateinit var car: Car // Should be extracted later
 
@@ -63,36 +63,25 @@ class GameScreen : Screen {
         val componentPen = PenComponent(world, worldWidth, worldHeight) // todo : This should be exported in the long run
         val componentWall = WallComponent(world, worldWidth, worldHeight)// todo : This should be exported in the long run
 
-        //Create a touchpad skin
-        val touchpadSkin = Skin()
-        //Set background image
-        touchpadSkin.add("touchBackground", Texture("data/touchBackground.png"))
-        //Set knob image
-        touchpadSkin.add("touchKnob", Texture("data/touchKnob.png"))
-        //Create TouchPad Style
-        val touchpadStyle = Touchpad.TouchpadStyle()
-        //Create Drawable's from TouchPad skin
-        val touchBackground = touchpadSkin.getDrawable("touchBackground")
-        val touchKnob = touchpadSkin.getDrawable("touchKnob")
-        //Apply the Drawables to the TouchPad Style
-        touchpadStyle.background = touchBackground
-        touchpadStyle.knob = touchKnob
-        //Create new TouchPad with the created style
-        touchpad = Touchpad(10.toFloat(), touchpadStyle)
-        //setBounds(x,y,width,height)
-        touchpad.setBounds(15.toFloat(), 15.toFloat(), 150.toFloat(), 150.toFloat())
+//        val touchpadSkin = Skin()
+//        touchpadSkin.add("touchBackground", Texture("data/touchBackground.png"))
+//        touchpadSkin.add("touchKnob", Texture("data/touchKnob.png"))
+//        val touchpadStyle = Touchpad.TouchpadStyle()
+//        val touchBackground = touchpadSkin.getDrawable("touchBackground")
+//        val touchKnob = touchpadSkin.getDrawable("touchKnob")
+//        touchpadStyle.background = touchBackground
+//        touchpadStyle.knob = touchKnob
+//        touchpad = Touchpad(10.toFloat(), touchpadStyle)
+//        touchpad.setBounds(15.toFloat(), 15.toFloat(), 150.toFloat(), 150.toFloat())
 
-        //Create a Stage and add TouchPad
-        stage = Stage(screenViewport, spriteBatch)
-        stage.addActor(touchpad)
-        Gdx.input.inputProcessor = stage
+//        stage = Stage(screenViewport, spriteBatch)
+//        stage.addActor(touchpad)
+//        Gdx.input.inputProcessor = stage
 
-        //Create block sprite
-        val blockTexture = Texture(Gdx.files.internal("data/block.png"))
-        val blockSprite = Sprite(blockTexture)
-        //Set position to centre of the screen
-        blockSprite.setPosition(Gdx.graphics.width / 2 - blockSprite.getWidth() / 2, Gdx.graphics.height / 2 - blockSprite.getHeight() / 2)
-        val blockSpeed = 5
+//        val blockTexture = Texture(Gdx.files.internal("data/block.png"))
+//        val blockSprite = Sprite(blockTexture)
+//        blockSprite.setPosition(Gdx.graphics.width / 2 - blockSprite.getWidth() / 2, Gdx.graphics.height / 2 - blockSprite.getHeight() / 2)
+//        val blockSpeed = 5
     }
 
     // Callback methods
@@ -116,46 +105,46 @@ class GameScreen : Screen {
         debugRenderer.render(world, debugMatrix)
         spriteBatch.end()
 
-        println("KnobX: ${touchpad.knobPercentX} / KnobY: ${touchpad.knobPercentY}")
+//        println("KnobX: ${touchpad.knobPercentX} / KnobY: ${touchpad.knobPercentY}")
 
-        if (touchpad.knobPercentX < -0.5f) {
-            car.steer = Car.STEER_LEFT
-        } else if (touchpad.knobPercentX > 0.5f) {
-            car.steer = Car.STEER_RIGHT
-        } else {
-            car.steer = Car.STEER_NONE
-        }
-
-        if (touchpad.knobPercentY > 0.5f) {
-            car.accelerate = Car.ACC_FORWARD
-        } else if (touchpad.knobPercentY < -0.5f) {
-            car.accelerate = Car.ACC_BACKWARD
-        } else {
-            car.accelerate = Car.ACC_NONE
-        }
-
-//        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//        if (touchpad.knobPercentX < -0.5f) {
 //            car.steer = Car.STEER_LEFT
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//        } else if (touchpad.knobPercentX > 0.5f) {
 //            car.steer = Car.STEER_RIGHT
 //        } else {
 //            car.steer = Car.STEER_NONE
 //        }
 
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+//        if (touchpad.knobPercentY > 0.5f) {
 //            car.accelerate = Car.ACC_FORWARD
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+//        } else if (touchpad.knobPercentY < -0.5f) {
 //            car.accelerate = Car.ACC_BACKWARD
 //        } else {
 //            car.accelerate = Car.ACC_NONE
 //        }
 
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            car.steer = Car.STEER_LEFT
+        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            car.steer = Car.STEER_RIGHT
+        } else {
+            car.steer = Car.STEER_NONE
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            car.accelerate = Car.ACC_FORWARD
+        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            car.accelerate = Car.ACC_BACKWARD
+        } else {
+            car.accelerate = Car.ACC_NONE
+        }
+
         world.step(Gdx.app.graphics.deltaTime, 3, 3)
         world.clearForces()
 
         car.update(Gdx.app.graphics.deltaTime)
-        stage.act(delta)
-        stage.draw()
+//        stage.act(delta)
+//        stage.draw()
     }
 
     override fun resize(width: Int, height: Int) { }

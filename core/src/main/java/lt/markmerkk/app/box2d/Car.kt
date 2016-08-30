@@ -1,10 +1,12 @@
 package lt.markmerkk.app.box2d
 
+import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import lt.markmerkk.app.box2d.temp_components.wheel.RevolvingWheelImpl
 import lt.markmerkk.app.box2d.temp_components.wheel.Wheel
 import lt.markmerkk.app.box2d.temp_components.wheel.WheelImpl
+import lt.markmerkk.app.utils.Utils
 
 /**
  * @author mariusmerkevicius
@@ -82,6 +84,8 @@ class Car(
     }
 
     fun update(deltaTime: Float) {
+//        println("Car angle: ${body.angle}")
+
         wheels.forEach { it.killSidewayVector() }
 
         val increase = maxSteerAngle * deltaTime * 5f
@@ -90,6 +94,7 @@ class Car(
             STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
             else -> wheelAngle = 0f
         }
+        println("SuggestAngle: $wheelAngle")
         wheels.filterIsInstance<RevolvingWheelImpl>()
                 .forEach { it.changeAngle(wheelAngle) }
 
@@ -130,6 +135,8 @@ class Car(
     }
 
     companion object {
+        private val TWO_PI = 2 * Math.PI
+
         const val STEER_NONE = 0
         const val STEER_LEFT = 1
         const val STEER_RIGHT = 2
