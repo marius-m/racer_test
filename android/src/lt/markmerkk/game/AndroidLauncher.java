@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import lt.markmerkk.app.screens.GameScreen;
+import lt.markmerkk.app.RacerGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
@@ -12,6 +12,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         // fixme no initializer for android
-//		initialize(GameScreen(), config);
+		initialize(new RacerGame(), config);
 	}
 }
