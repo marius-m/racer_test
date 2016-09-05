@@ -19,10 +19,10 @@ class Car(
     val body : Body
     val width = 1f
     val height = 2f
-    val maxSteerAngle = 25f
+    val maxSteerAngle = 30f
     val minSteerAngle = 15f
     val power = 5f
-    val maxSpeed = 15f
+    val maxSpeed = 20f
     val angle = Math.PI.toFloat()
     lateinit var wheels: List<Wheel>
 
@@ -49,7 +49,7 @@ class Car(
 
         val fixtureDef = FixtureDef()
         fixtureDef.density = 1.0f
-        fixtureDef.friction = 0.4f
+        fixtureDef.friction = 0.1f
         fixtureDef.restitution = 0.2f
 
         val carShape = PolygonShape()
