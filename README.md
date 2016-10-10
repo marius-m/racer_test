@@ -8,7 +8,7 @@ Top to down test racer game to try out:
 
 As far as I've tried, runs on all platforms (mac desktop, android tablet/phone, iphone).
 
-![Racer game](mgs/racer.gif)
+![Racer game](imgs/racer.gif)
 
 ### Refs
 
