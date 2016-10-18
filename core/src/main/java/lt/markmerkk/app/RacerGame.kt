@@ -1,7 +1,6 @@
 package lt.markmerkk.app
 
 import com.badlogic.gdx.Game
-import com.badlogic.gdx.Screen
 import lt.markmerkk.app.screens.GameScreen
 
 /**

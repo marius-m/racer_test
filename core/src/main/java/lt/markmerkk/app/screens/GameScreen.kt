@@ -46,13 +46,17 @@ class GameScreen : Screen {
 
         camera = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
         car = Car(world, Vector2(20f, 10f))
+        car.sprite.setOrigin(
+                (car.sprite.width / 2).toFloat(),
+                (car.sprite.height / 2).toFloat()
+        )
 
         worldWidth = camera.viewportWidth.toFloat() / PIXELS_PER_METER
         worldHeight = camera.viewportHeight.toFloat() / PIXELS_PER_METER
 
         spriteBatch = SpriteBatch()
         debugRenderer = Box2DDebugRenderer()
-        //spriteBatch.projectionMatrix = camera.combine
+        spriteBatch.projectionMatrix = camera.combine
         debugMatrix = camera.combine
         debugMatrix.scale(
                 PIXELS_PER_METER.toFloat(),
@@ -101,8 +105,14 @@ class GameScreen : Screen {
         world.step(Gdx.app.graphics.deltaTime, 3, 3)
         world.clearForces()
 
-        spriteBatch.begin()
         debugRenderer.render(world, debugMatrix)
+        spriteBatch.begin()
+        car.sprite.draw(spriteBatch)
+        car.sprite.setPosition(
+                PIXELS_PER_METER * car.body.position.x - car.sprite.width / 2,
+                PIXELS_PER_METER * car.body.position.y - car.sprite.height / 2
+        )
+        car.sprite.rotation = Math.toDegrees(car.body.angle.toDouble()).toFloat()
         spriteBatch.end()
 
 //        println("KnobX: ${touchpad.knobPercentX} / KnobY: ${touchpad.knobPercentY}")
@@ -153,6 +163,7 @@ class GameScreen : Screen {
 
     override fun dispose() {
         spriteBatch.dispose()
+        car.texture.dispose()
     }
 
     companion object {

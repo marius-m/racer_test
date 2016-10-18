@@ -1,5 +1,9 @@
 package lt.markmerkk.app.box2d
 
+import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.MathUtils
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
@@ -16,6 +20,9 @@ class Car(
         val world: World,
         val position: Vector2
 ) {
+    val texture = Texture(Gdx.files.internal("data/car_small.png"))
+    val textureRegion = TextureRegion(texture, 64, 37)
+    val sprite = Sprite(texture)
     val body : Body
     val width = 1f
     val height = 2f
@@ -71,6 +78,11 @@ class Car(
                         posX = 0.5f, posY = 0.6f,
                         width = 0.2f, height = 0.4f)
         )
+//        val playerTexture = ImageCache.getTexture("playerCar")
+//        playerSprite = Sprite(playerTexture)
+//        playerSprite.setPosition(PIXELS_PER_METER * car.body.getPosition().x - playerTexture.getRegionWidth() / 2,
+//                PIXELS_PER_METER * car.body.getPosition().y - playerTexture.getRegionHeight() / 2)
+
     }
 
     fun getSpeedKMH(): Float {
@@ -94,7 +106,7 @@ class Car(
             STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
             else -> wheelAngle = 0f
         }
-        println("SuggestAngle: $wheelAngle")
+//        println("SuggestAngle: $wheelAngle")
         wheels.filterIsInstance<RevolvingWheelImpl>()
                 .forEach { it.changeAngle(wheelAngle) }
 
