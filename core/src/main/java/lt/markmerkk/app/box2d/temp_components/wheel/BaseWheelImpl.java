@@ -48,7 +48,6 @@ public abstract class BaseWheelImpl implements Wheel {
    }
 
    public void changeAngle(float angle) {
-      System.out.println("Setting angle to "+angle);
       body.setTransform(
               body.getPosition(),
               car.getBody().getAngle() + (float) Math.toRadians(angle)

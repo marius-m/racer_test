@@ -11,7 +11,6 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import lt.markmerkk.app.CameraHelper;
 import lt.markmerkk.app.box2d.Car;
-import lt.markmerkk.app.box2d.Constants;
 import lt.markmerkk.app.box2d.temp_components.PenComponent;
 import lt.markmerkk.app.box2d.temp_components.WallComponent;
 import org.jetbrains.annotations.NotNull;
@@ -77,8 +76,8 @@ public final class GameScreen implements Screen {
       Box2DDebugRenderer debugRenderer = this.debugRenderer;
       debugRenderer.render(world, debugMatrix);
       car.getSprite().setPosition(
-              Constants.PIXELS_PER_METER * car.getBody().getPosition().x,
-              Constants.PIXELS_PER_METER * car.getBody().getPosition().y
+              PIXELS_PER_METER * car.getBody().getPosition().x - car.getSprite().getWidth() / 2,
+              PIXELS_PER_METER * car.getBody().getPosition().y - car.getSprite().getHeight() / 2
       );
       car.getSprite().setRotation((float)Math.toDegrees((double)car.getBody().getAngle()));
       spriteBatch.begin();
