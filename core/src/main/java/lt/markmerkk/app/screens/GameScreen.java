@@ -3,7 +3,6 @@ package lt.markmerkk.app.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
@@ -13,7 +12,14 @@ import lt.markmerkk.app.CameraHelper;
 import lt.markmerkk.app.box2d.Car;
 import lt.markmerkk.app.box2d.temp_components.PenComponent;
 import lt.markmerkk.app.box2d.temp_components.WallComponent;
+import lt.markmerkk.app.network.RaceServer;
+import org.java_websocket.WebSocketImpl;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.UnknownHostException;
 
 public final class GameScreen implements Screen {
    private float worldWidth;
@@ -33,6 +39,21 @@ public final class GameScreen implements Screen {
    public static final int VIRTUAL_WIDTH = 480;
    public static final int VIRTUAL_HEIGHT = 320;
    public static final int PIXELS_PER_METER = 16;
+
+   private RaceServer server;
+   private BufferedReader sysin = new BufferedReader( new InputStreamReader( System.in ) );
+
+   public GameScreen() {
+      WebSocketImpl.DEBUG = true;
+      int port = 8887; // 843 flash policy port
+      try {
+         server = new RaceServer(port);
+         server.start();
+         System.out.println( "ChatServer started on port: " + server.getPort() );
+      } catch (UnknownHostException e) {
+         e.printStackTrace();
+      }
+   }
 
    public final void create() {
       this.world = new World(new Vector2(0.0F, 0.0F), true);
@@ -68,6 +89,7 @@ public final class GameScreen implements Screen {
    }
 
    public void render(float delta) {
+//      handleServer();
       Gdx.gl.glClearColor(0.0F, 0.0F, 0.2F, 1.0F);
       Gdx.gl.glClear(16384);
 
@@ -103,6 +125,21 @@ public final class GameScreen implements Screen {
       world.step(Gdx.app.getGraphics().getDeltaTime(), 3, 3);
       world.clearForces();
       car.update(Gdx.app.getGraphics().getDeltaTime());
+      handleServer();
+   }
+
+   private void handleServer() {
+      if (server == null) return;
+      try {
+         server.sendToAll(
+                 "CarPos: " +
+                         car.getSprite().getX() +
+                         "x" +
+                         car.getSprite().getY()
+         );
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
    }
 
    public void resize(int width, int height) {
@@ -114,6 +151,15 @@ public final class GameScreen implements Screen {
    public void dispose() {
       spriteBatch.dispose();
       car.getTexture().dispose();
+      try {
+         if (server != null) {
+            server.stop();
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
    }
 
 }

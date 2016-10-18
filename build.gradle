@@ -4,6 +4,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+        maven { url "https://mvnrepository.com/artifact/" }
         jcenter()
     }
     dependencies {
@@ -120,12 +121,25 @@ project(":core") {
 
 
     dependencies {
+        compile "org.java-websocket:Java-WebSocket:1.3.0"
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+
+        testCompile 'junit:junit:4.11'
+        testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    }
+}
+
+project(":observer") {
+    apply plugin: "java"
+
+    dependencies {
+        compile "org.java-websocket:Java-WebSocket:1.3.0"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
         testCompile 'junit:junit:4.11'
         testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
