@@ -20,6 +20,8 @@ import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
 import lt.markmerkk.app.factory.PhysicsComponentFactory
+import lt.markmerkk.app.mvp.DebugPresenterImpl
+import lt.markmerkk.app.mvp.DebugView
 import lt.markmerkk.app.mvp.WorldPresenterImpl
 import lt.markmerkk.app.mvp.WorldView
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
@@ -29,13 +31,11 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  * @author mariusmerkevicius
  * @since 2016-06-04
  */
-class GameScreen : Screen, SpritesView, WorldView {
+class GameScreen : Screen, SpritesView, WorldView, DebugView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world : World = World(Vector2(0.0f, 0.0f), true)
     private val componentFactory = PhysicsComponentFactory(world, camera)
-    lateinit var debugMatrix : Matrix4
-    lateinit var debugRenderer: Box2DDebugRenderer
 
     val spritesPresenter by lazy {
         SpritesPresenterImpl(
@@ -46,8 +46,13 @@ class GameScreen : Screen, SpritesView, WorldView {
     }
 
     val worldPresenter by lazy {
-        WorldPresenterImpl(
-                world
+        WorldPresenterImpl(world)
+    }
+
+    val debugPresenter by lazy {
+        DebugPresenterImpl(
+                world,
+                camera
         )
     }
 
@@ -64,13 +69,7 @@ class GameScreen : Screen, SpritesView, WorldView {
         componentFactory.createPen()
 
         spritesPresenter.onAttach()
-        debugRenderer = Box2DDebugRenderer()
-        debugMatrix = camera.combine
-        debugMatrix.scale(
-                PIXELS_PER_METER.toFloat(),
-                PIXELS_PER_METER.toFloat(),
-                PIXELS_PER_METER.toFloat()
-        )
+        debugPresenter.onAttach()
     }
 
     // Callback methods
@@ -85,7 +84,6 @@ class GameScreen : Screen, SpritesView, WorldView {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        debugRenderer.render(world, debugMatrix)
 
         car.sprite.setPosition(
                 PIXELS_PER_METER * car.body.position.x - car.sprite.width / 2,
@@ -112,6 +110,7 @@ class GameScreen : Screen, SpritesView, WorldView {
         car.update(delta)
         worldPresenter.render()
         spritesPresenter.render()
+        debugPresenter.render()
     }
 
     override fun resize(width: Int, height: Int) { }
@@ -121,6 +120,7 @@ class GameScreen : Screen, SpritesView, WorldView {
     override fun dispose() {
         spritesPresenter.onDetach()
         worldPresenter.onDetach()
+        debugPresenter.onDetach()
         car.texture.dispose()
     }
 
