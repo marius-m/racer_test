@@ -19,6 +19,8 @@ import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
+import lt.markmerkk.app.mvp.WorldPresenterImpl
+import lt.markmerkk.app.mvp.WorldView
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -26,13 +28,13 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  * @author mariusmerkevicius
  * @since 2016-06-04
  */
-class GameScreen : Screen, SpritesView {
+class GameScreen : Screen, SpritesView, WorldView {
 
     private var worldWidth: Float = 0.toFloat()
     private var worldHeight: Float = 0.toFloat()
 
-    lateinit var camera: CameraHelper
-    lateinit var world : World
+    private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
+    private val world : World = World(Vector2(0.0f, 0.0f), true)
     lateinit var debugMatrix : Matrix4
     lateinit var debugRenderer: Box2DDebugRenderer
 
@@ -43,13 +45,15 @@ class GameScreen : Screen, SpritesView {
                 car.sprite
         )
     }
+    val worldPresenter by lazy {
+        WorldPresenterImpl(
+                world
+        )
+    }
 
     lateinit var car: Car // Should be extracted later
 
     fun create() {
-        world = World(Vector2(0.0f, 0.0f), true)
-
-        camera = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
         car = Car(world, Vector2(20f, 10f))
         car.sprite.setOrigin(
                 (car.sprite.width / 2).toFloat(),
@@ -84,9 +88,6 @@ class GameScreen : Screen, SpritesView {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        world.step(Gdx.app.graphics.deltaTime, 3, 3)
-        world.clearForces()
-
         debugRenderer.render(world, debugMatrix)
 
         car.sprite.setPosition(
@@ -111,10 +112,8 @@ class GameScreen : Screen, SpritesView {
             car.accelerate = Car.ACC_NONE
         }
 
-        world.step(Gdx.app.graphics.deltaTime, 3, 3)
-        world.clearForces()
-
-        car.update(Gdx.app.graphics.deltaTime)
+        car.update(delta)
+        worldPresenter.render()
         spritesPresenter.render()
     }
 
@@ -124,6 +123,7 @@ class GameScreen : Screen, SpritesView {
 
     override fun dispose() {
         spritesPresenter.onDetach()
+        worldPresenter.onDetach()
         car.texture.dispose()
     }
 
