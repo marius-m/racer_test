@@ -19,6 +19,7 @@ import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
+import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.WorldPresenterImpl
 import lt.markmerkk.app.mvp.WorldView
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
@@ -30,11 +31,9 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  */
 class GameScreen : Screen, SpritesView, WorldView {
 
-    private var worldWidth: Float = 0.toFloat()
-    private var worldHeight: Float = 0.toFloat()
-
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world : World = World(Vector2(0.0f, 0.0f), true)
+    private val componentFactory = PhysicsComponentFactory(world, camera)
     lateinit var debugMatrix : Matrix4
     lateinit var debugRenderer: Box2DDebugRenderer
 
@@ -45,6 +44,7 @@ class GameScreen : Screen, SpritesView, WorldView {
                 car.sprite
         )
     }
+
     val worldPresenter by lazy {
         WorldPresenterImpl(
                 world
@@ -60,11 +60,8 @@ class GameScreen : Screen, SpritesView, WorldView {
                 (car.sprite.height / 2).toFloat()
         )
 
-        worldWidth = camera.viewportWidth.toFloat() / PIXELS_PER_METER
-        worldHeight = camera.viewportHeight.toFloat() / PIXELS_PER_METER
-
-        val componentPen = PenComponent(world, worldWidth, worldHeight) // todo : This should be exported in the long run
-        val componentWall = WallComponent(world, worldWidth, worldHeight)// todo : This should be exported in the long run
+        componentFactory.createBoundWalls()
+        componentFactory.createPen()
 
         spritesPresenter.onAttach()
         debugRenderer = Box2DDebugRenderer()
