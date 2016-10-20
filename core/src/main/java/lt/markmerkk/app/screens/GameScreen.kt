@@ -19,21 +19,30 @@ import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
+import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
+import lt.markmerkk.app.mvp.painter.SpritesView
 
 /**
  * @author mariusmerkevicius
  * @since 2016-06-04
  */
-class GameScreen : Screen {
+class GameScreen : Screen, SpritesView {
 
     private var worldWidth: Float = 0.toFloat()
     private var worldHeight: Float = 0.toFloat()
 
-    lateinit var spriteBatch : SpriteBatch
     lateinit var camera: CameraHelper
     lateinit var world : World
     lateinit var debugMatrix : Matrix4
     lateinit var debugRenderer: Box2DDebugRenderer
+
+    val spritesPresenter by lazy {
+        SpritesPresenterImpl(
+                camera,
+                SpriteBatch(),
+                car.sprite
+        )
+    }
 
     lateinit var car: Car // Should be extracted later
 
@@ -50,18 +59,17 @@ class GameScreen : Screen {
         worldWidth = camera.viewportWidth.toFloat() / PIXELS_PER_METER
         worldHeight = camera.viewportHeight.toFloat() / PIXELS_PER_METER
 
-        spriteBatch = SpriteBatch()
+        val componentPen = PenComponent(world, worldWidth, worldHeight) // todo : This should be exported in the long run
+        val componentWall = WallComponent(world, worldWidth, worldHeight)// todo : This should be exported in the long run
+
+        spritesPresenter.onAttach()
         debugRenderer = Box2DDebugRenderer()
-        spriteBatch.projectionMatrix = camera.combine
         debugMatrix = camera.combine
         debugMatrix.scale(
                 PIXELS_PER_METER.toFloat(),
                 PIXELS_PER_METER.toFloat(),
                 PIXELS_PER_METER.toFloat()
         )
-
-        val componentPen = PenComponent(world, worldWidth, worldHeight) // todo : This should be exported in the long run
-        val componentWall = WallComponent(world, worldWidth, worldHeight)// todo : This should be exported in the long run
     }
 
     // Callback methods
@@ -80,14 +88,12 @@ class GameScreen : Screen {
         world.clearForces()
 
         debugRenderer.render(world, debugMatrix)
-        spriteBatch.begin()
-        car.sprite.draw(spriteBatch)
+
         car.sprite.setPosition(
                 PIXELS_PER_METER * car.body.position.x - car.sprite.width / 2,
                 PIXELS_PER_METER * car.body.position.y - car.sprite.height / 2
         )
         car.sprite.rotation = Math.toDegrees(car.body.angle.toDouble()).toFloat()
-        spriteBatch.end()
 
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             car.steer = Car.STEER_LEFT
@@ -109,6 +115,7 @@ class GameScreen : Screen {
         world.clearForces()
 
         car.update(Gdx.app.graphics.deltaTime)
+        spritesPresenter.render()
     }
 
     override fun resize(width: Int, height: Int) { }
@@ -116,7 +123,7 @@ class GameScreen : Screen {
     override fun hide() { }
 
     override fun dispose() {
-        spriteBatch.dispose()
+        spritesPresenter.onDetach()
         car.texture.dispose()
     }
 

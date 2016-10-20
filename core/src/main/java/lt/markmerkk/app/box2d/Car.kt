@@ -78,11 +78,6 @@ class Car(
                         posX = 0.5f, posY = 0.6f,
                         width = 0.2f, height = 0.4f)
         )
-//        val playerTexture = ImageCache.getTexture("playerCar")
-//        playerSprite = Sprite(playerTexture)
-//        playerSprite.setPosition(PIXELS_PER_METER * car.body.getPosition().x - playerTexture.getRegionWidth() / 2,
-//                PIXELS_PER_METER * car.body.getPosition().y - playerTexture.getRegionHeight() / 2)
-
     }
 
     fun getSpeedKMH(): Float {
@@ -96,8 +91,6 @@ class Car(
     }
 
     fun update(deltaTime: Float) {
-//        println("Car angle: ${body.angle}")
-
         wheels.forEach { it.killSidewayVector() }
 
         val increase = maxSteerAngle * deltaTime * 5f
@@ -106,7 +99,6 @@ class Car(
             STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
             else -> wheelAngle = 0f
         }
-//        println("SuggestAngle: $wheelAngle")
         wheels.filterIsInstance<RevolvingWheelImpl>()
                 .forEach { it.changeAngle(wheelAngle) }
 
