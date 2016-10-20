@@ -20,9 +20,6 @@ class Car(
         val world: World,
         val position: Vector2
 ) {
-    val texture = Texture(Gdx.files.internal("data/car_small.png"))
-    val textureRegion = TextureRegion(texture, 64, 37)
-    val sprite = Sprite(texture)
     val body : Body
     val width = 1f
     val height = 2f
