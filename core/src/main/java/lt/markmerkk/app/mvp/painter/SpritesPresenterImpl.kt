@@ -12,7 +12,7 @@ import lt.markmerkk.app.CameraHelper
 class SpritesPresenterImpl(
         private val camera: CameraHelper,
         private val spriteBatch: SpriteBatch,
-        vararg val sprites: Sprite
+        private val spriteBundleInteractors: List<SpriteBundleInteractor>
 ) : SpritesPresenter {
 
     init {
@@ -28,7 +28,7 @@ class SpritesPresenterImpl(
 
     override fun render() {
         spriteBatch.begin()
-        sprites.forEach { it.draw(spriteBatch) }
+        spriteBundleInteractors.forEach { it.sprite.draw(spriteBatch) }
         spriteBatch.end()
     }
 

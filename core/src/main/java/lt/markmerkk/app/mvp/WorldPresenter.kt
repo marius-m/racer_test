@@ -5,5 +5,5 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-20
  */
 interface WorldPresenter : Presenter {
-    fun render()
+    fun render(deltaTime: Float)
 }

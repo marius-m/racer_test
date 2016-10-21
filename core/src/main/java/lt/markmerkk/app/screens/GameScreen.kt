@@ -22,6 +22,8 @@ import lt.markmerkk.app.box2d.temp_components.PenComponent
 import lt.markmerkk.app.box2d.temp_components.WallComponent
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
+import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
+import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -29,39 +31,42 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  * @author mariusmerkevicius
  * @since 2016-06-04
  */
-class GameScreen : Screen, SpritesView, WorldView, DebugView {
+class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
-    private val world : World = World(Vector2(0.0f, 0.0f), true)
+    private val world: World = World(Vector2(0.0f, 0.0f), true)
     private val componentFactory = PhysicsComponentFactory(world, camera)
 
-    private val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
     private val car = Car(world, Vector2(20f, 10f))
+
+    private val spriteBundleInteractors = listOf<SpriteBundleInteractor>(
+            SpriteBundleInteractorImpl(
+                    car.body,
+                    Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+            )
+    )
+
+    val carPresenter by lazy {
+        CarPresenterImpl(car)
+    }
 
     val spritesPresenter by lazy {
         SpritesPresenterImpl(
                 camera,
                 SpriteBatch(),
-                carSprite
+                spriteBundleInteractors
         )
     }
 
     val worldPresenter by lazy {
-        WorldPresenterImpl(world)
+        WorldPresenterImpl(
+                world,
+                spriteBundleInteractors
+        )
     }
 
     val debugPresenter by lazy {
-        DebugPresenterImpl(
-                world,
-                camera
-        )
-    }
-
-    val carPresenter by lazy {
-        CarPresenterImpl(
-                car,
-                carSprite
-        )
+        DebugPresenterImpl(world, camera)
     }
 
     val inputPresenter by lazy {
@@ -77,39 +82,44 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
 
         spritesPresenter.onAttach()
         debugPresenter.onAttach()
-        carPresenter.onAttach()
         inputPresenter.onAttach()
+        carPresenter.onAttach()
     }
 
     // Callback methods
 
-    override fun pause() { }
+    override fun pause() {
+    }
 
-    override fun resume() { }
+    override fun resume() {
+    }
 
-    override fun show() { }
+    override fun show() {
+    }
 
     override fun render(delta: Float) {
         Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
 
-        carPresenter.render(delta)
-        worldPresenter.render()
+        worldPresenter.render(delta)
         spritesPresenter.render()
         debugPresenter.render()
         inputPresenter.render()
+        carPresenter.render(delta)
     }
 
-    override fun resize(width: Int, height: Int) { }
+    override fun resize(width: Int, height: Int) {
+    }
 
-    override fun hide() { }
+    override fun hide() {
+    }
 
     override fun dispose() {
         spritesPresenter.onDetach()
         worldPresenter.onDetach()
         debugPresenter.onDetach()
-        carPresenter.onDetach()
         inputPresenter.onDetach()
+        carPresenter.onDetach()
     }
 
     companion object {
