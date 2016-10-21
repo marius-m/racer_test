@@ -29,24 +29,6 @@ class CarPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
-        // todo: Should be moved elsewhere
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            car.steer = Car.STEER_LEFT
-        } else if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            car.steer = Car.STEER_RIGHT
-        } else {
-            car.steer = Car.STEER_NONE
-        }
-
-        // todo: Should be moved elsewhere
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            car.accelerate = Car.ACC_FORWARD
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            car.accelerate = Car.ACC_BACKWARD
-        } else {
-            car.accelerate = Car.ACC_NONE
-        }
-
         sprite.setPosition(
                 GameScreen.PIXELS_PER_METER * car.body.position.x - sprite.width / 2,
                 GameScreen.PIXELS_PER_METER * car.body.position.y - sprite.height / 2

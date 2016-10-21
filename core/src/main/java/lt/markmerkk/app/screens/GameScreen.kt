@@ -35,7 +35,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
     private val world : World = World(Vector2(0.0f, 0.0f), true)
     private val componentFactory = PhysicsComponentFactory(world, camera)
 
-    val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+    private val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
     private val car = Car(world, Vector2(20f, 10f))
 
     val spritesPresenter by lazy {
@@ -64,6 +64,13 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
         )
     }
 
+    val inputPresenter by lazy {
+        InputPresenterImpl(
+                Gdx.input,
+                CarInputInteractorImpl(car)
+        )
+    }
+
     fun create() {
         componentFactory.createBoundWalls()
         componentFactory.createPen()
@@ -71,6 +78,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
         spritesPresenter.onAttach()
         debugPresenter.onAttach()
         carPresenter.onAttach()
+        inputPresenter.onAttach()
     }
 
     // Callback methods
@@ -89,6 +97,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
         worldPresenter.render()
         spritesPresenter.render()
         debugPresenter.render()
+        inputPresenter.render()
     }
 
     override fun resize(width: Int, height: Int) { }
@@ -100,6 +109,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView {
         worldPresenter.onDetach()
         debugPresenter.onDetach()
         carPresenter.onDetach()
+        inputPresenter.onDetach()
     }
 
     companion object {
