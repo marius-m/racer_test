@@ -1,8 +1,6 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.graphics.g2d.Sprite
 import lt.markmerkk.app.box2d.Car
-import lt.markmerkk.app.screens.GameScreen
 
 /**
  * @author mariusmerkevicius
@@ -10,7 +8,7 @@ import lt.markmerkk.app.screens.GameScreen
  */
 // todo : Not sure this is needed at all
 class CarPresenterImpl(
-        private val car: Car
+        private val cars: List<Car>
 ) : CarPresenter {
 
     override fun onAttach() {
@@ -20,7 +18,7 @@ class CarPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
-        car.update(deltaTime)
+        cars.forEach { it.update(deltaTime) }
     }
 
 }

@@ -9,7 +9,7 @@ import lt.markmerkk.app.box2d.Car
  */
 class InputPresenterImpl(
         private val input: Input,
-        private val carInputInteractor: CarInputInteractor
+        private val carInputInteractor: CarInputInteractor?
 ) : InputPresenter {
 
     override fun onAttach() {
@@ -24,6 +24,7 @@ class InputPresenterImpl(
     }
 
     fun handleSteer() {
+        if (carInputInteractor == null) return
         if (input.isKeyPressed(Input.Keys.LEFT)) {
             carInputInteractor.steerLeft()
         } else if (input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -34,6 +35,7 @@ class InputPresenterImpl(
     }
 
     fun handleMove() {
+        if (carInputInteractor == null) return
         if (input.isKeyPressed(Input.Keys.UP)) {
             carInputInteractor.moveForward()
         } else if(input.isKeyPressed(Input.Keys.DOWN)) {

@@ -47,7 +47,11 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
     )
 
     val carPresenter by lazy {
-        CarPresenterImpl(car)
+        CarPresenterImpl(
+                listOf(
+                        car
+                )
+        )
     }
 
     val spritesPresenter by lazy {
