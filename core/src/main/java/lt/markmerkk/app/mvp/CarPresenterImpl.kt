@@ -1,8 +1,5 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import lt.markmerkk.app.box2d.Car
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
@@ -26,27 +23,30 @@ class CarPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
-        cars.forEach { it.update(deltaTime) }
-        spriteBundleInteractors.forEach {
-            it.updatePosition(
+        cars.forEach {
+            it.update(deltaTime)
+            it.sprite.setPosition(
                     GameScreen.PIXELS_PER_METER * it.body.position.x - it.sprite.width / 2,
                     GameScreen.PIXELS_PER_METER * it.body.position.y - it.sprite.height / 2
             )
-            it.updateAngle(Math.toDegrees(it.body.angle.toDouble()).toFloat())
+            it.sprite.rotation = Math.toDegrees(it.body.angle.toDouble()).toFloat()
         }
     }
 
     override fun addCar(car: Car) {
+        cars.add(car)
         spriteBundleInteractors.add(
                 SpriteBundleInteractorImpl(
-                        car.body,
-                        Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+                        car.sprite
                 )
         )
-        cars.add(car)
     }
 
     override fun removeCar(car: Car) {
+        cars.remove(car)
+        spriteBundleInteractors.removeAll(
+                spriteBundleInteractors.filter { it.sprite == car.sprite }
+        )
     }
 
 }

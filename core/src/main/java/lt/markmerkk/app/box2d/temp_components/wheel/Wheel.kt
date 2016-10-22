@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.Body
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarImpl
 
 /**
  * @author mariusmerkevicius

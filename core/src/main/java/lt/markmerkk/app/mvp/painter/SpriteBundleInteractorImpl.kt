@@ -1,14 +1,12 @@
 package lt.markmerkk.app.mvp.painter
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.physics.box2d.Body
 
 /**
  * @author mariusmerkevicius
  * @since 2016-10-22
  */
 class SpriteBundleInteractorImpl(
-        override val body: Body,
         override val sprite: Sprite
 ) : SpriteBundleInteractor {
 

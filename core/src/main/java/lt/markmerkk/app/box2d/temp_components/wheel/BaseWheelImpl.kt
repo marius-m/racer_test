@@ -2,7 +2,6 @@ package lt.markmerkk.app.box2d.temp_components.wheel
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef
 import lt.markmerkk.app.box2d.Car
 
 /**

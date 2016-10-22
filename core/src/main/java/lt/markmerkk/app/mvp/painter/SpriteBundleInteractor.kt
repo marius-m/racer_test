@@ -1,7 +1,6 @@
 package lt.markmerkk.app.mvp.painter
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import com.badlogic.gdx.physics.box2d.Body
 
 /**
  * @author mariusmerkevicius
@@ -10,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Body
  */
 interface SpriteBundleInteractor {
     val sprite: Sprite
-    val body: Body
 
     fun updatePosition(x: Float, y: Float)
     fun updateAngle(angle: Float)

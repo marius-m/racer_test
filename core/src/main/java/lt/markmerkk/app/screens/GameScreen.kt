@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
-import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
@@ -48,7 +48,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         carPresenter.onAttach()
 
         // Adding a test car
-        val car = Car(world, Vector2(20f, 10f))
+        val car = CarImpl(world, Vector2(20f, 10f))
         carPresenter.addCar(car)
         inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
     }

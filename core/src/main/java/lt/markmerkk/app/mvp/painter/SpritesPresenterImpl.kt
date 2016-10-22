@@ -1,7 +1,5 @@
 package lt.markmerkk.app.mvp.painter
 
-import com.badlogic.gdx.graphics.Camera
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
 
