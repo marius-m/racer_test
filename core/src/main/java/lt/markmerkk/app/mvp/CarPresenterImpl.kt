@@ -7,9 +7,9 @@ import lt.markmerkk.app.box2d.Car
  * @since 2016-10-21
  */
 // todo : Not sure this is needed at all
-class CarPresenterImpl(
-        private val cars: List<Car>
-) : CarPresenter {
+class CarPresenterImpl() : CarPresenter {
+
+    val cars = mutableListOf<Car>()
 
     override fun onAttach() {
     }

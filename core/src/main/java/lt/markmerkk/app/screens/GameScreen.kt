@@ -1,25 +1,15 @@
 package lt.markmerkk.app.screens
 
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.Input
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.graphics.g2d.TextureRegion
-import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
-import com.badlogic.gdx.scenes.scene2d.Stage
-import com.badlogic.gdx.scenes.scene2d.ui.Skin
-import com.badlogic.gdx.scenes.scene2d.ui.Touchpad
-import com.badlogic.gdx.utils.viewport.ScreenViewport
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.Car
-import lt.markmerkk.app.box2d.temp_components.PenComponent
-import lt.markmerkk.app.box2d.temp_components.WallComponent
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
@@ -37,42 +27,18 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
     private val world: World = World(Vector2(0.0f, 0.0f), true)
     private val componentFactory = PhysicsComponentFactory(world, camera)
 
-    private val car = Car(world, Vector2(20f, 10f))
-
-    private val spriteBundleInteractors = listOf<SpriteBundleInteractor>(
-            SpriteBundleInteractorImpl(
-                    car.body,
-                    Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-            )
+    private val spriteBundleInteractors = mutableListOf<SpriteBundleInteractor>()
+    val carPresenter = CarPresenterImpl()
+    val spritesPresenter = SpritesPresenterImpl(
+            camera,
+            SpriteBatch(),
+            spriteBundleInteractors
     )
-
-    val carPresenter by lazy {
-        CarPresenterImpl(
-                listOf(
-                        car
-                )
-        )
-    }
-
-    val spritesPresenter by lazy {
-        SpritesPresenterImpl(
-                camera,
-                SpriteBatch(),
-                spriteBundleInteractors
-        )
-    }
-
-    val worldPresenter by lazy {
-        WorldPresenterImpl(
-                world,
-                spriteBundleInteractors
-        )
-    }
-
-    val debugPresenter by lazy {
-        DebugPresenterImpl(world, camera)
-    }
-
+    val worldPresenter = WorldPresenterImpl(
+            world,
+            spriteBundleInteractors
+    )
+    val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
 
     fun create() {
@@ -84,7 +50,16 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         inputPresenter.onAttach()
         carPresenter.onAttach()
 
+        // Adding a test car
+        val car = Car(world, Vector2(20f, 10f))
+        carPresenter.cars.add(car)
         inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
+        spriteBundleInteractors.add(
+                SpriteBundleInteractorImpl(
+                        car.body,
+                        Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+                )
+        )
     }
 
     // Callback methods
