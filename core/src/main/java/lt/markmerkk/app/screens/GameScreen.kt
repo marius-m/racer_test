@@ -28,16 +28,13 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
     private val componentFactory = PhysicsComponentFactory(world, camera)
 
     private val spriteBundleInteractors = mutableListOf<SpriteBundleInteractor>()
-    val carPresenter = CarPresenterImpl()
+    val carPresenter = CarPresenterImpl(spriteBundleInteractors)
     val spritesPresenter = SpritesPresenterImpl(
             camera,
             SpriteBatch(),
             spriteBundleInteractors
     )
-    val worldPresenter = WorldPresenterImpl(
-            world,
-            spriteBundleInteractors
-    )
+    val worldPresenter = WorldPresenterImpl(world)
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
 
@@ -52,17 +49,11 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
 
         // Adding a test car
         val car = Car(world, Vector2(20f, 10f))
-        carPresenter.cars.add(car)
+        carPresenter.addCar(car)
         inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
-        spriteBundleInteractors.add(
-                SpriteBundleInteractorImpl(
-                        car.body,
-                        Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-                )
-        )
     }
 
-    // Callback methods
+    //region Callback methods
 
     override fun pause() {
     }
@@ -97,6 +88,8 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         inputPresenter.onDetach()
         carPresenter.onDetach()
     }
+
+    //endregion
 
     companion object {
         const val VIRTUAL_WIDTH = 480
