@@ -1,16 +1,16 @@
 package lt.markmerkk.app.mvp
 
 import com.badlogic.gdx.Input
-import lt.markmerkk.app.box2d.Car
 
 /**
  * @author mariusmerkevicius
  * @since 2016-10-21
  */
 class InputPresenterImpl(
-        private val input: Input,
-        private val carInputInteractor: CarInputInteractor?
+        private val input: Input
 ) : InputPresenter {
+
+    var carInputInteractor: CarInputInteractor? = null
 
     override fun onAttach() {
     }
@@ -24,24 +24,26 @@ class InputPresenterImpl(
     }
 
     fun handleSteer() {
-        if (carInputInteractor == null) return
+        val inputInteractor = carInputInteractor
+        if (inputInteractor == null) return
         if (input.isKeyPressed(Input.Keys.LEFT)) {
-            carInputInteractor.steerLeft()
+            inputInteractor.steerLeft()
         } else if (input.isKeyPressed(Input.Keys.RIGHT)) {
-            carInputInteractor.steerRight()
+            inputInteractor.steerRight()
         } else {
-            carInputInteractor.steerNone()
+            inputInteractor.steerNone()
         }
     }
 
     fun handleMove() {
-        if (carInputInteractor == null) return
+        val inputInteractor = carInputInteractor
+        if (inputInteractor == null) return
         if (input.isKeyPressed(Input.Keys.UP)) {
-            carInputInteractor.moveForward()
+            inputInteractor.moveForward()
         } else if(input.isKeyPressed(Input.Keys.DOWN)) {
-            carInputInteractor.moveBackward()
+            inputInteractor.moveBackward()
         } else {
-            carInputInteractor.moveNone()
+            inputInteractor.moveNone()
         }
     }
 

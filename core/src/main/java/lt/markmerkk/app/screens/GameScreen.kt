@@ -73,12 +73,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         DebugPresenterImpl(world, camera)
     }
 
-    val inputPresenter by lazy {
-        InputPresenterImpl(
-                Gdx.input,
-                CarInputInteractorImpl(car)
-        )
-    }
+    val inputPresenter = InputPresenterImpl(Gdx.input)
 
     fun create() {
         componentFactory.createBoundWalls()
@@ -88,6 +83,8 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         debugPresenter.onAttach()
         inputPresenter.onAttach()
         carPresenter.onAttach()
+
+        inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
     }
 
     // Callback methods

@@ -19,10 +19,8 @@ class InputPresenterImplTest {
     @Test
     fun interactorValid_triggerEvents() {
         // Arrange
-        val presenter = InputPresenterImpl(
-                input,
-                carInputInteractor
-        )
+        val presenter = InputPresenterImpl(input)
+        presenter.carInputInteractor = this.carInputInteractor
 
         // Act
         presenter.render()
@@ -35,10 +33,7 @@ class InputPresenterImplTest {
     @Test
     fun carInputValid_steerNone() {
         // Arrange
-        val presenter = InputPresenterImpl(
-                input,
-                null
-        )
+        val presenter = InputPresenterImpl(input)
 
         // Act
         presenter.render()

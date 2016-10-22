@@ -12,10 +12,9 @@ import org.junit.Test
 class InputPresenterImplHandleSteerTest {
     val carInputInteractor = mock<CarInputInteractor>()
     val input: Input = mock()
-    val presenter = InputPresenterImpl(
-            input,
-            carInputInteractor
-    )
+    val presenter = InputPresenterImpl(input).apply {
+        carInputInteractor = this@InputPresenterImplHandleSteerTest.carInputInteractor
+    }
 
     @Test
     fun noInput_steerNone() {
