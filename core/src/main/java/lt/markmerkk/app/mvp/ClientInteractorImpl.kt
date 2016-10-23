@@ -17,7 +17,8 @@ class ClientInteractorImpl : ClientInteractor {
         client.connect(
                 Const.CONN_TIMEOUT_MILLIS,
                 InetAddress.getLocalHost(),
-                Const.TCP_PORT
+                Const.PORT_TCP,
+                Const.PORT_UDP
         )
     }
 

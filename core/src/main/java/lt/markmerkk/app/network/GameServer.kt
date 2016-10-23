@@ -3,6 +3,7 @@ package lt.markmerkk.app.network
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Server
 import com.esotericsoftware.minlog.Log
+import lt.markmerkk.app.Const
 
 /**
  * @author mariusmerkevicius
@@ -13,7 +14,7 @@ class GameServer : Server() {
     val serverLogger = GameLogger()
 
     init {
-        Log.set(Log.LEVEL_TRACE)
+        Log.set(Const.LOG_LEVEL)
         Log.setLogger(serverLogger)
     }
 

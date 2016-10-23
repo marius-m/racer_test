@@ -5,6 +5,8 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-23
  */
 interface ServerInteractor {
+    var eventProvider: ServerEventProvider?
+
     fun start()
     fun stop()
 }

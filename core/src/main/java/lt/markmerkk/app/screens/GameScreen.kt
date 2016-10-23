@@ -54,9 +54,6 @@ class GameScreen(
         if (isHost) {
             val car = CarImpl(world, Vector2(20f, 10f))
             carPresenter.addCar(car)
-            carPresenter.addCar(CarImpl(world, Vector2(4.5f, 10f)))
-            carPresenter.addCar(CarImpl(world, Vector2(6f, 10f)))
-            carPresenter.addCar(CarImpl(world, Vector2(7.5f, 10f)))
             inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
         }
     }
