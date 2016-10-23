@@ -1,15 +1,11 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.physics.box2d.World
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
-
 /**
  * @author mariusmerkevicius
  * @since 2016-10-20
  */
 class WorldPresenterImpl(
-        private val world: World
+        private val worldInteractor: WorldInteractor
 ) : WorldPresenter {
 
     override fun onAttach() {
@@ -19,7 +15,6 @@ class WorldPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
-        world.step(Gdx.app.graphics.deltaTime, 3, 3)
-        world.clearForces()
+        worldInteractor.step(deltaTime)
     }
 }

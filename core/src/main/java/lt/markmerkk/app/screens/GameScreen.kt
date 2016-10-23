@@ -18,7 +18,9 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  * @author mariusmerkevicius
  * @since 2016-06-04
  */
-class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView {
+class GameScreen(
+        private val isHost: Boolean = true
+) : Screen, SpritesView, WorldView, DebugView, InputView, CarView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
@@ -31,7 +33,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
             SpriteBatch(),
             spriteBundleInteractors
     )
-    val worldPresenter = WorldPresenterImpl(world)
+    val worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
     val serverPresenter = ServerPresenterImpl(ServerInteractorImpl())
@@ -47,12 +49,14 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         serverPresenter.onAttach()
 
         // Adding a test car
-        val car = CarImpl(world, Vector2(20f, 10f))
-        carPresenter.addCar(car)
-        carPresenter.addCar(CarImpl(world, Vector2(4.5f, 10f)))
-        carPresenter.addCar(CarImpl(world, Vector2(6f, 10f)))
-        carPresenter.addCar(CarImpl(world, Vector2(7.5f, 10f)))
-        inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
+        if (isHost) {
+            val car = CarImpl(world, Vector2(20f, 10f))
+            carPresenter.addCar(car)
+            carPresenter.addCar(CarImpl(world, Vector2(4.5f, 10f)))
+            carPresenter.addCar(CarImpl(world, Vector2(6f, 10f)))
+            carPresenter.addCar(CarImpl(world, Vector2(7.5f, 10f)))
+            inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
+        }
     }
 
     //region Callback methods
