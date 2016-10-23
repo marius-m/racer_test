@@ -45,11 +45,11 @@ class GameScreen(
         carPresenter.onAttach()
         serverPresenter.onAttach()
 
+        componentFactory.createBoundWalls()
+        componentFactory.createPen()
+        
         // Adding a test car
         if (isHost) {
-            componentFactory.createBoundWalls()
-            componentFactory.createPen()
-
             val car = CarImpl(world, Vector2(20f, 10f))
             carPresenter.addCar(car)
             carPresenter.addCar(CarImpl(world, Vector2(4.5f, 10f)))

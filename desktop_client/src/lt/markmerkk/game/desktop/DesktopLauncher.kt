@@ -9,6 +9,6 @@ import lt.markmerkk.app.network.GameLogger
 object DesktopLauncher {
     @JvmStatic fun main(arg: Array<String>) {
         val config = LwjglApplicationConfiguration()
-        LwjglApplication(RacerGame(isHost = true), config)
+        LwjglApplication(RacerGame(isHost = false), config)
    }
 }
