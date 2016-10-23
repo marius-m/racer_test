@@ -36,12 +36,9 @@ class GameScreen(
     val worldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
-    val serverPresenter = ServerPresenterImpl(ServerInteractorImpl())
+    val serverPresenter = ServerPresenterImpl(isHost, ServerInteractorImpl())
 
     fun create() {
-        componentFactory.createBoundWalls()
-        componentFactory.createPen()
-
         spritesPresenter.onAttach()
         debugPresenter.onAttach()
         inputPresenter.onAttach()
@@ -50,6 +47,9 @@ class GameScreen(
 
         // Adding a test car
         if (isHost) {
+            componentFactory.createBoundWalls()
+            componentFactory.createPen()
+
             val car = CarImpl(world, Vector2(20f, 10f))
             carPresenter.addCar(car)
             carPresenter.addCar(CarImpl(world, Vector2(4.5f, 10f)))

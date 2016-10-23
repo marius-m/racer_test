@@ -1,6 +1,7 @@
 package lt.markmerkk.app.mvp
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.*
 import org.junit.Test
@@ -12,11 +13,12 @@ import org.junit.Test
  */
 class ServerPresenterImplTest {
     val serverInteractor: ServerInteractor = mock()
-    val presenter = ServerPresenterImpl(serverInteractor)
 
     @Test
-    fun onAttach_start() {
+    fun onAttach_host_start() {
         // Arrange
+        val presenter = ServerPresenterImpl(true, serverInteractor)
+
         // Act
         presenter.onAttach()
 
@@ -25,13 +27,39 @@ class ServerPresenterImplTest {
     }
 
     @Test
-    fun onDetach_stop() {
+    fun onAttach_notHost_idle() {
         // Arrange
+        val presenter = ServerPresenterImpl(false, serverInteractor)
+
+        // Act
+        presenter.onAttach()
+
+        // Assert
+        verify(serverInteractor, never()).start()
+    }
+
+    @Test
+    fun onDetach_host_stop() {
+        // Arrange
+        val presenter = ServerPresenterImpl(true, serverInteractor)
+
         // Act
         presenter.onDetach()
 
         // Assert
         verify(serverInteractor).stop()
+    }
+
+    @Test
+    fun onDetach_notHost_idle() {
+        // Arrange
+        val presenter = ServerPresenterImpl(false, serverInteractor)
+
+        // Act
+        presenter.onDetach()
+
+        // Assert
+        verify(serverInteractor, never()).stop()
     }
 
 }
