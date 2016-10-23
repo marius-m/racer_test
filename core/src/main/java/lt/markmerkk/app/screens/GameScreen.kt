@@ -20,7 +20,7 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  */
 class GameScreen(
         private val isHost: Boolean = true
-) : Screen, SpritesView, WorldView, DebugView, InputView, CarView {
+) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ClientView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
@@ -37,6 +37,7 @@ class GameScreen(
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
     val serverPresenter = ServerPresenterImpl(isHost, ServerInteractorImpl())
+    val clientPresenter = ClientPresenterImpl(isHost, ClientInteractorImpl())
 
     fun create() {
         spritesPresenter.onAttach()
@@ -44,10 +45,11 @@ class GameScreen(
         inputPresenter.onAttach()
         carPresenter.onAttach()
         serverPresenter.onAttach()
+        clientPresenter.onAttach()
 
         componentFactory.createBoundWalls()
         componentFactory.createPen()
-        
+
         // Adding a test car
         if (isHost) {
             val car = CarImpl(world, Vector2(20f, 10f))
@@ -94,6 +96,7 @@ class GameScreen(
         inputPresenter.onDetach()
         carPresenter.onDetach()
         serverPresenter.onDetach()
+        clientPresenter.onDetach()
     }
 
     //endregion
