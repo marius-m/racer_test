@@ -5,6 +5,7 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-20
  */
 class WorldPresenterImpl(
+        private val isHost: Boolean,
         private val worldInteractor: WorldInteractor
 ) : WorldPresenter {
 
@@ -15,6 +16,7 @@ class WorldPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
+        if (!isHost) return
         worldInteractor.step(deltaTime)
     }
 }

@@ -33,7 +33,7 @@ class GameScreen(
             SpriteBatch(),
             spriteBundleInteractors
     )
-    val worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
+    val worldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
     val serverPresenter = ServerPresenterImpl(ServerInteractorImpl())
