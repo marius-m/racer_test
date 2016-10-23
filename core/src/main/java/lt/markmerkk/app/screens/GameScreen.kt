@@ -3,8 +3,6 @@ package lt.markmerkk.app.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
@@ -13,7 +11,6 @@ import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -37,6 +34,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
     val worldPresenter = WorldPresenterImpl(world)
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
+    val serverPresenter = ServerPresenterImpl(ServerInteractorImpl())
 
     fun create() {
         componentFactory.createBoundWalls()
@@ -46,6 +44,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         debugPresenter.onAttach()
         inputPresenter.onAttach()
         carPresenter.onAttach()
+        serverPresenter.onAttach()
 
         // Adding a test car
         val car = CarImpl(world, Vector2(20f, 10f))
@@ -90,6 +89,7 @@ class GameScreen : Screen, SpritesView, WorldView, DebugView, InputView, CarView
         debugPresenter.onDetach()
         inputPresenter.onDetach()
         carPresenter.onDetach()
+        serverPresenter.onDetach()
     }
 
     //endregion
