@@ -9,12 +9,12 @@ class ClientPresenterImpl(
         private val clientInteractor: ClientInteractor
 ) : ClientPresenter {
     override fun onAttach() {
-        if (!isHost) return
+        if (isHost) return
         clientInteractor.start()
     }
 
     override fun onDetach() {
-        if (!isHost) return
+        if (isHost) return
         clientInteractor.stop()
     }
 }

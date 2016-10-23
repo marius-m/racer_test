@@ -1,15 +1,27 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.Const
+import lt.markmerkk.app.network.GameClient
+import java.net.InetAddress
+
 /**
  * @author mariusmerkevicius
  * @since 2016-10-23
  */
 class ClientInteractorImpl : ClientInteractor {
+
+    private val client = GameClient()
+
     override fun start() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        client.start()
+        client.connect(
+                Const.CONN_TIMEOUT_MILLIS,
+                InetAddress.getLocalHost(),
+                Const.TCP_PORT
+        )
     }
 
     override fun stop() {
-        throw UnsupportedOperationException("not implemented") //To change body of created functions use File | Settings | File Templates.
+        client.stop()
     }
 }

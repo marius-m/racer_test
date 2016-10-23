@@ -23,7 +23,7 @@ class ClientPresenterImplTest {
         presenter.onAttach()
 
         // Assert
-        verify(clientInteractor).start()
+        verify(clientInteractor, never()).start()
     }
 
     @Test
@@ -35,7 +35,7 @@ class ClientPresenterImplTest {
         presenter.onAttach()
 
         // Assert
-        verify(clientInteractor, never()).start()
+        verify(clientInteractor).start()
     }
 
     @Test
@@ -47,7 +47,7 @@ class ClientPresenterImplTest {
         presenter.onDetach()
 
         // Assert
-        verify(clientInteractor).stop()
+        verify(clientInteractor, never()).stop()
     }
 
     @Test
@@ -59,7 +59,7 @@ class ClientPresenterImplTest {
         presenter.onDetach()
 
         // Assert
-        verify(clientInteractor, never()).stop()
+        verify(clientInteractor).stop()
     }
 
 }

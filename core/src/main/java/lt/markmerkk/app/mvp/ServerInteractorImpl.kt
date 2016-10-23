@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameServer
 
 /**
@@ -8,12 +9,11 @@ import lt.markmerkk.app.network.GameServer
  */
 class ServerInteractorImpl : ServerInteractor {
 
-    private val port = 3000
     private var server: GameServer? = null
 
     override fun start() {
         server = GameServer().apply {
-            bind(port)
+            bind(Const.TCP_PORT)
             start()
         }
     }
