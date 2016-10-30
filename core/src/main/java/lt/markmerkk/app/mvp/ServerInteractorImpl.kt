@@ -14,7 +14,7 @@ import lt.markmerkk.app.network.events.NetworkEvent
 class ServerInteractorImpl : ServerInteractor {
 
     override var eventProvider: NetworkEventProvider? = null
-    private var server: GameServer? = null
+    override var server: GameServer? = null
 
     override fun start() {
         server = GameServer()

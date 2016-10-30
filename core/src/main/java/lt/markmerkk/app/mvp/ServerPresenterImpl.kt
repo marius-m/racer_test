@@ -2,6 +2,8 @@ package lt.markmerkk.app.mvp
 
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
+import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
+import lt.markmerkk.app.network.events.EventPlayerPosition
 import org.slf4j.LoggerFactory
 
 /**
@@ -10,7 +12,8 @@ import org.slf4j.LoggerFactory
  */
 class ServerPresenterImpl(
         private val isHost: Boolean,
-        private val serverInteractor: ServerInteractor
+        private val serverInteractor: ServerInteractor,
+        private val spriteBundleInteractor: List<SpriteBundleInteractor>
 ) : ServerPresenter, ServerEventListener {
 
     override fun onAttach() {
@@ -23,6 +26,14 @@ class ServerPresenterImpl(
         if (!isHost) return
         serverInteractor.eventProvider = null
         serverInteractor.stop()
+    }
+
+    override fun update() {
+        if (spriteBundleInteractor.size == 0) return
+        val updateEvent = EventPlayerPosition()
+        updateEvent.positionX = spriteBundleInteractor.first().sprite.x
+        updateEvent.positionY = spriteBundleInteractor.first().sprite.y
+        serverInteractor.server?.sendToAllUDP(updateEvent)
     }
 
     //region Network events

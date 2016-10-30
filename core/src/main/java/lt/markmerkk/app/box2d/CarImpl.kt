@@ -18,7 +18,6 @@ class CarImpl(
         val position: Vector2
 ) : Car {
     override val body : Body
-    override val sprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
     val width = 1f
     val height = 2f
     val maxSteerAngle = 30f

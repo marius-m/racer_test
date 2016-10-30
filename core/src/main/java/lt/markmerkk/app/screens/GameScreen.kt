@@ -3,6 +3,8 @@ package lt.markmerkk.app.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
@@ -11,6 +13,7 @@ import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
+import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -36,7 +39,11 @@ class GameScreen(
     val worldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
     val debugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter = InputPresenterImpl(Gdx.input)
-    val serverPresenter = ServerPresenterImpl(isHost, ServerInteractorImpl())
+    val serverPresenter = ServerPresenterImpl(
+            isHost,
+            ServerInteractorImpl(),
+            spriteBundleInteractors
+    )
     val clientPresenter = ClientPresenterImpl(isHost, ClientInteractorImpl())
 
     fun create() {
@@ -53,6 +60,8 @@ class GameScreen(
         // Adding a test car
         if (isHost) {
             val car = CarImpl(world, Vector2(20f, 10f))
+            val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+            spriteBundleInteractors.add(SpriteBundleInteractorImpl(carSprite))
             carPresenter.addCar(car)
             inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
         }
@@ -78,6 +87,7 @@ class GameScreen(
         debugPresenter.render()
         inputPresenter.render()
         carPresenter.render(delta)
+        serverPresenter.update()
     }
 
     override fun resize(width: Int, height: Int) {

@@ -1,6 +1,7 @@
 package lt.markmerkk.app.network
 
 import com.esotericsoftware.kryonet.EndPoint
+import lt.markmerkk.app.network.events.EventPlayerPosition
 import lt.markmerkk.app.network.events.EventRegister
 
 /**
@@ -11,5 +12,6 @@ object Network {
     fun register(endPoint: EndPoint) {
         val kryo = endPoint.kryo
         kryo.register(EventRegister::class.java)
+        kryo.register(EventPlayerPosition::class.java)
     }
 }
