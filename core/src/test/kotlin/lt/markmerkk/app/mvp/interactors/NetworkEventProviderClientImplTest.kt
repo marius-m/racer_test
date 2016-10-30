@@ -4,10 +4,10 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import lt.markmerkk.app.network.events.EventPlayerPosition
 import lt.markmerkk.app.network.events.EventRegister
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.junit.Assert.*
-import org.junit.Before
 import org.junit.Test
 
 /**
@@ -15,10 +15,10 @@ import org.junit.Test
  * *
  * @since 2016-10-30
  */
-class NetworkEventProviderServerImplTest {
+class NetworkEventProviderClientImplTest {
 
-    val listener: ServerEventListener = mock()
-    val eventProvider = NetworkEventProviderServerImpl(listener)
+    val listener: ClientEventListener = mock()
+    val eventProvider = NetworkEventProviderClientImpl(listener)
 
     @Test
     fun invalidEvent_noTrigger() {
@@ -29,20 +29,18 @@ class NetworkEventProviderServerImplTest {
         eventProvider.event(invalidEvent)
 
         // Assert
-        verify(listener, never()).onNewClient(any())
+        verify(listener, never()).onPlayerUpdate(any(), any())
     }
 
     @Test
     fun registerEvent_trigger() {
         // Arrange
-        val registerEvent = EventRegister()
-        registerEvent.name = "test_name"
+        val event = EventPlayerPosition()
 
         // Act
-        eventProvider.event(registerEvent)
+        eventProvider.event(event)
 
         // Assert
-        verify(listener).onNewClient(any())
+        verify(listener).onPlayerUpdate(any(), any())
     }
-
 }

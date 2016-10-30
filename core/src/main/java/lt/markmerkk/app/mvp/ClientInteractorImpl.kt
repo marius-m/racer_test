@@ -6,6 +6,7 @@ import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameClient
 import lt.markmerkk.app.network.Network
 import lt.markmerkk.app.network.events.EventRegister
+import lt.markmerkk.app.network.events.NetworkEvent
 import java.net.InetAddress
 
 /**
@@ -14,6 +15,7 @@ import java.net.InetAddress
  */
 class ClientInteractorImpl : ClientInteractor {
 
+    override var eventProvider: NetworkEventProvider? = null
     private val client = GameClient()
 
     override fun start() {
@@ -25,6 +27,13 @@ class ClientInteractorImpl : ClientInteractor {
                 val registerEvent = EventRegister()
                 registerEvent.name = connection.remoteAddressTCP.toString()
                 client.sendTCP(registerEvent)
+            }
+        })
+        client.addListener(object : Listener() {
+            override fun received(connection: Connection, eventObject: Any) {
+                super.received(connection, eventObject)
+                if (eventObject !is NetworkEvent) return
+                eventProvider?.event(eventObject)
             }
         })
         client.connect(
