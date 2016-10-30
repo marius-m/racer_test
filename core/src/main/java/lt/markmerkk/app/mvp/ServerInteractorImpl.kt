@@ -4,6 +4,7 @@ import com.esotericsoftware.kryonet.Connection
 import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameServer
 import com.esotericsoftware.kryonet.Listener
+import lt.markmerkk.app.network.Network
 import lt.markmerkk.app.network.events.NetworkEvent
 
 /**
@@ -12,18 +13,19 @@ import lt.markmerkk.app.network.events.NetworkEvent
  */
 class ServerInteractorImpl : ServerInteractor {
 
-    override var eventProvider: ServerEventProvider? = null
+    override var eventProvider: NetworkEventProvider? = null
     private var server: GameServer? = null
 
     override fun start() {
-        server = GameServer().apply {
-            bind(Const.PORT_TCP, Const.PORT_UDP)
-            start()
-        }
-        server?.addListener(object : Listener() {
+        server = GameServer()
+        Network.register(server!!)
+        server!!.bind(Const.PORT_TCP, Const.PORT_UDP)
+        server!!.start()
+        server!!.addListener(object : Listener() {
             override fun received(connection: Connection, eventObject: Any) {
                 super.received(connection, eventObject)
-                eventProvider?.event(eventObject as NetworkEvent)
+                if (eventObject !is NetworkEvent) return
+                eventProvider?.event(eventObject)
             }
         })
     }

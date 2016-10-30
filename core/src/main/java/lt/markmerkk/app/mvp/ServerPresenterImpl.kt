@@ -1,6 +1,8 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.network.events.NetworkEvent
+import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
+import lt.markmerkk.app.mvp.interactors.ServerEventListener
+import org.slf4j.LoggerFactory
 
 /**
  * @author mariusmerkevicius
@@ -9,20 +11,30 @@ import lt.markmerkk.app.network.events.NetworkEvent
 class ServerPresenterImpl(
         private val isHost: Boolean,
         private val serverInteractor: ServerInteractor
-) : ServerPresenter {
+) : ServerPresenter, ServerEventListener {
 
     override fun onAttach() {
         if (!isHost) return
         serverInteractor.start()
+        serverInteractor.eventProvider = NetworkEventProviderServerImpl(this)
     }
 
     override fun onDetach() {
         if (!isHost) return
+        serverInteractor.eventProvider = null
         serverInteractor.stop()
     }
 
-    fun handleEvent(eventObject: NetworkEvent) {
+    //region Network events
 
+    override fun onNewClient(clientName: String) {
+        logger.debug("Got a new client: $clientName!")
+    }
+
+    //endregion
+
+    companion object {
+        val logger = LoggerFactory.getLogger(ServerPresenterImpl::class.java)
     }
 
 }
