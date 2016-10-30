@@ -7,4 +7,5 @@ package lt.markmerkk.app.network.events
 class EventPlayerPosition : NetworkEvent {
     var positionX: Float = 0.0f
     var positionY: Float = 0.0f
+    var angle: Float = 0.0f
 }

@@ -33,6 +33,7 @@ class ServerPresenterImpl(
         val updateEvent = EventPlayerPosition()
         updateEvent.positionX = spriteBundleInteractor.first().sprite.x
         updateEvent.positionY = spriteBundleInteractor.first().sprite.y
+        updateEvent.angle = spriteBundleInteractor.first().sprite.rotation
         serverInteractor.server?.sendToAllUDP(updateEvent)
     }
 

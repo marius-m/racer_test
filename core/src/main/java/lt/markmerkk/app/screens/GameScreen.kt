@@ -44,7 +44,11 @@ class GameScreen(
             ServerInteractorImpl(),
             spriteBundleInteractors
     )
-    val clientPresenter = ClientPresenterImpl(isHost, ClientInteractorImpl())
+    val clientPresenter = ClientPresenterImpl(
+            isHost,
+            ClientInteractorImpl(),
+            spriteBundleInteractors
+    )
 
     fun create() {
         spritesPresenter.onAttach()
@@ -60,11 +64,12 @@ class GameScreen(
         // Adding a test car
         if (isHost) {
             val car = CarImpl(world, Vector2(20f, 10f))
-            val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-            spriteBundleInteractors.add(SpriteBundleInteractorImpl(carSprite))
             carPresenter.addCar(car)
             inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
         }
+
+        val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+        spriteBundleInteractors.add(SpriteBundleInteractorImpl(carSprite))
     }
 
     //region Callback methods
@@ -88,6 +93,7 @@ class GameScreen(
         inputPresenter.render()
         carPresenter.render(delta)
         serverPresenter.update()
+        clientPresenter.update()
     }
 
     override fun resize(width: Int, height: Int) {

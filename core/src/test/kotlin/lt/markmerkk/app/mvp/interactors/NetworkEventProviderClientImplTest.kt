@@ -29,7 +29,7 @@ class NetworkEventProviderClientImplTest {
         eventProvider.event(invalidEvent)
 
         // Assert
-        verify(listener, never()).onPlayerUpdate(any(), any())
+        verify(listener, never()).onPlayerUpdate(any(), any(), any())
     }
 
     @Test

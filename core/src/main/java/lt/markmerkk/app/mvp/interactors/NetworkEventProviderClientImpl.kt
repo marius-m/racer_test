@@ -14,7 +14,11 @@ class NetworkEventProviderClientImpl(
 ) : NetworkEventProvider {
     override fun event(eventObject: NetworkEvent) {
         when (eventObject) {
-            is EventPlayerPosition -> listener.onPlayerUpdate(eventObject.positionX, eventObject.positionY)
+            is EventPlayerPosition -> listener.onPlayerUpdate(
+                    eventObject.positionX,
+                    eventObject.positionY,
+                    eventObject.angle
+            )
             else -> logger.debug("Undefined event received: $eventObject")
         }
     }
