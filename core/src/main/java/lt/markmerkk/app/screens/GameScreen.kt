@@ -23,7 +23,7 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  */
 class GameScreen(
         private val isHost: Boolean = true
-) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ClientView {
+) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ClientView, PlayerView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
@@ -49,6 +49,7 @@ class GameScreen(
             ClientInteractorImpl(),
             spriteBundleInteractors
     )
+    val playerPresenter = PlayerPresenterImpl()
 
     fun create() {
         spritesPresenter.onAttach()
@@ -57,16 +58,17 @@ class GameScreen(
         carPresenter.onAttach()
         serverPresenter.onAttach()
         clientPresenter.onAttach()
+        playerPresenter.onAttach()
 
         componentFactory.createBoundWalls()
         componentFactory.createPen()
 
         // Adding a test car
-        if (isHost) {
-            val car = CarImpl(world, Vector2(20f, 10f))
-            carPresenter.addCar(car)
-            inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
-        }
+//        if (isHost) {
+//            val car = CarImpl(world, Vector2(20f, 10f))
+//            carPresenter.addCar(car)
+//            inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
+//        }
 
         val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
         spriteBundleInteractors.add(SpriteBundleInteractorImpl(carSprite))
@@ -110,6 +112,7 @@ class GameScreen(
         carPresenter.onDetach()
         serverPresenter.onDetach()
         clientPresenter.onDetach()
+        playerPresenter.onDetach()
     }
 
     //endregion
