@@ -5,7 +5,9 @@ import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameServer
 import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.network.Network
+import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.NetworkEvent
+import lt.markmerkk.app.network.events.ReportPlayer
 
 /**
  * @author mariusmerkevicius
@@ -42,6 +44,10 @@ class ServerInteractorImpl : ServerInteractor {
 
     override fun stop() {
         server?.stop()
+    }
+
+    override fun sendPlayerUpdate(eventPlayersUpdate: EventPlayersUpdate) {
+        server?.sendToAllTCP(eventPlayersUpdate)
     }
 
 }

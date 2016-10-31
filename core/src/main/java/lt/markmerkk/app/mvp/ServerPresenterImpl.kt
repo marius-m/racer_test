@@ -1,11 +1,11 @@
 package lt.markmerkk.app.mvp
 
 import com.badlogic.gdx.Gdx
-import javafx.application.Platform
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
-import lt.markmerkk.app.network.events.EventPlayerPosition
+import lt.markmerkk.app.network.events.EventPlayersUpdate
+import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
 
 /**
@@ -47,13 +47,27 @@ class ServerPresenterImpl(
 
     override fun onClientConnected(connectionId: Int) {
         Gdx.app.postRunnable { view.onClientConnected(connectionId) }
+        sendPlayerUpdate(players)
     }
 
     override fun onClientDisconnected(connectionId: Int) {
         Gdx.app.postRunnable { view.onClientDisconnected(connectionId) }
+        sendPlayerUpdate(players)
     }
 
     //endregion
+
+    fun sendPlayerUpdate(players: List<Player>) {
+        if (players.size == 0) return
+        val playerUpdateEvent = EventPlayersUpdate()
+        playerUpdateEvent.reportPlayers = players.map {
+            ReportPlayer().apply {
+                id = it.id
+                name = it.name
+            }
+        }
+        serverInteractor.sendPlayerUpdate(playerUpdateEvent)
+    }
 
     companion object {
         val logger = LoggerFactory.getLogger(ServerPresenterImpl::class.java)
