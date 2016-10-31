@@ -41,6 +41,6 @@ class NetworkEventProviderClientImplTest {
         eventProvider.event(event)
 
         // Assert
-        verify(listener).onPlayerUpdate(any(), any())
+        verify(listener).onPlayerUpdate(any(), any(), any())
     }
 }

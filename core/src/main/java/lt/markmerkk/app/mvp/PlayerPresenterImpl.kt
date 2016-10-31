@@ -6,10 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.box2d.CarImpl
+import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.entities.PlayerServerImpl
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
-import lt.markmerkk.app.screens.GameScreen
 
 /**
  * @author mariusmerkevicius
@@ -17,10 +15,8 @@ import lt.markmerkk.app.screens.GameScreen
  */
 class PlayerPresenterImpl(
         private val world: World,
-        private val spriteBundleInteractors: MutableList<SpriteBundleInteractor>
+        private val players: MutableList<Player>
 ) : PlayerPresenter {
-
-    private val players: MutableList<PlayerServerImpl> = mutableListOf()
 
     //region Life-cycle
 
@@ -49,13 +45,11 @@ class PlayerPresenterImpl(
     }
 
     override fun addPlayer(player: PlayerServerImpl) {
-        spriteBundleInteractors.add(SpriteBundleInteractorImpl(player.carSprite))
         players.add(player)
     }
 
     override fun removePlayer(player: PlayerServerImpl) {
         players.remove(player)
-        // todo : missing sprite bundle remover
     }
 
 }

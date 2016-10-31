@@ -11,7 +11,6 @@ import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -29,12 +28,10 @@ class GameScreen(
 
     private val players = mutableListOf<Player>()
 
-    private val spriteBundleInteractors = mutableListOf<SpriteBundleInteractor>()
-    val carPresenter = CarPresenterImpl(spriteBundleInteractors)
     val spritesPresenter = SpritesPresenterImpl(
             camera,
             SpriteBatch(),
-            spriteBundleInteractors
+            players
     )
     val worldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
     val debugPresenter = DebugPresenterImpl(world, camera)
@@ -42,23 +39,22 @@ class GameScreen(
     val serverPresenter = ServerPresenterImpl(
             isHost,
             ServerInteractorImpl(),
-            spriteBundleInteractors
+            players
     )
     val clientPresenter = ClientPresenterImpl(
             isHost,
             ClientInteractorImpl(),
-            spriteBundleInteractors
+            players
     )
     val playerPresenter = PlayerPresenterImpl(
             world,
-            spriteBundleInteractors
+            players
     )
 
     fun create() {
         spritesPresenter.onAttach()
         debugPresenter.onAttach()
         inputPresenter.onAttach()
-        carPresenter.onAttach()
         serverPresenter.onAttach()
         clientPresenter.onAttach()
         playerPresenter.onAttach()
@@ -93,7 +89,6 @@ class GameScreen(
         spritesPresenter.render()
         debugPresenter.render()
         inputPresenter.render()
-        carPresenter.render(delta)
         serverPresenter.update()
         clientPresenter.update()
         playerPresenter.render(delta)
@@ -110,7 +105,6 @@ class GameScreen(
         worldPresenter.onDetach()
         debugPresenter.onDetach()
         inputPresenter.onDetach()
-        carPresenter.onDetach()
         serverPresenter.onDetach()
         clientPresenter.onDetach()
         playerPresenter.onDetach()

@@ -1,8 +1,8 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
 import org.slf4j.LoggerFactory
 
 /**
@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 class ClientPresenterImpl(
         private val isHost: Boolean,
         private val clientInteractor: ClientInteractor,
-        private val spriteBundleInteractors: List<SpriteBundleInteractor>
+        private val players: List<Player>
 ) : ClientPresenter, ClientEventListener {
 
     override fun onAttach() {
@@ -34,9 +34,6 @@ class ClientPresenterImpl(
 
     override fun onPlayerUpdate(positionX: Float, positionY: Float, angle: Float) {
         logger.debug("Updating object position to $positionX x $positionY")
-        if (spriteBundleInteractors.size == 0) return
-        spriteBundleInteractors.first().updatePosition(positionX, positionY)
-        spriteBundleInteractors.first().updateAngle(angle)
     }
 
     //endregion

@@ -17,7 +17,7 @@ class ClientPresenterImplTest {
     @Test
     fun onAttach_host_start() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, clientInteractor)
+        val presenter = ClientPresenterImpl(true, clientInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -29,7 +29,7 @@ class ClientPresenterImplTest {
     @Test
     fun onAttach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, clientInteractor)
+        val presenter = ClientPresenterImpl(false, clientInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -41,7 +41,7 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_host_stop() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, clientInteractor)
+        val presenter = ClientPresenterImpl(true, clientInteractor, emptyList())
 
         // Act
         presenter.onDetach()
@@ -53,7 +53,7 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, clientInteractor)
+        val presenter = ClientPresenterImpl(false, clientInteractor, emptyList())
 
         // Act
         presenter.onDetach()

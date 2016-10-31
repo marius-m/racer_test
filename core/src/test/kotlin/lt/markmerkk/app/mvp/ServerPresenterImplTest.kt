@@ -17,7 +17,7 @@ class ServerPresenterImplTest {
     @Test
     fun onAttach_host_start() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, serverInteractor)
+        val presenter = ServerPresenterImpl(true, serverInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -29,7 +29,7 @@ class ServerPresenterImplTest {
     @Test
     fun onAttach_notHost_idle() {
         // Arrange
-        val presenter = ServerPresenterImpl(false, serverInteractor)
+        val presenter = ServerPresenterImpl(false, serverInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -41,7 +41,7 @@ class ServerPresenterImplTest {
     @Test
     fun onDetach_host_stop() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, serverInteractor)
+        val presenter = ServerPresenterImpl(true, serverInteractor, emptyList())
 
         // Act
         presenter.onDetach()
@@ -53,7 +53,7 @@ class ServerPresenterImplTest {
     @Test
     fun onDetach_notHost_idle() {
         // Arrange
-        val presenter = ServerPresenterImpl(false, serverInteractor)
+        val presenter = ServerPresenterImpl(false, serverInteractor, emptyList())
 
         // Act
         presenter.onDetach()

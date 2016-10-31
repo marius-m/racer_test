@@ -12,6 +12,6 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         // fixme no initializer for android
-		initialize(new RacerGame(), config);
+		initialize(new RacerGame(true), config);
 	}
 }

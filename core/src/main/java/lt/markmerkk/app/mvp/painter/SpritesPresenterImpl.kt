@@ -2,6 +2,7 @@ package lt.markmerkk.app.mvp.painter
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
+import lt.markmerkk.app.entities.Player
 
 /**
  * @author mariusmerkevicius
@@ -10,7 +11,7 @@ import lt.markmerkk.app.CameraHelper
 class SpritesPresenterImpl(
         private val camera: CameraHelper,
         private val spriteBatch: SpriteBatch,
-        private val spriteBundleInteractors: List<SpriteBundleInteractor>
+        private val players: List<Player>
 ) : SpritesPresenter {
 
     init {
@@ -26,7 +27,7 @@ class SpritesPresenterImpl(
 
     override fun render() {
         spriteBatch.begin()
-        spriteBundleInteractors.forEach { it.sprite.draw(spriteBatch) }
+        players.forEach { it.carSprite.draw(spriteBatch) }
         spriteBatch.end()
     }
 
