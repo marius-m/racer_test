@@ -121,7 +121,7 @@ class GameScreen(
     }
 
     override fun onClientDisconnected(id: Int) {
-        playerPresenter.removePlayer(id)
+        playerPresenter.removePlayerByConnectionId(id)
     }
 
     //endregion

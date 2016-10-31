@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.entities.PlayerServerImpl
 
 /**
@@ -12,8 +13,8 @@ interface PlayerPresenter : Presenter {
     /**
      * Creates a new player
      */
-    fun createPlayer(connectionId: Int): PlayerServerImpl
-    fun addPlayer(player: PlayerServerImpl)
-    fun removePlayer(player: PlayerServerImpl)
-    fun removePlayer(connectionId: Int)
+    fun createPlayer(connectionId: Int): Player
+    fun addPlayer(player: Player)
+    fun removePlayer(player: Player)
+    fun removePlayerByConnectionId(connectionId: Int)
 }
