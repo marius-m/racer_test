@@ -23,25 +23,25 @@ class CarPresenterImpl(
     }
 
     override fun render(deltaTime: Float) {
-        cars.forEach {
-            it.update(deltaTime)
-            val sprite = spriteBundleInteractors.first().sprite
-            spriteBundleInteractors.first().updatePosition(
-                    GameScreen.PIXELS_PER_METER * it.body.position.x - sprite.width / 2,
-                    GameScreen.PIXELS_PER_METER * it.body.position.y - sprite.height / 2
-            )
-            spriteBundleInteractors.first().updateAngle(
-                    Math.toDegrees(it.body.angle.toDouble()).toFloat()
-            )
-        }
+//        cars.forEach {
+//            it.update(deltaTime)
+//            val sprite = spriteBundleInteractors.first().sprite
+//            spriteBundleInteractors.first().updatePosition(
+//                    GameScreen.PIXELS_PER_METER * it.body.position.x - sprite.width / 2,
+//                    GameScreen.PIXELS_PER_METER * it.body.position.y - sprite.height / 2
+//            )
+//            spriteBundleInteractors.first().updateAngle(
+//                    Math.toDegrees(it.body.angle.toDouble()).toFloat()
+//            )
+//        }
     }
 
     override fun addCar(car: Car) {
-        cars.add(car)
+//        cars.add(car)
     }
 
     override fun removeCar(car: Car) {
-        cars.remove(car)
+//        cars.remove(car)
     }
 
 }

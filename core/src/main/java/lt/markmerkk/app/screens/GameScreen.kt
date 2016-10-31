@@ -3,17 +3,15 @@ package lt.markmerkk.app.screens
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.box2d.CarImpl
+import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpriteBundleInteractor
-import lt.markmerkk.app.mvp.painter.SpriteBundleInteractorImpl
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -28,6 +26,8 @@ class GameScreen(
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
     private val componentFactory = PhysicsComponentFactory(world, camera)
+
+    private val players = mutableListOf<Player>()
 
     private val spriteBundleInteractors = mutableListOf<SpriteBundleInteractor>()
     val carPresenter = CarPresenterImpl(spriteBundleInteractors)
@@ -49,7 +49,10 @@ class GameScreen(
             ClientInteractorImpl(),
             spriteBundleInteractors
     )
-    val playerPresenter = PlayerPresenterImpl()
+    val playerPresenter = PlayerPresenterImpl(
+            world,
+            spriteBundleInteractors
+    )
 
     fun create() {
         spritesPresenter.onAttach()
@@ -64,14 +67,11 @@ class GameScreen(
         componentFactory.createPen()
 
         // Adding a test car
-//        if (isHost) {
-//            val car = CarImpl(world, Vector2(20f, 10f))
-//            carPresenter.addCar(car)
-//            inputPresenter.carInputInteractor = CarInputInteractorImpl(car)
-//        }
-
-        val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-        spriteBundleInteractors.add(SpriteBundleInteractorImpl(carSprite))
+        if (isHost) {
+            val player = playerPresenter.createPlayer()
+            playerPresenter.addPlayer(player)
+            inputPresenter.carInputInteractor = CarInputInteractorImpl(player.car as CarImpl) // todo: remove nasty cast
+        }
     }
 
     //region Callback methods
@@ -96,6 +96,7 @@ class GameScreen(
         carPresenter.render(delta)
         serverPresenter.update()
         clientPresenter.update()
+        playerPresenter.render(delta)
     }
 
     override fun resize(width: Int, height: Int) {
