@@ -3,6 +3,7 @@ package lt.markmerkk.app.mvp
 import com.nhaarman.mockito_kotlin.*
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.network.events.EventPlayersUpdate
+import lt.markmerkk.app.network.events.ReportPlayer
 import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.ArgumentCaptor
@@ -21,13 +22,13 @@ class ServerPresenterImplSendPlayerUpdateTest {
         // Arrange
         val fakePlayer: Player = mock()
         val presenter = ServerPresenterImpl(true, view, serverInteractor, emptyList())
-        val captor = ArgumentCaptor.forClass(EventPlayersUpdate::class.java)
+        val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
         presenter.sendPlayerUpdate(listOf(fakePlayer))
 
         // Assert
-        verify(serverInteractor).sendPlayerUpdate(capture(captor))
+        verify(serverInteractor).sendPlayerUpdate(capture(captor) as List<ReportPlayer>)
         assertNotNull(captor.value)
     }
 
@@ -38,16 +39,17 @@ class ServerPresenterImplSendPlayerUpdateTest {
         whenever(fakePlayer.id).thenReturn(111)
         whenever(fakePlayer.name).thenReturn("test_name")
         val presenter = ServerPresenterImpl(true, view, serverInteractor, emptyList())
-        val captor = ArgumentCaptor.forClass(EventPlayersUpdate::class.java)
+        val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
         presenter.sendPlayerUpdate(listOf(fakePlayer))
 
         // Assert
-        verify(serverInteractor).sendPlayerUpdate(capture(captor))
-        assertEquals(1, captor.value.reportPlayers.size)
-        assertEquals(111, captor.value.reportPlayers.get(0).id)
-        assertEquals("test_name", captor.value.reportPlayers.get(0).name)
+        verify(serverInteractor).sendPlayerUpdate(capture(captor) as List<ReportPlayer>)
+        val reportPlayers = captor.value as List<ReportPlayer>
+        assertEquals(1, reportPlayers.size)
+        assertEquals(111, reportPlayers.get(0).id)
+        assertEquals("test_name", reportPlayers.get(0).name)
     }
 
     @Test

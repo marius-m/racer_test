@@ -4,8 +4,7 @@ import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
-import lt.markmerkk.app.network.events.EventPlayerPosition
-import lt.markmerkk.app.network.events.EventRegister
+import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.junit.Assert.*
 import org.junit.Test
@@ -29,18 +28,18 @@ class NetworkEventProviderClientImplTest {
         eventProvider.event(invalidEvent)
 
         // Assert
-        verify(listener, never()).onPlayerUpdate(any(), any(), any())
+        verify(listener, never()).onPlayersUpdate(any())
     }
 
     @Test
-    fun registerEvent_trigger() {
+    fun playerUpdate_trigger() {
         // Arrange
-        val event = EventPlayerPosition()
+        val event = EventPlayersUpdate()
 
         // Act
         eventProvider.event(event)
 
         // Assert
-        verify(listener).onPlayerUpdate(any(), any(), any())
+        verify(listener).onPlayersUpdate(any())
     }
 }

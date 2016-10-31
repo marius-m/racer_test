@@ -1,8 +1,6 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.network.GameServer
-import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.ReportPlayer
 
 /**
@@ -15,5 +13,5 @@ interface ServerInteractor {
 
     fun start()
     fun stop()
-    fun sendPlayerUpdate(eventPlayersUpdate: EventPlayersUpdate)
+    fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>)
 }

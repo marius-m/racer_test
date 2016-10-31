@@ -46,8 +46,10 @@ class ServerInteractorImpl : ServerInteractor {
         server?.stop()
     }
 
-    override fun sendPlayerUpdate(eventPlayersUpdate: EventPlayersUpdate) {
-        server?.sendToAllTCP(eventPlayersUpdate)
+    override fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>) {
+        val playersUpdate = EventPlayersUpdate()
+        playersUpdate.reportPlayers = reportPlayers
+        server?.sendToAllTCP(playersUpdate)
     }
 
 }

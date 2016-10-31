@@ -3,6 +3,8 @@ package lt.markmerkk.app.mvp
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
+import lt.markmerkk.app.network.events.EventPlayersUpdate
+import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
 
 /**
@@ -32,8 +34,7 @@ class ClientPresenterImpl(
 
     //region Client events
 
-    override fun onPlayerUpdate(positionX: Float, positionY: Float, angle: Float) {
-        logger.debug("Updating object position to $positionX x $positionY")
+    override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
     }
 
     //endregion

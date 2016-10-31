@@ -1,9 +1,11 @@
 package lt.markmerkk.app.mvp.interactors
 
+import lt.markmerkk.app.network.events.ReportPlayer
+
 /**
  * @author mariusmerkevicius
  * @since 2016-10-30
  */
 interface ClientEventListener {
-    fun onPlayerUpdate(positionX: Float, positionY: Float, angle: Float)
+    fun onPlayersUpdate(playersUpdate: List<ReportPlayer>)
 }

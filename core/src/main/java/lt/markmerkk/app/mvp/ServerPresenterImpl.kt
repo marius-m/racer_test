@@ -42,9 +42,6 @@ class ServerPresenterImpl(
 
     //region Network events
 
-    override fun onNewClient(id: Int) {
-    }
-
     override fun onClientConnected(connectionId: Int) {
         Gdx.app.postRunnable { view.onClientConnected(connectionId) }
         sendPlayerUpdate(players)
@@ -59,14 +56,13 @@ class ServerPresenterImpl(
 
     fun sendPlayerUpdate(players: List<Player>) {
         if (players.size == 0) return
-        val playerUpdateEvent = EventPlayersUpdate()
-        playerUpdateEvent.reportPlayers = players.map {
+        val reportPlayers = players.map {
             ReportPlayer().apply {
                 id = it.id
                 name = it.name
             }
         }
-        serverInteractor.sendPlayerUpdate(playerUpdateEvent)
+        serverInteractor.sendPlayerUpdate(reportPlayers)
     }
 
     companion object {

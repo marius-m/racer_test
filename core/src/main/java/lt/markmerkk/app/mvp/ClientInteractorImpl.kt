@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameClient
 import lt.markmerkk.app.network.Network
-import lt.markmerkk.app.network.events.EventRegister
 import lt.markmerkk.app.network.events.NetworkEvent
 import java.net.InetAddress
 
@@ -24,9 +23,6 @@ class ClientInteractorImpl : ClientInteractor {
         client.addListener(object : Listener() {
             override fun connected(connection: Connection) {
                 super.connected(connection)
-                val registerEvent = EventRegister()
-                registerEvent.name = connection.remoteAddressTCP.toString()
-                client.sendTCP(registerEvent)
             }
         })
         client.addListener(object : Listener() {
