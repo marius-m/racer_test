@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 class NetworkEventProviderClientImpl(
         private val listener: ClientEventListener
 ) : NetworkEventProvider {
+
     override fun event(eventObject: NetworkEvent) {
         when (eventObject) {
             is EventPlayerPosition -> listener.onPlayerUpdate(
@@ -21,6 +22,13 @@ class NetworkEventProviderClientImpl(
             )
             else -> logger.debug("Undefined event received: $eventObject")
         }
+    }
+
+
+    override fun connected(connectionId: Int) {
+    }
+
+    override fun disconnected(connectionId: Int) {
     }
 
     companion object {

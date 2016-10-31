@@ -9,4 +9,5 @@ import com.badlogic.gdx.physics.box2d.Body
 interface Car {
     val body: Body
     fun update(deltaTime: Float)
+    fun destroy()
 }

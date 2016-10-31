@@ -132,6 +132,11 @@ class CarImpl(
                 }
     }
 
+    override fun destroy() {
+        world.destroyBody(body)
+        wheels.forEach { world.destroyBody(it.body) }
+    }
+
     companion object {
         private val TWO_PI = 2 * Math.PI
 

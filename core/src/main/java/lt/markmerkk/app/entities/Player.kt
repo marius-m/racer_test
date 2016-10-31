@@ -8,6 +8,7 @@ import lt.markmerkk.app.box2d.Car
  * @since 2016-10-31
  */
 interface Player {
+    val id: Int
     val name: String
     val car: Car
     val carSprite: Sprite

@@ -12,7 +12,8 @@ interface PlayerPresenter : Presenter {
     /**
      * Creates a new player
      */
-    fun createPlayer(): PlayerServerImpl
+    fun createPlayer(connectionId: Int): PlayerServerImpl
     fun addPlayer(player: PlayerServerImpl)
     fun removePlayer(player: PlayerServerImpl)
+    fun removePlayer(connectionId: Int)
 }

@@ -34,12 +34,13 @@ class PlayerPresenterImpl(
 
     //endregion
 
-    override fun createPlayer(): PlayerServerImpl {
+    override fun createPlayer(connectionId: Int): PlayerServerImpl {
         val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
         val player = PlayerServerImpl(
-                "test_player",
-                CarImpl(world, Vector2(2.0f, 5.0f)),
-                carSprite
+                id = connectionId,
+                name = "test_player_"+players.size,
+                car = CarImpl(world, Vector2(2.0f, 5.0f)),
+                carSprite = carSprite
         )
         return player
     }
@@ -49,6 +50,12 @@ class PlayerPresenterImpl(
     }
 
     override fun removePlayer(player: PlayerServerImpl) {
+        players.remove(player)
+    }
+
+    override fun removePlayer(connectionId: Int) {
+        val player = players.find { it.id == connectionId } ?: return
+        player.car.destroy()
         players.remove(player)
     }
 

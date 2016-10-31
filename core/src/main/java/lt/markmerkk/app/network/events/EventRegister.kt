@@ -5,5 +5,6 @@ package lt.markmerkk.app.network.events
  * @since 2016-10-23
  */
 class EventRegister : NetworkEvent {
+    var id: Int = -1
     var name: String? = null
 }

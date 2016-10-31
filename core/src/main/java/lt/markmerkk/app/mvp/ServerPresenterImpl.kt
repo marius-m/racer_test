@@ -1,5 +1,7 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.Gdx
+import javafx.application.Platform
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory
  */
 class ServerPresenterImpl(
         private val isHost: Boolean,
+        private val view: ServerView,
         private val serverInteractor: ServerInteractor,
         private val players: List<Player>
 ) : ServerPresenter, ServerEventListener {
@@ -30,7 +33,7 @@ class ServerPresenterImpl(
 
     override fun update() {
         if (players.size == 0) return
-        val updateEvent = EventPlayerPosition()
+//        val updateEvent = EventPlayerPosition()
 //        updateEvent.positionX = spriteBundleInteractor.first().sprite.x
 //        updateEvent.positionY = spriteBundleInteractor.first().sprite.y
 //        updateEvent.angle = spriteBundleInteractor.first().sprite.rotation
@@ -39,8 +42,15 @@ class ServerPresenterImpl(
 
     //region Network events
 
-    override fun onNewClient(clientName: String) {
-        logger.debug("Got a new client: $clientName!")
+    override fun onNewClient(id: Int) {
+    }
+
+    override fun onClientConnected(connectionId: Int) {
+        Gdx.app.postRunnable { view.onClientConnected(connectionId) }
+    }
+
+    override fun onClientDisconnected(connectionId: Int) {
+        Gdx.app.postRunnable { view.onClientDisconnected(connectionId) }
     }
 
     //endregion

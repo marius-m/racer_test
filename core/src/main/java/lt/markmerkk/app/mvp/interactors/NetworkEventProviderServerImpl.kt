@@ -15,9 +15,17 @@ class NetworkEventProviderServerImpl(
 
     override fun event(eventObject: NetworkEvent) {
         when(eventObject) {
-            is EventRegister -> listener.onNewClient(eventObject.toString())
+            is EventRegister -> listener.onNewClient(eventObject.id)
             else -> logger.debug("Undefined event received: $eventObject")
         }
+    }
+
+    override fun connected(connectionId: Int) {
+        listener.onClientConnected(connectionId)
+    }
+
+    override fun disconnected(connectionId: Int) {
+        listener.onClientDisconnected(connectionId)
     }
 
     companion object {

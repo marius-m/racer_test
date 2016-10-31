@@ -33,9 +33,30 @@ class NetworkEventProviderServerImplTest {
     }
 
     @Test
+    fun connected_trigger() {
+        // Arrange
+        // Act
+        eventProvider.connected(111)
+
+        // Assert
+        verify(listener).onClientConnected(any())
+    }
+
+    @Test
+    fun disconnected_trigger() {
+        // Arrange
+        // Act
+        eventProvider.disconnected(111)
+
+        // Assert
+        verify(listener).onClientDisconnected(any())
+    }
+
+    @Test
     fun registerEvent_trigger() {
         // Arrange
         val registerEvent = EventRegister()
+        registerEvent.id = 111
         registerEvent.name = "test_name"
 
         // Act

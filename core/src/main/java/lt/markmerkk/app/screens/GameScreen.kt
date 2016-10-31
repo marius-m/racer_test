@@ -20,7 +20,7 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  */
 class GameScreen(
         private val isHost: Boolean = true
-) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ClientView, PlayerView {
+) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ServerView, ClientView, PlayerView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
@@ -38,6 +38,7 @@ class GameScreen(
     val inputPresenter = InputPresenterImpl(Gdx.input)
     val serverPresenter = ServerPresenterImpl(
             isHost,
+            this,
             ServerInteractorImpl(),
             players
     )
@@ -64,7 +65,7 @@ class GameScreen(
 
         // Adding a test car
         if (isHost) {
-            val player = playerPresenter.createPlayer()
+            val player = playerPresenter.createPlayer(connectionId = -1)
             playerPresenter.addPlayer(player)
             inputPresenter.carInputInteractor = CarInputInteractorImpl(player.car as CarImpl) // todo: remove nasty cast
         }
@@ -108,6 +109,19 @@ class GameScreen(
         serverPresenter.onDetach()
         clientPresenter.onDetach()
         playerPresenter.onDetach()
+    }
+
+    //endregion
+
+    //region MVP
+
+    override fun onClientConnected(id: Int) {
+        val newPlayer = playerPresenter.createPlayer(id)
+        playerPresenter.addPlayer(newPlayer)
+    }
+
+    override fun onClientDisconnected(id: Int) {
+        playerPresenter.removePlayer(id)
     }
 
     //endregion

@@ -22,6 +22,16 @@ class ServerInteractorImpl : ServerInteractor {
         server!!.bind(Const.PORT_TCP, Const.PORT_UDP)
         server!!.start()
         server!!.addListener(object : Listener() {
+            override fun connected(connection: Connection) {
+                super.connected(connection)
+                eventProvider?.connected(connection.id)
+            }
+
+            override fun disconnected(connection: Connection) {
+                super.disconnected(connection)
+                eventProvider?.disconnected(connection.id)
+            }
+
             override fun received(connection: Connection, eventObject: Any) {
                 super.received(connection, eventObject)
                 if (eventObject !is NetworkEvent) return

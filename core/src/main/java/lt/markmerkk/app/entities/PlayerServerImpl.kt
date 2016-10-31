@@ -9,6 +9,7 @@ import lt.markmerkk.app.screens.GameScreen
  * @since 2016-10-31
  */
 class PlayerServerImpl(
+        override val id: Int = -1,
         override val name: String,
         override val car: Car,
         override val carSprite: Sprite
