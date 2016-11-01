@@ -1,35 +1,35 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.box2d.CarImpl
+import lt.markmerkk.app.box2d.Car
 
 /**
  * @author mariusmerkevicius
  * @since 2016-10-21
  */
 class CarInputInteractorImpl(
-        private val car: CarImpl
+        private val car: Car
 ) : CarInputInteractor {
     override fun moveForward() {
-        car.accelerate = CarImpl.ACC_FORWARD
+        car.accelerate = Car.ACC_FORWARD
     }
 
     override fun moveBackward() {
-        car.accelerate = CarImpl.ACC_BACKWARD
+        car.accelerate = Car.ACC_BACKWARD
     }
 
     override fun moveNone() {
-        car.accelerate = CarImpl.ACC_NONE
+        car.accelerate = Car.ACC_NONE
     }
 
     override fun steerLeft() {
-        car.steer = CarImpl.STEER_LEFT
+        car.steer = Car.STEER_LEFT
     }
 
     override fun steerRight() {
-        car.steer = CarImpl.STEER_RIGHT
+        car.steer = Car.STEER_RIGHT
     }
 
     override fun steerNone() {
-        car.steer = CarImpl.STEER_NONE
+        car.steer = Car.STEER_NONE
     }
 }

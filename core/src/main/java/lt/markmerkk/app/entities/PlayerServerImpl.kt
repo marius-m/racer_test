@@ -1,7 +1,7 @@
 package lt.markmerkk.app.entities
 
 import com.badlogic.gdx.graphics.g2d.Sprite
-import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarBridge
 import lt.markmerkk.app.screens.GameScreen
 
 /**
@@ -11,15 +11,15 @@ import lt.markmerkk.app.screens.GameScreen
 class PlayerServerImpl(
         override val id: Int = -1,
         override val name: String,
-        override val car: Car,
+        override val carBridge: CarBridge,
         override val carSprite: Sprite
 ) : Player {
     override fun update(deltaTime: Float) {
-        car.update(deltaTime)
+        carBridge.update(deltaTime)
         carSprite.setPosition(
-                GameScreen.PIXELS_PER_METER * car.body.position.x - carSprite.width / 2,
-                GameScreen.PIXELS_PER_METER * car.body.position.y - carSprite.height / 2
+                GameScreen.PIXELS_PER_METER * carBridge.x - carSprite.width / 2,
+                GameScreen.PIXELS_PER_METER * carBridge.y - carSprite.height / 2
         )
-        carSprite.rotation = Math.toDegrees(car.body.angle.toDouble()).toFloat()
+        carSprite.rotation = Math.toDegrees(carBridge.angle.toDouble()).toFloat()
     }
 }

@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
+import lt.markmerkk.app.box2d.CarBridgeEmptyImpl
+import lt.markmerkk.app.box2d.CarBridgeImpl
 import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.entities.PlayerServerImpl
@@ -14,6 +16,7 @@ import lt.markmerkk.app.entities.PlayerServerImpl
  * @since 2016-10-31
  */
 class PlayerPresenterImpl(
+        private val isHost: Boolean,
         private val world: World,
         private val players: MutableList<Player>
 ) : PlayerPresenter {
@@ -36,10 +39,11 @@ class PlayerPresenterImpl(
 
     override fun createPlayer(connectionId: Int): Player {
         val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
+        val carBridge = if (isHost) CarBridgeImpl(CarImpl(world, Vector2(2.0f, 5.0f))) else CarBridgeEmptyImpl()
         val player = PlayerServerImpl(
                 id = connectionId,
                 name = "test_player_"+players.size,
-                car = CarImpl(world, Vector2(2.0f, 5.0f)),
+                carBridge = carBridge,
                 carSprite = carSprite
         )
         return player
@@ -50,7 +54,7 @@ class PlayerPresenterImpl(
     }
 
     override fun removePlayer(player: Player) {
-        player.car.destroy()
+        player.carBridge.destroy()
         players.remove(player)
     }
 

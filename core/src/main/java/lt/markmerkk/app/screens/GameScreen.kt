@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
+import lt.markmerkk.app.box2d.CarBridge
 import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
@@ -50,6 +51,7 @@ class GameScreen(
             players
     )
     val playerPresenter = PlayerPresenterImpl(
+            isHost,
             world,
             players
     )
@@ -69,7 +71,7 @@ class GameScreen(
         if (isHost) {
             val player = playerPresenter.createPlayer(connectionId = -1)
             playerPresenter.addPlayer(player)
-            inputPresenter.carInputInteractor = CarInputInteractorImpl(player.car as CarImpl) // todo: remove nasty cast
+            inputPresenter.carInputInteractor = CarInputInteractorImpl(player.carBridge.car)
         }
     }
 

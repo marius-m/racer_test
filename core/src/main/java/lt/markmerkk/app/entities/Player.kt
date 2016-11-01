@@ -2,6 +2,7 @@ package lt.markmerkk.app.entities
 
 import com.badlogic.gdx.graphics.g2d.Sprite
 import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarBridge
 
 /**
  * @author mariusmerkevicius
@@ -10,7 +11,7 @@ import lt.markmerkk.app.box2d.Car
 interface Player {
     val id: Int
     val name: String
-    val car: Car
+    val carBridge: CarBridge
     val carSprite: Sprite
 
     fun update(deltaTime: Float)

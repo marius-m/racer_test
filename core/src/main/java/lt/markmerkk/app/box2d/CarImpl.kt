@@ -1,8 +1,5 @@
 package lt.markmerkk.app.box2d
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.Sprite
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
 import lt.markmerkk.app.box2d.temp_components.wheel.RevolvingWheelImpl
@@ -27,8 +24,8 @@ class CarImpl(
     val angle = Math.PI.toFloat()
     lateinit var wheels: List<Wheel>
 
-    var steer = STEER_NONE
-    var accelerate = ACC_NONE
+    override var steer = Car.STEER_NONE
+    override var accelerate = Car.ACC_NONE
     var wheelAngle: Float = 0f
     var speed = 0f
         set(value) {
@@ -89,23 +86,23 @@ class CarImpl(
 
         val increase = maxSteerAngle * deltaTime * 5f
         when (steer) {
-            STEER_LEFT -> wheelAngle = Math.min((Math.max(wheelAngle, 0f) + increase).toFloat(), maxSteerAngle)
-            STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
+            Car.STEER_LEFT -> wheelAngle = Math.min((Math.max(wheelAngle, 0f) + increase).toFloat(), maxSteerAngle)
+            Car.STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
             else -> wheelAngle = 0f
         }
         wheels.filterIsInstance<RevolvingWheelImpl>()
                 .forEach { it.changeAngle(wheelAngle) }
 
         var baseVector: Vector2
-        if (accelerate == ACC_FORWARD && this.getSpeedKMH() < this.maxSpeed) {
+        if (accelerate == Car.ACC_FORWARD && this.getSpeedKMH() < this.maxSpeed) {
             baseVector = Vector2(0f, -1f)
-        } else if (accelerate == ACC_BACKWARD) {
+        } else if (accelerate == Car.ACC_BACKWARD) {
             if (getLocalVelocity().y < 0) {
                 baseVector = Vector2(0f, 1.3f)
             } else {
                 baseVector = Vector2(0f, 0.7f)
             }
-        } else if (accelerate == ACC_NONE) {
+        } else if (accelerate == Car.ACC_NONE) {
             baseVector = Vector2(0f, 0f)
             if (getSpeedKMH() < 7) {
                 speed = 0f
@@ -135,18 +132,6 @@ class CarImpl(
     override fun destroy() {
         world.destroyBody(body)
         wheels.forEach { world.destroyBody(it.body) }
-    }
-
-    companion object {
-        private val TWO_PI = 2 * Math.PI
-
-        const val STEER_NONE = 0
-        const val STEER_LEFT = 1
-        const val STEER_RIGHT = 2
-
-        const val ACC_NONE = 0
-        const val ACC_FORWARD = 1
-        const val ACC_BACKWARD = 2
     }
 
 }
