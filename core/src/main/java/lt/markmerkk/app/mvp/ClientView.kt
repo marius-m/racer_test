@@ -5,6 +5,4 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-23
  */
 interface ClientView {
-    fun onClientConnected(id: Int)
-    fun onClientDisconnected(id: Int)
 }

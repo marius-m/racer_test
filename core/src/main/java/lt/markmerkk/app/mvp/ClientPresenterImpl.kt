@@ -14,6 +14,7 @@ class ClientPresenterImpl(
         private val isHost: Boolean,
         private val view: ClientView,
         private val clientInteractor: ClientInteractor,
+        private val playerInteractor: PlayerInteractor,
         private val players: List<Player>
 ) : ClientPresenter, ClientEventListener {
 
@@ -39,14 +40,15 @@ class ClientPresenterImpl(
         for (reportPlayer in reportPlayers) {
             val alreadyExistingPlayer = currentPlayers.find { it.id == reportPlayer.id }
             if (alreadyExistingPlayer != null) continue
-            view.onClientConnected(reportPlayer.id)
+            val newPlayer = playerInteractor.createPlayer(reportPlayer.id)
+            playerInteractor.addPlayer(newPlayer)
         }
 
         // Removing not connected players
         for (player in currentPlayers) {
             val playerExist = reportPlayers.find { it.id == player.id }
             if (playerExist != null) continue
-            view.onClientDisconnected(player.id)
+            playerInteractor.removePlayerByConnectionId(player.id)
         }
     }
 

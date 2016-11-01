@@ -14,13 +14,14 @@ import org.junit.Test
  */
 class ClientPresenterImplTest {
     val view: ClientView = mock()
+    val playerInteractor: PlayerInteractor = mock()
     val eventProvider: NetworkEventProvider = mock()
     val clientInteractor: ClientInteractor = mock()
 
     @Test
     fun onAttach_host_start() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, view, clientInteractor, emptyList())
+        val presenter = ClientPresenterImpl(true, view, clientInteractor, playerInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -32,7 +33,7 @@ class ClientPresenterImplTest {
     @Test
     fun onAttach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, view, clientInteractor, emptyList())
+        val presenter = ClientPresenterImpl(false, view, clientInteractor, playerInteractor, emptyList())
 
         // Act
         presenter.onAttach()
@@ -44,7 +45,7 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_host_stop() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, view, clientInteractor, emptyList())
+        val presenter = ClientPresenterImpl(true, view, clientInteractor, playerInteractor, emptyList())
 
         // Act
         presenter.onDetach()
@@ -56,7 +57,7 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, view, clientInteractor, emptyList())
+        val presenter = ClientPresenterImpl(false, view, clientInteractor, playerInteractor, emptyList())
 
         // Act
         presenter.onDetach()

@@ -53,6 +53,7 @@ class GameScreen(
             isHost,
             this,
             ClientInteractorImpl(),
+            playerInteractor,
             players
     )
     val playerPresenter: PlayerPresenter = PlayerPresenterImpl(
@@ -117,23 +118,6 @@ class GameScreen(
         serverPresenter.onDetach()
         clientPresenter.onDetach()
         playerPresenter.onDetach()
-    }
-
-    //endregion
-
-    //region MVP
-
-    override fun onClientConnected(id: Int) {
-//        Gdx.app.postRunnable {
-//            val newPlayer = playerPresenter.createPlayer(id)
-//            playerPresenter.addPlayer(newPlayer)
-//        }
-    }
-
-    override fun onClientDisconnected(id: Int) {
-//        Gdx.app.postRunnable {
-//            playerPresenter.removePlayerByConnectionId(id)
-//        }
     }
 
     //endregion

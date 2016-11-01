@@ -10,6 +10,7 @@ import org.junit.Test
  */
 class ClientPresenterImplSendHelloTest {
     val view: ClientView = mock()
+    val playerInteractor: PlayerInteractor = mock()
     val interactor: ClientInteractor = mock()
 
     @Test
@@ -19,6 +20,7 @@ class ClientPresenterImplSendHelloTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 emptyList()
         )
 
@@ -36,6 +38,7 @@ class ClientPresenterImplSendHelloTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 emptyList()
         )
 

@@ -4,6 +4,7 @@ import com.nhaarman.mockito_kotlin.*
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.network.events.ReportPlayer
 import org.junit.Assert.*
+import org.junit.Before
 import org.junit.Test
 
 /**
@@ -13,7 +14,14 @@ import org.junit.Test
  */
 class ClientPresenterImplPlayersUpdateTest {
     val view: ClientView = mock()
+    val playerInteractor: PlayerInteractor = mock()
     val interactor: ClientInteractor = mock()
+
+    @Before
+    fun setUp() {
+        val fakePlayer: Player = mock()
+        whenever(playerInteractor.createPlayer(any())).thenReturn(fakePlayer)
+    }
 
     @Test
     fun noPlayers_newPlayer_createNew() {
@@ -22,6 +30,7 @@ class ClientPresenterImplPlayersUpdateTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 emptyList()
         )
         val reportPlayer = ReportPlayer().apply {
@@ -35,7 +44,8 @@ class ClientPresenterImplPlayersUpdateTest {
         ))
 
         // Assert
-        verify(view).onClientConnected(10)
+        verify(playerInteractor).createPlayer(10)
+        verify(playerInteractor).addPlayer(any())
     }
 
     @Test
@@ -45,6 +55,7 @@ class ClientPresenterImplPlayersUpdateTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 emptyList()
         )
         val reportPlayer1 = ReportPlayer().apply {
@@ -68,9 +79,10 @@ class ClientPresenterImplPlayersUpdateTest {
         ))
 
         // Assert
-        verify(view).onClientConnected(10)
-        verify(view).onClientConnected(11)
-        verify(view).onClientConnected(12)
+        verify(playerInteractor).createPlayer(10)
+        verify(playerInteractor).createPlayer(11)
+        verify(playerInteractor).createPlayer(12)
+        verify(playerInteractor, times(3)).addPlayer(any())
     }
 
     @Test
@@ -87,6 +99,7 @@ class ClientPresenterImplPlayersUpdateTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 listOf(existPlayer1)
         )
 
@@ -96,8 +109,8 @@ class ClientPresenterImplPlayersUpdateTest {
         ))
 
         // Assert
-        verify(view, never()).onClientConnected(any())
-        verify(view, never()).onClientDisconnected(any())
+        verify(playerInteractor, never()).createPlayer(any())
+        verify(playerInteractor, never()).removePlayerByConnectionId(any())
     }
 
     @Test
@@ -110,6 +123,7 @@ class ClientPresenterImplPlayersUpdateTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 listOf(existPlayer1)
         )
 
@@ -117,7 +131,7 @@ class ClientPresenterImplPlayersUpdateTest {
         presenter.onPlayersUpdate(emptyList())
 
         // Assert
-        verify(view).onClientDisconnected(10)
+        verify(playerInteractor).removePlayerByConnectionId(10)
     }
 
     @Test
@@ -134,6 +148,7 @@ class ClientPresenterImplPlayersUpdateTest {
                 false,
                 view,
                 interactor,
+                playerInteractor,
                 listOf(existPlayer1)
         )
 
@@ -141,7 +156,7 @@ class ClientPresenterImplPlayersUpdateTest {
         presenter.onPlayersUpdate(listOf(reportPlayer1))
 
         // Assert
-        verify(view).onClientConnected(10)
-        verify(view).onClientDisconnected(20)
+        verify(playerInteractor).createPlayer(10)
+        verify(playerInteractor).removePlayerByConnectionId(20)
     }
 }
