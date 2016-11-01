@@ -62,11 +62,10 @@ class ServerPresenterImpl(
             ReportPlayer().apply {
                 id = it.id
                 name = it.name
-                x = it.carBridge.x
-                y = it.carBridge.y
             }
         }
         serverInteractor.sendPlayerUpdate(reportPlayers)
+        logger.debug("Reporting player list: $reportPlayers")
     }
 
     companion object {

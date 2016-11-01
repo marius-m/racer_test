@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
@@ -13,6 +14,7 @@ import org.junit.Test
  */
 class ServerPresenterImplTest {
     val view: ServerView = mock()
+    val eventProvider: NetworkEventProvider = mock()
     val serverInteractor: ServerInteractor = mock()
 
     @Test
@@ -24,7 +26,7 @@ class ServerPresenterImplTest {
         presenter.onAttach()
 
         // Assert
-        verify(serverInteractor).start()
+        verify(serverInteractor).start(any())
     }
 
     @Test
@@ -36,7 +38,7 @@ class ServerPresenterImplTest {
         presenter.onAttach()
 
         // Assert
-        verify(serverInteractor, never()).start()
+        verify(serverInteractor, never()).start(any())
     }
 
     @Test

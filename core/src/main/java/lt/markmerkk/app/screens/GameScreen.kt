@@ -10,6 +10,7 @@ import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
+import lt.markmerkk.app.mvp.painter.SpritesPresenter
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
 
@@ -28,29 +29,33 @@ class GameScreen(
 
     private val players = mutableListOf<Player>()
 
-    val spritesPresenter = SpritesPresenterImpl(
+    val spritesPresenter: SpritesPresenter = SpritesPresenterImpl(
             camera,
             SpriteBatch(),
             players
     )
-    val worldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
-    val debugPresenter = DebugPresenterImpl(world, camera)
-    val inputPresenter = InputPresenterImpl(Gdx.input)
-    val serverPresenter = ServerPresenterImpl(
+    val worldPresenter: WorldPresenter = WorldPresenterImpl(isHost, WorldInteractorImpl(world))
+    val debugPresenter: DebugPresenter = DebugPresenterImpl(world, camera)
+    val inputPresenter: InputPresenter = InputPresenterImpl(Gdx.input)
+    val serverPresenter: ServerPresenter = ServerPresenterImpl(
             isHost,
             this,
             ServerInteractorImpl(),
             players
     )
-    val clientPresenter = ClientPresenterImpl(
+    val clientPresenter: ClientPresenter = ClientPresenterImpl(
             isHost,
             this,
             ClientInteractorImpl(),
             players
     )
-    val playerPresenter = PlayerPresenterImpl(
+    val playerInteractor: PlayerInteractor = PlayerInteractorImpl(
             isHost,
             world,
+            players
+    )
+    val playerPresenter: PlayerPresenter = PlayerPresenterImpl(
+            playerInteractor,
             players
     )
 
@@ -118,16 +123,16 @@ class GameScreen(
     //region MVP
 
     override fun onClientConnected(id: Int) {
-        Gdx.app.postRunnable {
-            val newPlayer = playerPresenter.createPlayer(id)
-            playerPresenter.addPlayer(newPlayer)
-        }
+//        Gdx.app.postRunnable {
+//            val newPlayer = playerPresenter.createPlayer(id)
+//            playerPresenter.addPlayer(newPlayer)
+//        }
     }
 
     override fun onClientDisconnected(id: Int) {
-        Gdx.app.postRunnable {
-            playerPresenter.removePlayerByConnectionId(id)
-        }
+//        Gdx.app.postRunnable {
+//            playerPresenter.removePlayerByConnectionId(id)
+//        }
     }
 
     //endregion

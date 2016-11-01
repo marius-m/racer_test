@@ -4,11 +4,9 @@ import lt.markmerkk.app.entities.Player
 
 /**
  * @author mariusmerkevicius
- * @since 2016-10-31
+ * @since 2016-11-01
  */
-interface PlayerPresenter : Presenter {
-    fun render(deltaTime: Float)
-
+interface PlayerInteractor {
     fun createPlayer(connectionId: Int): Player
     fun addPlayer(player: Player)
     fun removePlayer(player: Player)

@@ -10,7 +10,7 @@ class InputPresenterImpl(
         private val input: Input
 ) : InputPresenter {
 
-    var carInputInteractor: CarInputInteractor? = null
+    override var carInputInteractor: CarInputInteractor? = null
 
     override fun onAttach() {
     }

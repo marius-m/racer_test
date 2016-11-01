@@ -5,5 +5,7 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-21
  */
 interface InputPresenter : Presenter {
+    var carInputInteractor: CarInputInteractor?
+
     fun render()
 }
