@@ -43,12 +43,12 @@ class ServerPresenterImpl(
     //region Network events
 
     override fun onClientConnected(connectionId: Int) {
-        Gdx.app.postRunnable { view.onClientConnected(connectionId) }
+        view.onClientConnected(connectionId)
         sendPlayerUpdate(players)
     }
 
     override fun onClientDisconnected(connectionId: Int) {
-        Gdx.app.postRunnable { view.onClientDisconnected(connectionId) }
+        view.onClientDisconnected(connectionId)
         sendPlayerUpdate(players)
     }
 

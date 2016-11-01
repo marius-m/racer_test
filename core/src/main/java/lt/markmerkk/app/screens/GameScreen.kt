@@ -7,8 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
-import lt.markmerkk.app.box2d.CarBridge
-import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
@@ -120,12 +118,16 @@ class GameScreen(
     //region MVP
 
     override fun onClientConnected(id: Int) {
-        val newPlayer = playerPresenter.createPlayer(id)
-        playerPresenter.addPlayer(newPlayer)
+        Gdx.app.postRunnable {
+            val newPlayer = playerPresenter.createPlayer(id)
+            playerPresenter.addPlayer(newPlayer)
+        }
     }
 
     override fun onClientDisconnected(id: Int) {
-        playerPresenter.removePlayerByConnectionId(id)
+        Gdx.app.postRunnable {
+            playerPresenter.removePlayerByConnectionId(id)
+        }
     }
 
     //endregion

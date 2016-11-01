@@ -10,6 +10,7 @@ import lt.markmerkk.app.box2d.CarBridgeImpl
 import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.entities.PlayerServerImpl
+import org.slf4j.LoggerFactory
 
 /**
  * @author mariusmerkevicius
@@ -38,8 +39,13 @@ class PlayerPresenterImpl(
     //endregion
 
     override fun createPlayer(connectionId: Int): Player {
+        logger.debug("Creating a new player with $connectionId id")
         val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-        val carBridge = if (isHost) CarBridgeImpl(CarImpl(world, Vector2(2.0f, 5.0f))) else CarBridgeEmptyImpl()
+        val carBridge = if (isHost) {
+            CarBridgeImpl(CarImpl(world, Vector2(2.0f, 5.0f)))
+        } else {
+            CarBridgeEmptyImpl()
+        }
         val player = PlayerServerImpl(
                 id = connectionId,
                 name = "test_player_"+players.size,
@@ -50,10 +56,12 @@ class PlayerPresenterImpl(
     }
 
     override fun addPlayer(player: Player) {
+        logger.debug("Adding $player")
         players.add(player)
     }
 
     override fun removePlayer(player: Player) {
+        logger.debug("Removing $player")
         player.carBridge.destroy()
         players.remove(player)
     }
@@ -61,6 +69,10 @@ class PlayerPresenterImpl(
     override fun removePlayerByConnectionId(connectionId: Int) {
         val player = players.find { it.id == connectionId } ?: return
         removePlayer(player)
+    }
+
+    companion object {
+        val logger = LoggerFactory.getLogger(PlayerPresenterImpl::class.java)!!
     }
 
 }
