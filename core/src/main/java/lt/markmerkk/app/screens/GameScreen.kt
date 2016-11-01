@@ -29,6 +29,11 @@ class GameScreen(
 
     private val players = mutableListOf<Player>()
 
+    val playerInteractor: PlayerInteractor = PlayerInteractorImpl(
+            isHost,
+            world,
+            players
+    )
     val spritesPresenter: SpritesPresenter = SpritesPresenterImpl(
             camera,
             SpriteBatch(),
@@ -41,17 +46,13 @@ class GameScreen(
             isHost,
             this,
             ServerInteractorImpl(),
+            playerInteractor,
             players
     )
     val clientPresenter: ClientPresenter = ClientPresenterImpl(
             isHost,
             this,
             ClientInteractorImpl(),
-            players
-    )
-    val playerInteractor: PlayerInteractor = PlayerInteractorImpl(
-            isHost,
-            world,
             players
     )
     val playerPresenter: PlayerPresenter = PlayerPresenterImpl(

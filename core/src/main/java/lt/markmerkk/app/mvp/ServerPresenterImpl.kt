@@ -16,6 +16,7 @@ class ServerPresenterImpl(
         private val isHost: Boolean,
         private val view: ServerView,
         private val serverInteractor: ServerInteractor,
+        private val playerInteractor: PlayerInteractor,
         private val players: List<Player>
 ) : ServerPresenter, ServerEventListener {
 
@@ -30,23 +31,17 @@ class ServerPresenterImpl(
     }
 
     override fun update() {
-        if (players.size == 0) return
-//        val updateEvent = EventPlayerPosition()
-//        updateEvent.positionX = spriteBundleInteractor.first().sprite.x
-//        updateEvent.positionY = spriteBundleInteractor.first().sprite.y
-//        updateEvent.angle = spriteBundleInteractor.first().sprite.rotation
-//        serverInteractor.server?.sendToAllUDP(updateEvent)
     }
 
     //region Network events
 
     override fun onClientConnected(connectionId: Int) {
-        view.onClientConnected(connectionId)
-//        sendPlayerUpdate(players)
+        val newPlayer = playerInteractor.createPlayer(connectionId)
+        playerInteractor.addPlayer(newPlayer)
     }
 
     override fun onClientDisconnected(connectionId: Int) {
-        view.onClientDisconnected(connectionId)
+        playerInteractor.removePlayerByConnectionId(connectionId)
         sendPlayerUpdate(players)
     }
 

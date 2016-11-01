@@ -15,13 +15,14 @@ import org.mockito.ArgumentCaptor
  */
 class ServerPresenterImplSendPlayerUpdateTest {
     val view: ServerView = mock()
+    val playerInteractor: PlayerInteractor = mock()
     val serverInteractor: ServerInteractor = mock()
 
     @Test
     fun validPlayers_generatePlayers() {
         // Arrange
         val fakePlayer: Player = mock()
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, emptyList())
+        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
         val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
@@ -38,7 +39,7 @@ class ServerPresenterImplSendPlayerUpdateTest {
         val fakePlayer: Player = mock()
         whenever(fakePlayer.id).thenReturn(111)
         whenever(fakePlayer.name).thenReturn("test_name")
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, emptyList())
+        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
         val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
@@ -55,7 +56,7 @@ class ServerPresenterImplSendPlayerUpdateTest {
     @Test
     fun noPlayers_doNotSend() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, emptyList())
+        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
 
         // Act
         presenter.sendPlayerUpdate(emptyList())
