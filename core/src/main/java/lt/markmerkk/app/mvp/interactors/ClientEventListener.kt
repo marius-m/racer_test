@@ -8,4 +8,6 @@ import lt.markmerkk.app.network.events.ReportPlayer
  */
 interface ClientEventListener {
     fun onPlayersUpdate(reportPlayers: List<ReportPlayer>)
+    fun onConnected(connectionId: Int)
+    fun onDisconnected(connectionId: Int)
 }

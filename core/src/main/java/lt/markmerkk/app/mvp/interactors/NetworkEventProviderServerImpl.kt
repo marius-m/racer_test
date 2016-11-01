@@ -1,6 +1,7 @@
 package lt.markmerkk.app.mvp.interactors
 
 import lt.markmerkk.app.mvp.NetworkEventProvider
+import lt.markmerkk.app.network.events.EventHello
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.slf4j.LoggerFactory
 
@@ -14,6 +15,7 @@ class NetworkEventProviderServerImpl(
 
     override fun event(eventObject: NetworkEvent) {
         when(eventObject) {
+            is EventHello -> listener.onClientHello()
             else -> logger.debug("Undefined event received: $eventObject")
         }
     }

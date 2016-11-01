@@ -42,4 +42,24 @@ class NetworkEventProviderClientImplTest {
         // Assert
         verify(listener).onPlayersUpdate(any())
     }
+
+    @Test
+    fun playerConnected_trigger() {
+        // Arrange
+        // Act
+        eventProvider.connected(connectionId = 1)
+
+        // Assert
+        verify(listener).onConnected(any())
+    }
+
+    @Test
+    fun playerDisconnected_trigger() {
+        // Arrange
+        // Act
+        eventProvider.disconnected(connectionId = 1)
+
+        // Assert
+        verify(listener).onDisconnected(any())
+    }
 }

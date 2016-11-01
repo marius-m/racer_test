@@ -19,13 +19,11 @@ class ClientPresenterImpl(
 
     override fun onAttach() {
         if (isHost) return
-        clientInteractor.start()
-        clientInteractor.eventProvider = NetworkEventProviderClientImpl(this)
+        clientInteractor.start(NetworkEventProviderClientImpl(this))
     }
 
     override fun onDetach() {
         if (isHost) return
-        clientInteractor.eventProvider = null
         clientInteractor.stop()
     }
 
@@ -41,15 +39,22 @@ class ClientPresenterImpl(
         for (reportPlayer in reportPlayers) {
             val alreadyExistingPlayer = currentPlayers.find { it.id == reportPlayer.id }
             if (alreadyExistingPlayer != null) continue
-            view.onClientConnected(reportPlayer.id!!)
+            view.onClientConnected(reportPlayer.id)
         }
 
         // Removing not connected players
         for (player in currentPlayers) {
-            val playerExist = reportPlayers.find { it.id!! == player.id }
+            val playerExist = reportPlayers.find { it.id == player.id }
             if (playerExist != null) continue
             view.onClientDisconnected(player.id)
         }
+    }
+
+    override fun onConnected(connectionId: Int) {
+        clientInteractor.sendHello()
+    }
+
+    override fun onDisconnected(connectionId: Int) {
     }
 
     //endregion

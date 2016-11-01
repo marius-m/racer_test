@@ -2,7 +2,9 @@ package lt.markmerkk.app.mvp.interactors
 
 import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
+import lt.markmerkk.app.network.events.EventHello
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.junit.Assert.*
 import org.junit.Before
@@ -27,7 +29,19 @@ class NetworkEventProviderServerImplTest {
         eventProvider.event(invalidEvent)
 
         // Assert
-//        verify(listener, never()).onNewClient(any())
+        verify(listener, never()).onClientHello()
+    }
+
+    @Test
+    fun validEvent_hello_trigger() {
+        // Arrange
+        val event = EventHello()
+
+        // Act
+        eventProvider.event(event)
+
+        // Assert
+        verify(listener).onClientHello()
     }
 
     @Test

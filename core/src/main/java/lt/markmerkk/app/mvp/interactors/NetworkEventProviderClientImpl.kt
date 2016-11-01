@@ -20,11 +20,12 @@ class NetworkEventProviderClientImpl(
         }
     }
 
-
     override fun connected(connectionId: Int) {
+        listener.onConnected(connectionId)
     }
 
     override fun disconnected(connectionId: Int) {
+        listener.onDisconnected(connectionId)
     }
 
     companion object {

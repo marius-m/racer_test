@@ -5,7 +5,10 @@ package lt.markmerkk.app.mvp
  * @since 2016-10-23
  */
 interface ClientInteractor {
-    var eventProvider: NetworkEventProvider?
-    fun start()
+    fun start(eventProvider: NetworkEventProvider)
     fun stop()
+    /**
+     * Send an event to the server with a greet
+     */
+    fun sendHello()
 }

@@ -21,13 +21,11 @@ class ServerPresenterImpl(
 
     override fun onAttach() {
         if (!isHost) return
-        serverInteractor.start()
-        serverInteractor.eventProvider = NetworkEventProviderServerImpl(this)
+        serverInteractor.start(NetworkEventProviderServerImpl(this))
     }
 
     override fun onDetach() {
         if (!isHost) return
-        serverInteractor.eventProvider = null
         serverInteractor.stop()
     }
 
@@ -44,11 +42,15 @@ class ServerPresenterImpl(
 
     override fun onClientConnected(connectionId: Int) {
         view.onClientConnected(connectionId)
-        sendPlayerUpdate(players)
+//        sendPlayerUpdate(players)
     }
 
     override fun onClientDisconnected(connectionId: Int) {
         view.onClientDisconnected(connectionId)
+        sendPlayerUpdate(players)
+    }
+
+    override fun onClientHello() {
         sendPlayerUpdate(players)
     }
 
@@ -60,6 +62,8 @@ class ServerPresenterImpl(
             ReportPlayer().apply {
                 id = it.id
                 name = it.name
+                x = it.carBridge.x
+                y = it.carBridge.y
             }
         }
         serverInteractor.sendPlayerUpdate(reportPlayers)
