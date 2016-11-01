@@ -3,7 +3,6 @@ package lt.markmerkk.app.mvp
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
-import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
 
@@ -13,6 +12,7 @@ import org.slf4j.LoggerFactory
  */
 class ClientPresenterImpl(
         private val isHost: Boolean,
+        private val view: ClientView,
         private val clientInteractor: ClientInteractor,
         private val players: List<Player>
 ) : ClientPresenter, ClientEventListener {
@@ -35,6 +35,21 @@ class ClientPresenterImpl(
     //region Client events
 
     override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
+        val currentPlayers = players
+
+        //Adding new players
+        for (reportPlayer in reportPlayers) {
+            val alreadyExistingPlayer = currentPlayers.find { it.id == reportPlayer.id }
+            if (alreadyExistingPlayer != null) continue
+            view.onClientConnected(reportPlayer.id!!)
+        }
+
+        // Removing not connected players
+        for (player in currentPlayers) {
+            val playerExist = reportPlayers.find { it.id!! == player.id }
+            if (playerExist != null) continue
+            view.onClientDisconnected(player.id)
+        }
     }
 
     //endregion

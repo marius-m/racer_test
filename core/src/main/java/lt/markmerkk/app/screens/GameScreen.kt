@@ -20,7 +20,8 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  */
 class GameScreen(
         private val isHost: Boolean = true
-) : Screen, SpritesView, WorldView, DebugView, InputView, CarView, ServerView, ClientView, PlayerView {
+) : Screen, SpritesView, WorldView, DebugView, InputView,
+        CarView, ServerView, ClientView, PlayerView {
 
     private val camera: CameraHelper = CameraHelper(VIRTUAL_WIDTH, VIRTUAL_HEIGHT)
     private val world: World = World(Vector2(0.0f, 0.0f), true)
@@ -44,6 +45,7 @@ class GameScreen(
     )
     val clientPresenter = ClientPresenterImpl(
             isHost,
+            this,
             ClientInteractorImpl(),
             players
     )

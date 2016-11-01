@@ -7,5 +7,5 @@ import lt.markmerkk.app.network.events.ReportPlayer
  * @since 2016-10-30
  */
 interface ClientEventListener {
-    fun onPlayersUpdate(playersUpdate: List<ReportPlayer>)
+    fun onPlayersUpdate(reportPlayers: List<ReportPlayer>)
 }
