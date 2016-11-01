@@ -36,17 +36,22 @@ class ServerPresenterImpl(
     //region Network events
 
     override fun onClientConnected(connectionId: Int) {
-        val newPlayer = playerInteractor.createPlayer(connectionId)
-        playerInteractor.addPlayer(newPlayer)
+        Gdx.app.postRunnable {
+            val newPlayer = playerInteractor.createPlayer(connectionId)
+            playerInteractor.addPlayer(newPlayer)
+            sendPlayerUpdate(players)
+        }
     }
 
     override fun onClientDisconnected(connectionId: Int) {
-        playerInteractor.removePlayerByConnectionId(connectionId)
-        sendPlayerUpdate(players)
+        Gdx.app.postRunnable {
+            playerInteractor.removePlayerByConnectionId(connectionId)
+            sendPlayerUpdate(players)
+        }
     }
 
     override fun onClientHello() {
-        sendPlayerUpdate(players)
+//        sendPlayerUpdate(players)
     }
 
     //endregion

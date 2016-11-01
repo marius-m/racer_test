@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
@@ -40,15 +41,19 @@ class ClientPresenterImpl(
         for (reportPlayer in reportPlayers) {
             val alreadyExistingPlayer = currentPlayers.find { it.id == reportPlayer.id }
             if (alreadyExistingPlayer != null) continue
-            val newPlayer = playerInteractor.createPlayer(reportPlayer.id)
-            playerInteractor.addPlayer(newPlayer)
+            Gdx.app.postRunnable {
+                val newPlayer = playerInteractor.createPlayer(reportPlayer.id)
+                playerInteractor.addPlayer(newPlayer)
+            }
         }
 
         // Removing not connected players
         for (player in currentPlayers) {
             val playerExist = reportPlayers.find { it.id == player.id }
             if (playerExist != null) continue
-            playerInteractor.removePlayerByConnectionId(player.id)
+            Gdx.app.postRunnable {
+                playerInteractor.removePlayerByConnectionId(player.id)
+            }
         }
     }
 
