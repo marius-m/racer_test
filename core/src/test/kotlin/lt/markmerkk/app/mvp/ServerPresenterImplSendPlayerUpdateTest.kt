@@ -7,6 +7,7 @@ import lt.markmerkk.app.network.events.ReportPlayer
 import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.ArgumentCaptor
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -22,7 +23,15 @@ class ServerPresenterImplSendPlayerUpdateTest {
     fun validPlayers_generatePlayers() {
         // Arrange
         val fakePlayer: Player = mock()
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                true,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
         val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
@@ -39,7 +48,15 @@ class ServerPresenterImplSendPlayerUpdateTest {
         val fakePlayer: Player = mock()
         whenever(fakePlayer.id).thenReturn(111)
         whenever(fakePlayer.name).thenReturn("test_name")
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                true,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
         val captor = ArgumentCaptor.forClass(List::class.java)
 
         // Act
@@ -56,7 +73,15 @@ class ServerPresenterImplSendPlayerUpdateTest {
     @Test
     fun noPlayers_doNotSend() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                true,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
 
         // Act
         presenter.sendPlayerUpdate(emptyList())

@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.*
 import org.junit.Test
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -21,7 +22,15 @@ class ServerPresenterImplTest {
     @Test
     fun onAttach_host_start() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                true,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
 
         // Act
         presenter.onAttach()
@@ -33,7 +42,15 @@ class ServerPresenterImplTest {
     @Test
     fun onAttach_notHost_idle() {
         // Arrange
-        val presenter = ServerPresenterImpl(false, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                false,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
 
         // Act
         presenter.onAttach()
@@ -45,7 +62,15 @@ class ServerPresenterImplTest {
     @Test
     fun onDetach_host_stop() {
         // Arrange
-        val presenter = ServerPresenterImpl(true, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                true,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
 
         // Act
         presenter.onDetach()
@@ -57,7 +82,15 @@ class ServerPresenterImplTest {
     @Test
     fun onDetach_notHost_idle() {
         // Arrange
-        val presenter = ServerPresenterImpl(false, view, serverInteractor, playerInteractor, emptyList())
+        val presenter = ServerPresenterImpl(
+                false,
+                view,
+                serverInteractor,
+                playerInteractor,
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
+        )
 
         // Act
         presenter.onDetach()

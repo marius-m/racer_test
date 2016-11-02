@@ -1,12 +1,13 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
-import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
+import rx.Observable
+import rx.Scheduler
+import rx.Subscription
 
 /**
  * @author mariusmerkevicius
@@ -17,8 +18,12 @@ class ServerPresenterImpl(
         private val view: ServerView,
         private val serverInteractor: ServerInteractor,
         private val playerInteractor: PlayerInteractor,
-        private val players: List<Player>
+        private val players: List<Player>,
+        private val uiScheduler: Scheduler,
+        private val ioScheduler: Scheduler
 ) : ServerPresenter, ServerEventListener {
+
+    val subscriptions = mutableListOf<Subscription>()
 
     override fun onAttach() {
         if (!isHost) return
@@ -26,6 +31,7 @@ class ServerPresenterImpl(
     }
 
     override fun onDetach() {
+        subscriptions.forEach { it.unsubscribe() }
         if (!isHost) return
         serverInteractor.stop()
     }
@@ -36,18 +42,24 @@ class ServerPresenterImpl(
     //region Network events
 
     override fun onClientConnected(connectionId: Int) {
-        Gdx.app.postRunnable {
-            val newPlayer = playerInteractor.createPlayer(connectionId)
-            playerInteractor.addPlayer(newPlayer)
-            sendPlayerUpdate(players)
-        }
+        Observable.just(connectionId)
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler)
+                .subscribe({
+                    val newPlayer = playerInteractor.createPlayer(connectionId)
+                    playerInteractor.addPlayer(newPlayer)
+                    sendPlayerUpdate(players)
+                }).apply { subscriptions.add(this) }
     }
 
     override fun onClientDisconnected(connectionId: Int) {
-        Gdx.app.postRunnable {
-            playerInteractor.removePlayerByConnectionId(connectionId)
-            sendPlayerUpdate(players)
-        }
+        Observable.just(connectionId)
+                .subscribeOn(ioScheduler)
+                .observeOn(uiScheduler)
+                .subscribe({
+                    playerInteractor.removePlayerByConnectionId(connectionId)
+                    sendPlayerUpdate(players)
+                }).apply { subscriptions.add(this) }
     }
 
     override fun onClientHello() {

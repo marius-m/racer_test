@@ -49,7 +49,9 @@ class GameScreen(
             this,
             ServerInteractorImpl(),
             playerInteractor,
-            players
+            players,
+            GdxScheduler.get(),
+            Schedulers.io()
     )
     val clientPresenter: ClientPresenter = ClientPresenterImpl(
             isHost,

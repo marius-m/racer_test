@@ -31,6 +31,7 @@ class ClientPresenterImpl(
     }
 
     override fun onDetach() {
+        subscription?.unsubscribe()
         if (isHost) return
         clientInteractor.stop()
     }
