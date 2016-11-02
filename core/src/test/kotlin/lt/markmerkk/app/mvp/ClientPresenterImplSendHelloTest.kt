@@ -1,7 +1,9 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.ai.sched.Scheduler
 import com.nhaarman.mockito_kotlin.*
 import org.junit.Test
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -21,7 +23,9 @@ class ClientPresenterImplSendHelloTest {
                 view,
                 interactor,
                 playerInteractor,
-                emptyList()
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
 
         // Act
@@ -39,7 +43,9 @@ class ClientPresenterImplSendHelloTest {
                 view,
                 interactor,
                 playerInteractor,
-                emptyList()
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
 
         // Act

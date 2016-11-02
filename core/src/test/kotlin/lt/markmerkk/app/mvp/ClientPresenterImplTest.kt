@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import org.junit.Assert.*
 import org.junit.Test
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -17,12 +18,19 @@ class ClientPresenterImplTest {
     val playerInteractor: PlayerInteractor = mock()
     val eventProvider: NetworkEventProvider = mock()
     val clientInteractor: ClientInteractor = mock()
+    val presenter = ClientPresenterImpl(
+            true,
+            view,
+            clientInteractor,
+            playerInteractor,
+            emptyList(),
+            Schedulers.immediate(),
+            Schedulers.immediate()
+    )
 
     @Test
     fun onAttach_host_start() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, view, clientInteractor, playerInteractor, emptyList())
-
         // Act
         presenter.onAttach()
 
@@ -33,8 +41,6 @@ class ClientPresenterImplTest {
     @Test
     fun onAttach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, view, clientInteractor, playerInteractor, emptyList())
-
         // Act
         presenter.onAttach()
 
@@ -45,8 +51,6 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_host_stop() {
         // Arrange
-        val presenter = ClientPresenterImpl(true, view, clientInteractor, playerInteractor, emptyList())
-
         // Act
         presenter.onDetach()
 
@@ -57,8 +61,6 @@ class ClientPresenterImplTest {
     @Test
     fun onDetach_notHost_idle() {
         // Arrange
-        val presenter = ClientPresenterImpl(false, view, clientInteractor, playerInteractor, emptyList())
-
         // Act
         presenter.onDetach()
 

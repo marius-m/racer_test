@@ -1,11 +1,13 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.ai.sched.Scheduler
 import com.nhaarman.mockito_kotlin.*
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.network.events.ReportPlayer
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -31,7 +33,9 @@ class ClientPresenterImplPlayersUpdateTest {
                 view,
                 interactor,
                 playerInteractor,
-                emptyList()
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
         val reportPlayer = ReportPlayer().apply {
             id = 10
@@ -56,7 +60,9 @@ class ClientPresenterImplPlayersUpdateTest {
                 view,
                 interactor,
                 playerInteractor,
-                emptyList()
+                emptyList(),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
         val reportPlayer1 = ReportPlayer().apply {
             id = 10
@@ -100,7 +106,9 @@ class ClientPresenterImplPlayersUpdateTest {
                 view,
                 interactor,
                 playerInteractor,
-                listOf(existPlayer1)
+                listOf(existPlayer1),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
 
         // Act
@@ -124,7 +132,9 @@ class ClientPresenterImplPlayersUpdateTest {
                 view,
                 interactor,
                 playerInteractor,
-                listOf(existPlayer1)
+                listOf(existPlayer1),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
 
         // Act
@@ -149,7 +159,9 @@ class ClientPresenterImplPlayersUpdateTest {
                 view,
                 interactor,
                 playerInteractor,
-                listOf(existPlayer1)
+                listOf(existPlayer1),
+                Schedulers.immediate(),
+                Schedulers.immediate()
         )
 
         // Act

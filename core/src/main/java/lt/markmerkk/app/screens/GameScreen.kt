@@ -13,6 +13,8 @@ import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpritesPresenter
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
+import rx.concurrency.GdxScheduler
+import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -54,7 +56,9 @@ class GameScreen(
             this,
             ClientInteractorImpl(),
             playerInteractor,
-            players
+            players,
+            GdxScheduler.get(),
+            Schedulers.io()
     )
     val playerPresenter: PlayerPresenter = PlayerPresenterImpl(
             playerInteractor,

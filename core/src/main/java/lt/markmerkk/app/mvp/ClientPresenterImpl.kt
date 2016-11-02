@@ -6,6 +6,8 @@ import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
 import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
+import rx.Observable
+import rx.Scheduler
 
 /**
  * @author mariusmerkevicius
@@ -16,7 +18,9 @@ class ClientPresenterImpl(
         private val view: ClientView,
         private val clientInteractor: ClientInteractor,
         private val playerInteractor: PlayerInteractor,
-        private val players: List<Player>
+        private val players: List<Player>,
+        private val uiScheduler: Scheduler,
+        private val ioScheduler: Scheduler
 ) : ClientPresenter, ClientEventListener {
 
     override fun onAttach() {
@@ -34,6 +38,7 @@ class ClientPresenterImpl(
 
     //region Client events
 
+    // todo : Rewrite this in RX for threading fix (to be actually testable)
     override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
         val currentPlayers = players
 
