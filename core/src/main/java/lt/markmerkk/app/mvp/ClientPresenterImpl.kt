@@ -1,6 +1,5 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
@@ -8,6 +7,7 @@ import lt.markmerkk.app.network.events.ReportPlayer
 import org.slf4j.LoggerFactory
 import rx.Observable
 import rx.Scheduler
+import rx.Subscription
 
 /**
  * @author mariusmerkevicius
@@ -22,6 +22,8 @@ class ClientPresenterImpl(
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ClientPresenter, ClientEventListener {
+
+    var subscription: Subscription? = null
 
     override fun onAttach() {
         if (isHost) return
@@ -38,28 +40,34 @@ class ClientPresenterImpl(
 
     //region Client events
 
-    // todo : Rewrite this in RX for threading fix (to be actually testable)
     override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
+        subscription?.unsubscribe()
         val currentPlayers = players
-
-        //Adding new players
-        for (reportPlayer in reportPlayers) {
-            val alreadyExistingPlayer = currentPlayers.find { it.id == reportPlayer.id }
-            if (alreadyExistingPlayer != null) continue
-            Gdx.app.postRunnable {
-                val newPlayer = playerInteractor.createPlayer(reportPlayer.id)
-                playerInteractor.addPlayer(newPlayer)
-            }
-        }
-
-        // Removing not connected players
-        for (player in currentPlayers) {
-            val playerExist = reportPlayers.find { it.id == player.id }
-            if (playerExist != null) continue
-            Gdx.app.postRunnable {
-                playerInteractor.removePlayerByConnectionId(player.id)
-            }
-        }
+        val newPlayersFilterObservable = Observable.from(reportPlayers)
+                .subscribeOn(ioScheduler)
+                .filter {
+                    val reportPlayerId = it.id
+                    currentPlayers.find { it.id == reportPlayerId } == null
+                }
+                .observeOn(uiScheduler)
+                .doOnNext {
+                    val newPlayer = playerInteractor.createPlayer(it.id)
+                    playerInteractor.addPlayer(newPlayer)
+                }
+        val oldPlayersFilterObservable = Observable.from(currentPlayers)
+                .subscribeOn(ioScheduler)
+                .filter {
+                    val currentPlayer = it
+                    reportPlayers.find { currentPlayer.id == it.id } == null
+                }
+                .observeOn(uiScheduler)
+                .doOnNext {
+                    playerInteractor.removePlayerByConnectionId(it.id)
+                }
+        subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
+                .subscribe({
+                    logger.debug("Player update complete!")
+                })
     }
 
     override fun onConnected(connectionId: Int) {
