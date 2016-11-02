@@ -7,7 +7,7 @@ import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.network.Network
 import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.NetworkEvent
-import lt.markmerkk.app.network.events.ReportPlayer
+import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 
 /**

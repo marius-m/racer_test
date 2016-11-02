@@ -3,7 +3,7 @@ package lt.markmerkk.app.mvp
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
-import lt.markmerkk.app.network.events.ReportPlayer
+import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 import rx.Observable
 import rx.Scheduler

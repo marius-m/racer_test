@@ -3,7 +3,7 @@ package lt.markmerkk.app.mvp
 import com.nhaarman.mockito_kotlin.*
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.network.events.EventPlayersUpdate
-import lt.markmerkk.app.network.events.ReportPlayer
+import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.ArgumentCaptor

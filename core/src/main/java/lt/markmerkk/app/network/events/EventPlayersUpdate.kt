@@ -1,5 +1,7 @@
 package lt.markmerkk.app.network.events
 
+import lt.markmerkk.app.network.events.models.ReportPlayer
+
 /**
  * @author mariusmerkevicius
  * @since 2016-10-31

@@ -3,7 +3,7 @@ package lt.markmerkk.app.network
 import com.esotericsoftware.kryonet.EndPoint
 import lt.markmerkk.app.network.events.EventHello
 import lt.markmerkk.app.network.events.EventPlayersUpdate
-import lt.markmerkk.app.network.events.ReportPlayer
+import lt.markmerkk.app.network.events.models.ReportPlayer
 import java.util.*
 
 /**

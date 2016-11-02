@@ -1,4 +1,4 @@
-package lt.markmerkk.app.network.events
+package lt.markmerkk.app.network.events.models
 
 class ReportPlayer {
     var id: Int = 0

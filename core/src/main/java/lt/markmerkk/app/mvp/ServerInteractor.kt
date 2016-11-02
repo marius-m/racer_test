@@ -1,6 +1,6 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.network.events.ReportPlayer
+import lt.markmerkk.app.network.events.models.ReportPlayer
 
 /**
  * @author mariusmerkevicius
