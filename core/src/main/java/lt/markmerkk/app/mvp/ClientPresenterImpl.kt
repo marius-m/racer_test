@@ -67,7 +67,7 @@ class ClientPresenterImpl(
                 }
         subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
                 .subscribe({
-                    logger.debug("Player update complete!")
+                    logger.info("Player update complete!")
                 })
     }
 

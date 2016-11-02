@@ -14,6 +14,8 @@ interface Player {
     val carBridge: CarBridge
     val carSprite: Sprite
 
+    var dirty: Boolean
+
     fun update(deltaTime: Float)
 
 }

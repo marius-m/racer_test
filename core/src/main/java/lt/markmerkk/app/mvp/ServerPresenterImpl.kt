@@ -37,6 +37,7 @@ class ServerPresenterImpl(
     }
 
     override fun update() {
+        updatePosition(players)
     }
 
     //region Network events
@@ -68,6 +69,16 @@ class ServerPresenterImpl(
 
     //endregion
 
+    /**
+     * Updates position whenever its needed
+     */
+    fun updatePosition(players: List<Player>) {
+        if (players.find { it.dirty == true } != null) {
+            sendPlayerUpdate(players)
+            players.forEach { it.dirty = false }
+        }
+    }
+
     fun sendPlayerUpdate(players: List<Player>) {
         if (players.size == 0) return
         val reportPlayers = players.map {
@@ -77,7 +88,6 @@ class ServerPresenterImpl(
             }
         }
         serverInteractor.sendPlayerUpdate(reportPlayers)
-        logger.debug("Reporting player list: $reportPlayers")
     }
 
     companion object {

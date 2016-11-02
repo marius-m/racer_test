@@ -9,7 +9,7 @@ import lt.markmerkk.app.box2d.CarBridgeEmptyImpl
 import lt.markmerkk.app.box2d.CarBridgeImpl
 import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.Player
-import lt.markmerkk.app.entities.PlayerServerImpl
+import lt.markmerkk.app.entities.PlayerImpl
 import org.slf4j.LoggerFactory
 
 /**
@@ -29,7 +29,7 @@ class PlayerInteractorImpl(
         } else {
             CarBridgeEmptyImpl()
         }
-        val player = PlayerServerImpl(
+        val player = PlayerImpl(
                 id = connectionId,
                 name = "test_player_"+players.size,
                 carBridge = carBridge,
