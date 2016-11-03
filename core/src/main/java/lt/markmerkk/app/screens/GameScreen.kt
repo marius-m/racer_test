@@ -45,22 +45,22 @@ class GameScreen(
     val debugPresenter: DebugPresenter = DebugPresenterImpl(world, camera)
     val inputPresenter: InputPresenter = InputPresenterImpl(Gdx.input)
     val serverPresenter: ServerPresenter = ServerPresenterImpl(
-            isHost,
-            this,
-            ServerInteractorImpl(),
-            playerInteractor,
-            players,
-            GdxScheduler.get(),
-            Schedulers.io()
+            isHost = isHost,
+            view = this,
+            serverInteractor = ServerInteractorImpl(),
+            playerInteractor = playerInteractor,
+            players = players,
+            uiScheduler = GdxScheduler.get(),
+            ioScheduler = Schedulers.io()
     )
     val clientPresenter: ClientPresenter = ClientPresenterImpl(
-            isHost,
-            this,
-            ClientInteractorImpl(),
-            playerInteractor,
-            players,
-            GdxScheduler.get(),
-            Schedulers.io()
+            isHost = isHost,
+            view = this,
+            clientInteractor = ClientInteractorImpl(),
+            playerInteractor = playerInteractor,
+            players = players,
+            uiScheduler = GdxScheduler.get(),
+            ioScheduler = Schedulers.io()
     )
     val playerPresenter: PlayerPresenter = PlayerPresenterImpl(
             playerInteractor,

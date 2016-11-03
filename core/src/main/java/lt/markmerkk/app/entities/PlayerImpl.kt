@@ -15,7 +15,7 @@ class PlayerImpl(
         override val carSprite: Sprite
 ) : Player {
 
-    override var dirty: Boolean = false
+    override var dirty: Boolean = true
 
     override fun update(deltaTime: Float) {
         carBridge.update(deltaTime)

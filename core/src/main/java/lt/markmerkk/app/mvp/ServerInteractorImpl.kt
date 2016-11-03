@@ -54,6 +54,9 @@ class ServerInteractorImpl : ServerInteractor {
         server.sendToAllTCP(playersUpdate)
     }
 
+    override fun sendPositionUpdate() {
+    }
+
     companion object {
         val logger = LoggerFactory.getLogger(ServerInteractorImpl::class.java)!!
     }

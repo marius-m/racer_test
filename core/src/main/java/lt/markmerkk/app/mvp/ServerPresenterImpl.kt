@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
@@ -31,13 +32,13 @@ class ServerPresenterImpl(
     }
 
     override fun onDetach() {
-        subscriptions.forEach { it.unsubscribe() }
         if (!isHost) return
         serverInteractor.stop()
+        subscriptions.forEach { it.unsubscribe() }
     }
 
     override fun update() {
-        updatePosition(players)
+//        updatePosition(players)
     }
 
     //region Network events
@@ -47,20 +48,23 @@ class ServerPresenterImpl(
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe({
-                    val newPlayer = playerInteractor.createPlayer(connectionId)
+                    val newPlayer = playerInteractor.createPlayer(it)
                     playerInteractor.addPlayer(newPlayer)
                     sendPlayerUpdate(players)
+                }, {
+                    logger.error("Error creating client", it)
                 }).apply { subscriptions.add(this) }
     }
 
     override fun onClientDisconnected(connectionId: Int) {
+        // Will not work with threading targets ??
         Observable.just(connectionId)
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler)
                 .subscribe({
-                    playerInteractor.removePlayerByConnectionId(connectionId)
+                    playerInteractor.removePlayerByConnectionId(it)
                     sendPlayerUpdate(players)
-                }).apply { subscriptions.add(this) }
+                }, {
+                    logger.error("Error disconnecting client", it)
+                })
     }
 
     override fun onClientHello() {
@@ -73,8 +77,10 @@ class ServerPresenterImpl(
      * Updates position whenever its needed
      */
     fun updatePosition(players: List<Player>) {
-        if (players.find { it.dirty == true } != null) {
-            sendPlayerUpdate(players)
+        val playersDirty = players.find { it.dirty == true } != null
+        if (playersDirty) {
+            logger.info("Found dirty players")
+            serverInteractor.sendPositionUpdate()
             players.forEach { it.dirty = false }
         }
     }

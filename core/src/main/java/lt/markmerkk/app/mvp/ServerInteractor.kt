@@ -10,4 +10,5 @@ interface ServerInteractor {
     fun start(eventProvider: NetworkEventProvider)
     fun stop()
     fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>)
+    fun sendPositionUpdate()
 }
