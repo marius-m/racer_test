@@ -13,7 +13,7 @@ Although networking seems to work correctly, its still missing some parts (as cl
 
 ## Running browser
 
-* (To try out game in a browser)[http://545149.s.dedikuoti.lt/racer/]
+* To try out game in a [browser](http://545149.s.dedikuoti.lt/racer/)
 
 Definitely should work on chrome, didn't try others.
 
