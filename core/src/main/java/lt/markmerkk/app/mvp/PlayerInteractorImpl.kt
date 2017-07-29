@@ -17,18 +17,14 @@ import org.slf4j.LoggerFactory
  * @since 2016-11-01
  */
 class PlayerInteractorImpl(
-        private val isHost: Boolean,
         private val world: World,
         private val players: MutableList<Player>
 ) : PlayerInteractor {
     override fun createPlayer(connectionId: Int): Player {
         logger.debug("Creating a new player with $connectionId id")
+
         val carSprite = Sprite(Texture(Gdx.files.internal("data/car_small.png")))
-        val carBridge = if (isHost) {
-            CarBridgeImpl(CarImpl(world, Vector2(2.0f, 5.0f)))
-        } else {
-            CarBridgeEmptyImpl()
-        }
+        val carBridge = CarBridgeImpl(CarImpl(world, Vector2(2.0f, 5.0f)))
         val player = PlayerImpl(
                 id = connectionId,
                 name = "test_player_"+players.size,
@@ -40,11 +36,13 @@ class PlayerInteractorImpl(
 
     override fun addPlayer(player: Player) {
         logger.debug("Adding $player")
+
         players.add(player)
     }
 
     override fun removePlayer(player: Player) {
         logger.debug("Removing $player")
+
         player.carBridge.destroy()
         players.remove(player)
     }

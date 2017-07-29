@@ -14,8 +14,6 @@ import rx.Subscription
  * @since 2016-10-23
  */
 class ClientPresenterImpl(
-        private val isHost: Boolean,
-        private val view: ClientView,
         private val clientInteractor: ClientInteractor,
         private val playerInteractor: PlayerInteractor,
         private val players: List<Player>,
@@ -26,13 +24,11 @@ class ClientPresenterImpl(
     var subscription: Subscription? = null
 
     override fun onAttach() {
-        if (isHost) return
         clientInteractor.start(NetworkEventProviderClientImpl(this))
     }
 
     override fun onDetach() {
         subscription?.unsubscribe()
-        if (isHost) return
         clientInteractor.stop()
     }
 

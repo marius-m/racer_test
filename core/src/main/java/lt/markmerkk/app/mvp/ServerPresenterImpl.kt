@@ -15,8 +15,6 @@ import rx.Subscription
  * @since 2016-10-23
  */
 class ServerPresenterImpl(
-        private val isHost: Boolean,
-        private val view: ServerView,
         private val serverInteractor: ServerInteractor,
         private val playerInteractor: PlayerInteractor,
         private val players: List<Player>,
@@ -27,12 +25,10 @@ class ServerPresenterImpl(
     val subscriptions = mutableListOf<Subscription>()
 
     override fun onAttach() {
-        if (!isHost) return
         serverInteractor.start(NetworkEventProviderServerImpl(this))
     }
 
     override fun onDetach() {
-        if (!isHost) return
         serverInteractor.stop()
         subscriptions.forEach { it.unsubscribe() }
     }

@@ -7,7 +7,7 @@ package lt.markmerkk.app.box2d
 class CarBridgeEmptyImpl : CarBridge {
 
     override val car: Car
-        get() = throw IllegalStateException("Cannot provide a car impl in an empty shell")
+        get() = throw IllegalStateException("Cannot provide a car impl in an empty shell") as Throwable
 
     override val x: Float = 0.0f
 
