@@ -15,7 +15,6 @@ class NetworkEventProviderServerImpl(
 
     override fun event(eventObject: NetworkEvent) {
         when(eventObject) {
-            is EventHello -> listener.onClientHello()
             else -> logger.debug("Undefined event received: $eventObject")
         }
     }

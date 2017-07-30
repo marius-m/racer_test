@@ -31,10 +31,23 @@ class ServerPresenterImplOnConnectionTest {
         whenever(playerProvider.create(any())).thenReturn(fakePlayer)
 
         // Act
-        presenter.onClientConnected(1)
+        presenter.serverEventListener.onClientConnected(1)
 
         // Assert
-        verify(playerPresenter).addPlayer(any())
+        verify(playerProvider).create(any())
+    }
+
+    @Test
+    fun validConnection_sendPlayerReport() {
+        // Arrange
+        val fakePlayer: PlayerServer = mock()
+        whenever(playerProvider.create(any())).thenReturn(fakePlayer)
+
+        // Act
+        presenter.serverEventListener.onClientConnected(1)
+
+        // Assert
+        verify(serverInteractor).sendPlayerRegister(any())
     }
 
     @Test
@@ -43,7 +56,7 @@ class ServerPresenterImplOnConnectionTest {
         val fakePlayer1 = PlayerServerImpl(1, "test_1", mock())
 
         // Act
-        presenter.onClientDisconnected(1)
+        presenter.serverEventListener.onClientDisconnected(1)
 
         // Assert
         verify(playerPresenter).removePlayerByConnectionId(1)

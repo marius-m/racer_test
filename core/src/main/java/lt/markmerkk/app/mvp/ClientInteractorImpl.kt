@@ -36,10 +36,6 @@ class ClientInteractorImpl : ClientInteractor {
         client.stop()
     }
 
-//    override fun sendHello() {
-//        client.sendTCP(EventHello())
-//    }
-
     //region Listeners
 
     private val listener: Listener = object : Listener() {

@@ -10,4 +10,6 @@ interface PlayerProvider<out Player> {
     fun create(
             connectionId: Int
     ): Player
+
+    fun all(): List<Player>
 }

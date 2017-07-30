@@ -5,8 +5,10 @@ import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameServer
 import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.network.Network
+import lt.markmerkk.app.network.events.EventPlayersRegister
 import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.NetworkEvent
+import lt.markmerkk.app.network.events.models.PlayerRegister
 import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 
@@ -25,23 +27,7 @@ class ServerInteractorImpl : ServerInteractor {
         Network.register(server)
         server.bind(Const.PORT_TCP, Const.PORT_UDP)
         server.start()
-        server.addListener(object : Listener() {
-            override fun connected(connection: Connection) {
-                super.connected(connection)
-                eventProvider.connected(connection.id)
-            }
-
-            override fun disconnected(connection: Connection) {
-                super.disconnected(connection)
-                eventProvider.disconnected(connection.id)
-            }
-
-            override fun received(connection: Connection, eventObject: Any) {
-                super.received(connection, eventObject)
-                if (eventObject !is NetworkEvent) return
-                eventProvider.event(eventObject)
-            }
-        })
+        server.addListener(serverListener)
     }
 
     override fun stop() {
@@ -56,6 +42,32 @@ class ServerInteractorImpl : ServerInteractor {
 
     override fun sendPositionUpdate() {
     }
+
+    override fun sendPlayerRegister(registeredPlayers: List<PlayerRegister>) {
+        server.sendToAllTCP(EventPlayersRegister(registeredPlayers))
+    }
+
+    //region Listeners
+
+    private val serverListener: Listener = object : Listener() {
+        override fun connected(connection: Connection) {
+            super.connected(connection)
+            eventProvider.connected(connection.id)
+        }
+
+        override fun disconnected(connection: Connection) {
+            super.disconnected(connection)
+            eventProvider.disconnected(connection.id)
+        }
+
+        override fun received(connection: Connection, eventObject: Any) {
+            super.received(connection, eventObject)
+            if (eventObject !is NetworkEvent) return
+            eventProvider.event(eventObject)
+        }
+    }
+
+    //endregion
 
     companion object {
         val logger = LoggerFactory.getLogger(ServerInteractorImpl::class.java)!!

@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.network.events.models.PlayerRegister
 import lt.markmerkk.app.network.events.models.ReportPlayer
 
 /**
@@ -11,4 +12,5 @@ interface ServerInteractor {
     fun stop()
     fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>)
     fun sendPositionUpdate()
+    fun sendPlayerRegister(registeredPlayers: List<PlayerRegister>)
 }

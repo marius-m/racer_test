@@ -3,6 +3,7 @@ package lt.markmerkk.app.mvp
 import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
+import lt.markmerkk.app.network.events.models.PlayerRegister
 import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 import rx.Scheduler
@@ -18,12 +19,12 @@ class ClientPresenterImpl(
         private val players: List<PlayerClient>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
-) : ClientPresenter, ClientEventListener {
+) : ClientPresenter {
 
     var subscription: Subscription? = null
 
     override fun onAttach() {
-        clientInteractor.start(NetworkEventProviderClientImpl(this))
+        clientInteractor.start(NetworkEventProviderClientImpl(clientEventListener))
     }
 
     override fun onDetach() {
@@ -31,48 +32,20 @@ class ClientPresenterImpl(
         clientInteractor.stop()
     }
 
-    override fun update() {
-
-    }
+    override fun update() { }
 
 
-    //region Client events
+    //region Listeners
 
-    override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
-//        subscription?.unsubscribe()
-//        val currentPlayers = players
-//        val newPlayersFilterObservable = Observable.from(reportPlayers)
-//                .subscribeOn(ioScheduler)
-//                .filter {
-//                    val reportPlayerId = it.id
-//                    currentPlayers.find { it.id == reportPlayerId } == null
-//                }
-//                .observeOn(uiScheduler)
-//                .doOnNext {
-//                    val newPlayer = playerInteractor.createPlayer(it.id)
-//                    playerInteractor.addPlayer(newPlayer)
-//                }
-//        val oldPlayersFilterObservable = Observable.from(currentPlayers)
-//                .subscribeOn(ioScheduler)
-//                .filter {
-//                    val currentPlayer = it
-//                    reportPlayers.find { currentPlayer.id == it.id } == null
-//                }
-//                .observeOn(uiScheduler)
-//                .doOnNext {
-//                    playerInteractor.removePlayerByConnectionId(it.id)
-//                }
-//        subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
-//                .subscribe({
-//                    logger.info("Player update complete!")
-//                })
-    }
+    private val clientEventListener: ClientEventListener = object : ClientEventListener {
+        override fun onConnected(connectionId: Int) { }
 
-    override fun onConnected(connectionId: Int) {
-//        clientInteractor.sendHello()
-    }
+        override fun onDisconnected(connectionId: Int) { }
 
-    override fun onDisconnected(connectionId: Int) {
+        override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
+            logger.debug("onPlayersRegister(registeredPlayers: List<PlayerRegister>)")
+        }
+
     }
 
     //endregion

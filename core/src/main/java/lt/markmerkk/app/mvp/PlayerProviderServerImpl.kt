@@ -11,7 +11,8 @@ import lt.markmerkk.app.entities.PlayerServerImpl
  * Creates a [PlayerServer] for a server impl
  */
 class PlayerProviderServerImpl(
-        private val world: World
+        private val world: World,
+        private val players: MutableList<PlayerServer>
 ) : PlayerProvider<PlayerServer> {
 
     private var playerCounter = 0
@@ -20,10 +21,15 @@ class PlayerProviderServerImpl(
             connectionId: Int
     ): PlayerServer {
         playerCounter += 1
-        return PlayerServerImpl(
+        val playerServerImpl = PlayerServerImpl(
                 id = connectionId,
                 name = "Player " + playerCounter,
                 car = CarImpl(CarBox2DImpl(world, Vector2(2.0f, 5.0f)))
         )
+        players.add(playerServerImpl)
+        return playerServerImpl
     }
+
+    override fun all(): List<PlayerServer> = players
+
 }

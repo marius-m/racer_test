@@ -27,7 +27,8 @@ class RacerGame(
     lateinit var playerProvider: PlayerProvider<PlayerServer>
     lateinit var serverPresenter: ServerPresenter
 
-    private val playerPresenter: PlayerPresenter<PlayerServer> = PlayerPresenterServerImpl(mutableListOf())
+    private val players = mutableListOf<PlayerServer>()
+    private val playerPresenter: PlayerPresenter<PlayerServer> = PlayerPresenterServerImpl(players)
 
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
@@ -35,7 +36,7 @@ class RacerGame(
         componentFactory= PhysicsComponentFactory(world, camera)
         worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
         debugPresenter = DebugPresenterImpl(world, camera)
-        playerProvider = PlayerProviderServerImpl(world)
+        playerProvider = PlayerProviderServerImpl(world, players)
         serverPresenter = ServerPresenterImpl(
                 serverInteractor = ServerInteractorImpl(),
                 playerProvider = playerProvider,
@@ -62,6 +63,7 @@ class RacerGame(
 
         worldPresenter.render(deltaTime)
         debugPresenter.render()
+        serverPresenter.update()
     }
 
     override fun dispose() {
