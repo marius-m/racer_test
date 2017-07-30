@@ -1,7 +1,7 @@
 package lt.markmerkk.app.mvp
 
 import com.nhaarman.mockito_kotlin.*
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.entities.PlayerServerImpl
 import org.junit.Test
 import rx.schedulers.Schedulers
@@ -12,10 +12,10 @@ import rx.schedulers.Schedulers
  * @since 2016-11-02
  */
 class ServerPresenterImplOnConnectionTest {
-    val playerProvider: PlayerProvider = mock()
-    val playerPresenter: PlayerPresenter = mock()
+    val playerProvider: PlayerProvider<PlayerServer> = mock()
+    val playerPresenter: PlayerPresenter<PlayerServer> = mock()
     val serverInteractor: ServerInteractor = mock()
-    val players = mutableListOf<Player>()
+    val players = mutableListOf<PlayerServer>()
     val presenter = ServerPresenterImpl(
             serverInteractor,
             playerProvider,
@@ -27,7 +27,7 @@ class ServerPresenterImplOnConnectionTest {
     @Test
     fun validConnection_createPlayer() {
         // Arrange
-        val fakePlayer: Player = mock()
+        val fakePlayer: PlayerServer = mock()
         whenever(playerProvider.create(any())).thenReturn(fakePlayer)
 
         // Act

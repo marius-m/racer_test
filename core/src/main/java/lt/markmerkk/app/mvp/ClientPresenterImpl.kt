@@ -1,11 +1,10 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
 import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
-import rx.Observable
 import rx.Scheduler
 import rx.Subscription
 
@@ -15,8 +14,8 @@ import rx.Subscription
  */
 class ClientPresenterImpl(
         private val clientInteractor: ClientInteractor,
-        private val playerPresenter: PlayerPresenter,
-        private val players: List<Player>,
+        private val playerPresenter: PlayerPresenter<PlayerClient>,
+        private val players: List<PlayerClient>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ClientPresenter, ClientEventListener {

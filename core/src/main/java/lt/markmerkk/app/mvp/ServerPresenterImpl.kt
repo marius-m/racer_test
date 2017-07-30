@@ -1,6 +1,6 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
 import org.slf4j.LoggerFactory
@@ -14,8 +14,8 @@ import rx.Subscription
  */
 class ServerPresenterImpl(
         private val serverInteractor: ServerInteractor,
-        private val playerProvider: PlayerProvider,
-        private val playerPresenter: PlayerPresenter,
+        private val playerProvider: PlayerProvider<PlayerServer>,
+        private val playerPresenter: PlayerPresenter<PlayerServer>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ServerPresenter, ServerEventListener {
@@ -69,7 +69,7 @@ class ServerPresenterImpl(
     /**
      * Updates position whenever its needed
      */
-    fun updatePosition(players: List<Player>) {
+    fun updatePosition(players: List<PlayerServer>) {
 //        val playersDirty = players.find { it.dirty == true } != null
 //        if (playersDirty) {
 //            logger.info("Found dirty players")
@@ -78,7 +78,7 @@ class ServerPresenterImpl(
 //        }
     }
 
-    fun sendPlayerUpdate(players: List<Player>) {
+    fun sendPlayerUpdate(players: List<PlayerServer>) {
 //        if (players.size == 0) return
 //        val reportPlayers = players.map {
 //            ReportPlayer().apply {

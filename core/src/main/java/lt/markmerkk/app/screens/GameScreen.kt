@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpritesPresenter
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
@@ -21,13 +21,13 @@ class GameScreen(
 ) : Screen, SpritesView, WorldView, DebugView, InputView,
         ServerView, ClientView {
 
-    private val players = mutableListOf<Player>()
+    private val players = mutableListOf<PlayerClient>()
     private val spritesPresenter: SpritesPresenter = SpritesPresenterImpl(
             camera,
             SpriteBatch(),
             players
     )
-    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(players)
+    private val playerPresenter: PlayerPresenter<PlayerClient> = PlayerPresenterClientImpl(players)
     private val clientPresenter: ClientPresenter = ClientPresenterImpl(
             clientInteractor = ClientInteractorImpl(),
             playerPresenter = playerPresenter,

@@ -1,11 +1,9 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
-
 /**
  * Creates provides a new instance of a player
  */
-interface PlayerProvider {
+interface PlayerProvider<out Player> {
     /**
      * Creates a new player with a provided connection id
      */

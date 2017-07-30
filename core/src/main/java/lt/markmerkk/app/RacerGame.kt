@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.screens.GameScreen
@@ -24,10 +24,10 @@ class RacerGame(
     lateinit var componentFactory: PhysicsComponentFactory
     lateinit var worldPresenter: WorldPresenter
     lateinit var debugPresenter: DebugPresenter
-    lateinit var playerProvider: PlayerProvider
+    lateinit var playerProvider: PlayerProvider<PlayerServer>
     lateinit var serverPresenter: ServerPresenter
 
-    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(mutableListOf())
+    private val playerPresenter: PlayerPresenter<PlayerServer> = PlayerPresenterServerImpl(mutableListOf())
 
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)

@@ -2,7 +2,7 @@ package lt.markmerkk.app.mvp.painter
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerClient
 
 /**
  * @author mariusmerkevicius
@@ -11,7 +11,7 @@ import lt.markmerkk.app.entities.Player
 class SpritesPresenterImpl(
         private val camera: CameraHelper,
         private val spriteBatch: SpriteBatch,
-        private val players: List<Player>
+        private val players: List<PlayerClient>
 ) : SpritesPresenter {
 
     init {

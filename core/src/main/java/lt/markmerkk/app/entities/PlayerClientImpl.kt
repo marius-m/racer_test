@@ -1,26 +1,24 @@
 package lt.markmerkk.app.entities
 
-import lt.markmerkk.app.box2d.Car
+import com.badlogic.gdx.graphics.g2d.Sprite
 
 class PlayerClientImpl(
         override val id: Int = -1,
         override val name: String
-) : Player {
+) : PlayerClient {
 
-    override fun update(deltaTime: Float) {
-//        val newPositionX = GameScreen.PIXELS_PER_METER * car.x - carSprite.width / 2
-//        val newPositionY = GameScreen.PIXELS_PER_METER * car.y - carSprite.height / 2
-//        val newAngle = Math.toDegrees(car.angle.toDouble()).toFloat()
+    lateinit var sprite: Sprite
 
-//        if (newPositionX != carSprite.x ||
-//                newPositionY != carSprite.y ||
-//                carSprite.rotation != newAngle) {
-//        }
-//
-//        carSprite.setPosition(newPositionX, newPositionY)
-//        carSprite.rotation = newAngle
+    override fun update(
+            positionX: Float,
+            positionY: Float,
+            angle: Float
+    ) {
+        sprite.setPosition(positionX, positionY)
+        sprite.rotation = angle
     }
 
     override fun destroy() {
+
     }
 }

@@ -1,12 +1,10 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
-
 /**
  * @author mariusmerkevicius
  * @since 2016-10-31
  */
-interface PlayerPresenter : Presenter {
+interface PlayerPresenter<in Player> : Presenter {
     fun render(deltaTime: Float)
 
     fun addPlayer(player: Player)

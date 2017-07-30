@@ -1,22 +1,21 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.physics.box2d.World
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.PlayerServer
 import org.slf4j.LoggerFactory
 
 /**
  * @author mariusmerkevicius
  * @since 2016-10-31
  */
-class PlayerPresenterImpl(
-        private val players: MutableList<Player>
-) : PlayerPresenter {
+class PlayerPresenterServerImpl(
+        private val players: MutableList<PlayerServer>
+) : PlayerPresenter<PlayerServer> {
 
     //region Life-cycle
 
-    override fun onAttach() { }
+    override fun onAttach() {}
 
-    override fun onDetach() { }
+    override fun onDetach() {}
 
     override fun render(deltaTime: Float) {
         players.forEach {
@@ -24,11 +23,11 @@ class PlayerPresenterImpl(
         }
     }
 
-    override fun addPlayer(player: Player) {
+    override fun addPlayer(player: PlayerServer) {
         players.add(player)
     }
 
-    override fun removePlayer(player: Player) {
+    override fun removePlayer(player: PlayerServer) {
         players.remove(
                 player.apply {
                     destroy()
@@ -44,7 +43,7 @@ class PlayerPresenterImpl(
     //endregion
 
     companion object {
-        val logger = LoggerFactory.getLogger(PlayerPresenterImpl::class.java)!!
+        val logger = LoggerFactory.getLogger(PlayerPresenterServerImpl::class.java)!!
     }
 
 }

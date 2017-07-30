@@ -10,7 +10,7 @@ class PlayerServerImpl(
         override val id: Int = -1,
         override val name: String,
         private val car: Car
-) : Player {
+) : PlayerServer {
 
     override fun update(deltaTime: Float) {
         car.update(deltaTime)
