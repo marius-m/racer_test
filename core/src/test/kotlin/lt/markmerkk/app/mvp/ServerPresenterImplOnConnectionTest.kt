@@ -12,18 +12,14 @@ import rx.schedulers.Schedulers
  * @since 2016-11-02
  */
 class ServerPresenterImplOnConnectionTest {
-    val view: ServerView = mock()
-    val eventProvider: NetworkEventProvider = mock()
-    val playerInteractor: PlayerInteractor = mock()
+    val playerProvider: PlayerProvider = mock()
+    val playerPresenter: PlayerPresenter = mock()
     val serverInteractor: ServerInteractor = mock()
-    val fakePlayer1 = PlayerServerImpl(1, "test_1", mock(), mock())
-    val players = listOf(fakePlayer1)
+    val players = mutableListOf<Player>()
     val presenter = ServerPresenterImpl(
-            false,
-            view,
             serverInteractor,
-            playerInteractor,
-            players,
+            playerProvider,
+            playerPresenter,
             Schedulers.immediate(),
             Schedulers.immediate()
     )
@@ -32,24 +28,25 @@ class ServerPresenterImplOnConnectionTest {
     fun validConnection_createPlayer() {
         // Arrange
         val fakePlayer: Player = mock()
-        whenever(playerInteractor.createPlayer(any())).thenReturn(fakePlayer)
+        whenever(playerProvider.create(any())).thenReturn(fakePlayer)
 
         // Act
         presenter.onClientConnected(1)
 
         // Assert
-        verify(playerInteractor).createPlayer(1)
-        verify(playerInteractor).addPlayer(any())
+        verify(playerPresenter).addPlayer(any())
     }
 
     @Test
     fun validDisconnect_removePlayer() {
         // Arrange
+        val fakePlayer1 = PlayerServerImpl(1, "test_1", mock())
+
         // Act
         presenter.onClientDisconnected(1)
 
         // Assert
-        verify(playerInteractor).removePlayerByConnectionId(1)
+        verify(playerPresenter).removePlayerByConnectionId(1)
     }
 
 }

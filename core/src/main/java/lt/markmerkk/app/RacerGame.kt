@@ -27,8 +27,7 @@ class RacerGame(
     lateinit var playerProvider: PlayerProvider
     lateinit var serverPresenter: ServerPresenter
 
-    private val players = mutableListOf<Player>()
-    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(players)
+    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(mutableListOf())
 
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
@@ -41,7 +40,6 @@ class RacerGame(
                 serverInteractor = ServerInteractorImpl(),
                 playerProvider = playerProvider,
                 playerPresenter = playerPresenter,
-                players = players,
                 uiScheduler = GdxScheduler.get(),
                 ioScheduler = Schedulers.io()
         )

@@ -16,7 +16,6 @@ class ServerPresenterImpl(
         private val serverInteractor: ServerInteractor,
         private val playerProvider: PlayerProvider,
         private val playerPresenter: PlayerPresenter,
-        private val players: List<Player>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ServerPresenter, ServerEventListener {
@@ -43,9 +42,9 @@ class ServerPresenterImpl(
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe({
-//                    val newPlayer = playerProvider.create(it)
-//                    playerPresenter.addPlayer(newPlayer)
-//                    sendPlayerUpdate(players)
+                    playerPresenter.addPlayer(
+                            playerProvider.create(it)
+                    )
                 }, {
                     logger.error("Error creating client", it)
                 }).apply { subscriptions.add(this) }
@@ -55,11 +54,10 @@ class ServerPresenterImpl(
         // Will not work with threading targets ??
         Observable.just(connectionId)
                 .subscribe({
-//                    playerPresenter.removePlayerByConnectionId(it)
-//                    sendPlayerUpdate(players)
+                    playerPresenter.removePlayerByConnectionId(it)
                 }, {
                     logger.error("Error disconnecting client", it)
-                })
+                }).apply { subscriptions.add(this) }
     }
 
     override fun onClientHello() {

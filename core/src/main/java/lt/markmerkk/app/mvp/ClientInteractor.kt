@@ -7,8 +7,4 @@ package lt.markmerkk.app.mvp
 interface ClientInteractor {
     fun start(eventProvider: NetworkEventProvider)
     fun stop()
-    /**
-     * Send an event to the server with a greet
-     */
-    fun sendHello()
 }
