@@ -15,8 +15,7 @@ import rx.Subscription
  */
 class ServerPresenterImpl(
         private val serverInteractor: ServerInteractor,
-        private val playerProvider: PlayerProvider<PlayerServer>,
-        private val playerPresenter: PlayerPresenter<PlayerServer>,
+        private val playerPresenterServer: PlayerPresenterServer,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ServerPresenter {
@@ -44,11 +43,12 @@ class ServerPresenterImpl(
                     .subscribeOn(ioScheduler)
                     .observeOn(uiScheduler)
                     .subscribe({
-                        playerProvider.create(it)
-                        val playersAsRegisters = playerProvider
-                                .all()
-                                .map { PlayerRegister(it.id, it.name) }
-                        serverInteractor.sendPlayerRegister(playersAsRegisters)
+                        playerPresenterServer.createPlayerById(connectionId)
+                        serverInteractor.sendPlayerRegister(
+                                playerPresenterServer
+                                        .players()
+                                        .map { PlayerRegister(it.id, it.name) }
+                        )
                     }, {
                         logger.error("Error creating client", it)
                     }).apply { subscriptions.add(this) }
@@ -57,7 +57,12 @@ class ServerPresenterImpl(
         override fun onClientDisconnected(connectionId: Int) {
             Observable.just(connectionId)
                     .subscribe({
-                        playerPresenter.removePlayerByConnectionId(it)
+                        playerPresenterServer.removePlayerByConnectionId(it)
+                        serverInteractor.sendPlayerRegister(
+                                playerPresenterServer
+                                        .players()
+                                        .map { PlayerRegister(it.id, it.name) }
+                        )
                     }, {
                         logger.error("Error disconnecting client", it)
                     }).apply { subscriptions.add(this) }

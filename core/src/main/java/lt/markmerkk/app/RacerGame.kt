@@ -24,11 +24,10 @@ class RacerGame(
     lateinit var componentFactory: PhysicsComponentFactory
     lateinit var worldPresenter: WorldPresenter
     lateinit var debugPresenter: DebugPresenter
-    lateinit var playerProvider: PlayerProvider<PlayerServer>
     lateinit var serverPresenter: ServerPresenter
+    lateinit var playerPresenterServer: PlayerPresenterServer
 
     private val players = mutableListOf<PlayerServer>()
-    private val playerPresenter: PlayerPresenter<PlayerServer> = PlayerPresenterServerImpl(players)
 
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
@@ -36,11 +35,10 @@ class RacerGame(
         componentFactory= PhysicsComponentFactory(world, camera)
         worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
         debugPresenter = DebugPresenterImpl(world, camera)
-        playerProvider = PlayerProviderServerImpl(world, players)
+        playerPresenterServer = PlayerPresenterServerImpl(world, players)
         serverPresenter = ServerPresenterImpl(
                 serverInteractor = ServerInteractorImpl(),
-                playerProvider = playerProvider,
-                playerPresenter = playerPresenter,
+                playerPresenterServer = playerPresenterServer,
                 uiScheduler = GdxScheduler.get(),
                 ioScheduler = Schedulers.io()
         )

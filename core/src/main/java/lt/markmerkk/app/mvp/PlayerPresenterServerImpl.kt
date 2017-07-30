@@ -1,6 +1,11 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.World
+import lt.markmerkk.app.box2d.CarBox2DImpl
+import lt.markmerkk.app.box2d.CarImpl
 import lt.markmerkk.app.entities.PlayerServer
+import lt.markmerkk.app.entities.PlayerServerImpl
 import org.slf4j.LoggerFactory
 
 /**
@@ -8,14 +13,11 @@ import org.slf4j.LoggerFactory
  * @since 2016-10-31
  */
 class PlayerPresenterServerImpl(
+        private val world: World,
         private val players: MutableList<PlayerServer>
-) : PlayerPresenter<PlayerServer> {
+) : PlayerPresenterServer {
 
-    //region Life-cycle
-
-    override fun onAttach() {}
-
-    override fun onDetach() {}
+    private var playerCounter = 0
 
     override fun render(deltaTime: Float) {
         players.forEach {
@@ -23,24 +25,26 @@ class PlayerPresenterServerImpl(
         }
     }
 
-    override fun addPlayer(player: PlayerServer) {
-        players.add(player)
-    }
-
-    override fun removePlayer(player: PlayerServer) {
-        players.remove(
-                player.apply {
-                    destroy()
-                }
+    override fun createPlayerById(connectionId: Int) {
+        playerCounter += 1
+        val playerServerImpl = PlayerServerImpl(
+                id = connectionId,
+                name = "Player " + playerCounter,
+                car = CarImpl(CarBox2DImpl(world, Vector2(2.0f, 5.0f)))
         )
+        players.add(playerServerImpl)
     }
 
     override fun removePlayerByConnectionId(connectionId: Int) {
-        players.find { it.id == connectionId }
-                .let { removePlayer(it!!) }
+        val playerById = players.find { it.id == connectionId }
+        if (playerById != null) {
+            players.remove(playerById)
+        }
     }
 
-    //endregion
+    override fun players(): List<PlayerServer> {
+        return players
+    }
 
     companion object {
         val logger = LoggerFactory.getLogger(PlayerPresenterServerImpl::class.java)!!

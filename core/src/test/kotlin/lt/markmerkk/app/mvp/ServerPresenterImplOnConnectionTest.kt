@@ -1,8 +1,9 @@
 package lt.markmerkk.app.mvp
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockito_kotlin.any
+import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.verify
 import lt.markmerkk.app.entities.PlayerServer
-import lt.markmerkk.app.entities.PlayerServerImpl
 import org.junit.Test
 import rx.schedulers.Schedulers
 
@@ -12,37 +13,30 @@ import rx.schedulers.Schedulers
  * @since 2016-11-02
  */
 class ServerPresenterImplOnConnectionTest {
-    val playerProvider: PlayerProvider<PlayerServer> = mock()
-    val playerPresenter: PlayerPresenter<PlayerServer> = mock()
+    val playerPresenterServer: PlayerPresenterServer = mock()
     val serverInteractor: ServerInteractor = mock()
-    val players = mutableListOf<PlayerServer>()
     val presenter = ServerPresenterImpl(
             serverInteractor,
-            playerProvider,
-            playerPresenter,
+            playerPresenterServer,
             Schedulers.immediate(),
             Schedulers.immediate()
     )
 
+    val players = mutableListOf<PlayerServer>()
+
     @Test
     fun validConnection_createPlayer() {
         // Arrange
-        val fakePlayer: PlayerServer = mock()
-        whenever(playerProvider.create(any())).thenReturn(fakePlayer)
-
         // Act
         presenter.serverEventListener.onClientConnected(1)
 
         // Assert
-        verify(playerProvider).create(any())
+        verify(playerPresenterServer).createPlayerById(any())
     }
 
     @Test
     fun validConnection_sendPlayerReport() {
         // Arrange
-        val fakePlayer: PlayerServer = mock()
-        whenever(playerProvider.create(any())).thenReturn(fakePlayer)
-
         // Act
         presenter.serverEventListener.onClientConnected(1)
 
@@ -53,13 +47,21 @@ class ServerPresenterImplOnConnectionTest {
     @Test
     fun validDisconnect_removePlayer() {
         // Arrange
-        val fakePlayer1 = PlayerServerImpl(1, "test_1", mock())
-
         // Act
         presenter.serverEventListener.onClientDisconnected(1)
 
         // Assert
-        verify(playerPresenter).removePlayerByConnectionId(1)
+        verify(playerPresenterServer).removePlayerByConnectionId(1)
+    }
+
+    @Test
+    fun validDisconnect_sendNewPlayerList() {
+        // Arrange
+        // Act
+        presenter.serverEventListener.onClientDisconnected(1)
+
+        // Assert
+        verify(serverInteractor).sendPlayerRegister(any())
     }
 
 }
