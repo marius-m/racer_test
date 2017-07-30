@@ -1,10 +1,10 @@
 package lt.markmerkk.app.mvp
 
 import lt.markmerkk.app.entities.PlayerClient
+import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
 import lt.markmerkk.app.network.events.models.PlayerRegister
-import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 import rx.Scheduler
 import rx.Subscription
@@ -15,8 +15,7 @@ import rx.Subscription
  */
 class ClientPresenterImpl(
         private val clientInteractor: ClientInteractor,
-        private val playerPresenter: PlayerPresenter<PlayerClient>,
-        private val players: List<PlayerClient>,
+        private val players: MutableList<PlayerClient>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
 ) : ClientPresenter {
@@ -37,13 +36,21 @@ class ClientPresenterImpl(
 
     //region Listeners
 
-    private val clientEventListener: ClientEventListener = object : ClientEventListener {
+    val clientEventListener: ClientEventListener = object : ClientEventListener {
         override fun onConnected(connectionId: Int) { }
 
         override fun onDisconnected(connectionId: Int) { }
 
         override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
-            logger.debug("onPlayersRegister(registeredPlayers: List<PlayerRegister>)")
+            players.clear()
+            players.addAll(
+                    registeredPlayers.map {
+                        PlayerClientImpl(
+                                id = it.connectionId,
+                                name = it.name
+                        )
+                    }
+            )
         }
 
     }

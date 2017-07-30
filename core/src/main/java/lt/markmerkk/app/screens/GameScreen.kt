@@ -27,10 +27,8 @@ class GameScreen(
             SpriteBatch(),
             players
     )
-    private val playerPresenter: PlayerPresenter<PlayerClient> = PlayerPresenterClientImpl(players)
     private val clientPresenter: ClientPresenter = ClientPresenterImpl(
             clientInteractor = ClientInteractorImpl(),
-            playerPresenter = playerPresenter,
             players = players,
             uiScheduler = GdxScheduler.get(),
             ioScheduler = Schedulers.io()
@@ -42,7 +40,6 @@ class GameScreen(
         spritesPresenter.onAttach()
         inputPresenter.onAttach()
         clientPresenter.onAttach()
-        playerPresenter.onAttach()
 
         // Adding a test car
 //        if (isHost) {
@@ -67,7 +64,6 @@ class GameScreen(
         spritesPresenter.render()
         inputPresenter.render()
         clientPresenter.update()
-        playerPresenter.render(delta)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -77,7 +73,6 @@ class GameScreen(
     }
 
     override fun dispose() {
-        playerPresenter.onDetach()
         clientPresenter.onDetach()
         inputPresenter.onDetach()
         spritesPresenter.onDetach()
