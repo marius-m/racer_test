@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp.interactors
 
+import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.mvp.NetworkEventProvider
 import lt.markmerkk.app.network.events.EventHello
 import lt.markmerkk.app.network.events.NetworkEvent

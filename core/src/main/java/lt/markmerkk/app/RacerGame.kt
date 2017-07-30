@@ -2,14 +2,12 @@ package lt.markmerkk.app
 
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.screens.GameScreen
-import rx.concurrency.GdxScheduler
 import rx.schedulers.Schedulers
 
 /**
@@ -19,6 +17,7 @@ import rx.schedulers.Schedulers
 class RacerGame(
         private val isHost: Boolean
 ) : Game() {
+
     lateinit var camera: CameraHelper
     lateinit var world: World
     lateinit var componentFactory: PhysicsComponentFactory
@@ -32,15 +31,13 @@ class RacerGame(
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
         world = World(Vector2(0.0f, 0.0f), true)
-        componentFactory= PhysicsComponentFactory(world, camera)
+        componentFactory = PhysicsComponentFactory(world, camera)
         worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
         debugPresenter = DebugPresenterImpl(world, camera)
         playerPresenterServer = PlayerPresenterServerImpl(world, players)
         serverPresenter = ServerPresenterImpl(
                 serverInteractor = ServerInteractorImpl(),
-                playerPresenterServer = playerPresenterServer,
-                uiScheduler = GdxScheduler.get(),
-                ioScheduler = Schedulers.io()
+                playerPresenterServer = playerPresenterServer
         )
 
         worldPresenter.onAttach()

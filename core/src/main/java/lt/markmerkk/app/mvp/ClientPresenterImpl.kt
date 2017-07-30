@@ -1,6 +1,5 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
@@ -17,9 +16,7 @@ import rx.Subscription
  */
 class ClientPresenterImpl(
         private val clientInteractor: ClientInteractor,
-        private val players: MutableList<PlayerClient>,
-        private val uiScheduler: Scheduler,
-        private val ioScheduler: Scheduler
+        private val players: MutableList<PlayerClient>
 ) : ClientPresenter {
 
     var subscription: Subscription? = null
@@ -44,19 +41,16 @@ class ClientPresenterImpl(
         override fun onDisconnected(connectionId: Int) { }
 
         override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
-            Gdx.app.postRunnable {
-                players.clear()
-                players.addAll(
-                        registeredPlayers.map {
-                            PlayerClientImpl(
-                                    id = it.connectionId,
-                                    name = it.name
-                            )
-                        }
-                )
-            }
+            players.clear()
+            players.addAll(
+                    registeredPlayers.map {
+                        PlayerClientImpl(
+                                it.connectionId,
+                                it.name
+                        )
+                    }
+            )
         }
-
     }
 
     //endregion

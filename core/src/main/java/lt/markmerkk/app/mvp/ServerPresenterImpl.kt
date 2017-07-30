@@ -1,12 +1,10 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 import rx.Observable
-import rx.Scheduler
 import rx.Subscription
 
 /**
@@ -15,9 +13,7 @@ import rx.Subscription
  */
 class ServerPresenterImpl(
         private val serverInteractor: ServerInteractor,
-        private val playerPresenterServer: PlayerPresenterServer,
-        private val uiScheduler: Scheduler,
-        private val ioScheduler: Scheduler
+        private val playerPresenterServer: PlayerPresenterServer
 ) : ServerPresenter {
 
     val subscriptions = mutableListOf<Subscription>()
@@ -32,7 +28,6 @@ class ServerPresenterImpl(
     }
 
     override fun update() {
-
     }
 
     //region Listeners
@@ -40,8 +35,6 @@ class ServerPresenterImpl(
     val serverEventListener: ServerEventListener = object : ServerEventListener {
         override fun onClientConnected(connectionId: Int) {
             Observable.just(connectionId)
-                    .subscribeOn(ioScheduler)
-                    .observeOn(uiScheduler)
                     .subscribe({
                         playerPresenterServer.createPlayerById(connectionId)
                         serverInteractor.sendPlayerRegister(

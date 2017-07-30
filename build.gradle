@@ -134,7 +134,7 @@ project(":core") {
 
         compile 'io.reactivex:rxjava:1.1.0'
         compile 'io.reactivex:rxjava-async-util:0.21.0'
-        compile 'de.johoop:rxjava-libgdx:0.2.1'
+//        compile 'de.johoop:rxjava-libgdx:0.2.1'
 
         testCompile 'junit:junit:4.11'
         testCompile "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
