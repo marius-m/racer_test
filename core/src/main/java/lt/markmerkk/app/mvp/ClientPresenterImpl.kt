@@ -1,11 +1,13 @@
 package lt.markmerkk.app.mvp
 
+import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
+import rx.Observable
 import rx.Scheduler
 import rx.Subscription
 
@@ -42,15 +44,17 @@ class ClientPresenterImpl(
         override fun onDisconnected(connectionId: Int) { }
 
         override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
-            players.clear()
-            players.addAll(
-                    registeredPlayers.map {
-                        PlayerClientImpl(
-                                id = it.connectionId,
-                                name = it.name
-                        )
-                    }
-            )
+            Gdx.app.postRunnable {
+                players.clear()
+                players.addAll(
+                        registeredPlayers.map {
+                            PlayerClientImpl(
+                                    id = it.connectionId,
+                                    name = it.name
+                            )
+                        }
+                )
+            }
         }
 
     }

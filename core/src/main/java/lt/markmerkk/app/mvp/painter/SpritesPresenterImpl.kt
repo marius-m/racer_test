@@ -4,10 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.entities.PlayerClient
 
-/**
- * @author mariusmerkevicius
- * @since 2016-10-20
- */
 class SpritesPresenterImpl(
         private val camera: CameraHelper,
         private val spriteBatch: SpriteBatch,
@@ -27,7 +23,7 @@ class SpritesPresenterImpl(
 
     override fun render() {
         spriteBatch.begin()
-//        players.forEach { it.carSprite.draw(spriteBatch) }
+        players.forEach { it.draw(spriteBatch) }
         spriteBatch.end()
     }
 

@@ -50,13 +50,11 @@ class RacerGame(
         componentFactory.createBoundWalls()
         componentFactory.createPen()
 
-        screen = GameScreen(camera).apply { create() }
+        setScreen(GameScreen(camera))
     }
 
     override fun render() {
         super.render()
-        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
         val deltaTime = Gdx.graphics.deltaTime
 
         worldPresenter.render(deltaTime)

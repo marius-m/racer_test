@@ -2,6 +2,7 @@ package lt.markmerkk.app.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
+import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.entities.PlayerClient
@@ -36,20 +37,13 @@ class GameScreen(
 
     private val inputPresenter: InputPresenter = InputPresenterImpl(Gdx.input)
 
-    fun create() {
+    //region Callback methods
+
+    override fun show() {
         spritesPresenter.onAttach()
         inputPresenter.onAttach()
         clientPresenter.onAttach()
-
-        // Adding a test car
-//        if (isHost) {
-//            val player = playerPresenter.createPlayer(connectionId = -1)
-//            playerPresenter.addPlayer(player)
-//            inputPresenter.carInputInteractor = CarInputInteractorImpl(player.carBridge.car)
-//        }
     }
-
-    //region Callback methods
 
     override fun pause() {
     }
@@ -57,13 +51,13 @@ class GameScreen(
     override fun resume() {
     }
 
-    override fun show() {
-    }
-
     override fun render(delta: Float) {
-        spritesPresenter.render()
-        inputPresenter.render()
+        Gdx.gl.glClearColor(0f, 0f, 0.2f, 1f)
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT)
+
         clientPresenter.update()
+        inputPresenter.render()
+        spritesPresenter.render()
     }
 
     override fun resize(width: Int, height: Int) {
