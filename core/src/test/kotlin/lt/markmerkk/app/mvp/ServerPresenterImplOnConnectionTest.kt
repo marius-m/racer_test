@@ -2,8 +2,7 @@ package lt.markmerkk.app.mvp
 
 import com.nhaarman.mockito_kotlin.*
 import lt.markmerkk.app.entities.Player
-import lt.markmerkk.app.entities.PlayerImpl
-import org.junit.Assert.*
+import lt.markmerkk.app.entities.PlayerServerImpl
 import org.junit.Test
 import rx.schedulers.Schedulers
 
@@ -17,7 +16,7 @@ class ServerPresenterImplOnConnectionTest {
     val eventProvider: NetworkEventProvider = mock()
     val playerInteractor: PlayerInteractor = mock()
     val serverInteractor: ServerInteractor = mock()
-    val fakePlayer1 = PlayerImpl(1, "test_1", mock(), mock())
+    val fakePlayer1 = PlayerServerImpl(1, "test_1", mock(), mock())
     val players = listOf(fakePlayer1)
     val presenter = ServerPresenterImpl(
             false,

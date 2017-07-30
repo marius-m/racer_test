@@ -9,7 +9,6 @@ import lt.markmerkk.app.entities.Player
 interface PlayerPresenter : Presenter {
     fun render(deltaTime: Float)
 
-    fun createPlayer(connectionId: Int): Player
     fun addPlayer(player: Player)
     fun removePlayer(player: Player)
     fun removePlayerByConnectionId(connectionId: Int)

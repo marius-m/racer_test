@@ -1,28 +1,12 @@
 package lt.markmerkk.app.box2d
 
-import com.badlogic.gdx.physics.box2d.Body
-
-/**
- * @author mariusmerkevicius
- * @since 2016-10-22
- */
 interface Car {
-    val body: Body
+    val carBox2D: CarBox2D
 
-    var accelerate: Int // Flag for an acceleration
-    var steer: Int // Flag for a steer direction
+    val x: Float
+    val y: Float
+    val angle: Float
 
     fun update(deltaTime: Float)
     fun destroy()
-
-    companion object {
-        const val STEER_NONE = 0
-        const val STEER_LEFT = 1
-        const val STEER_RIGHT = 2
-
-        const val ACC_NONE = 0
-        const val ACC_FORWARD = 1
-        const val ACC_BACKWARD = 2
-    }
-
 }

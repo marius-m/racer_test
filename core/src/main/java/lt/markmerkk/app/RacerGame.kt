@@ -3,14 +3,11 @@ package lt.markmerkk.app
 import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.GL20
-import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
-import lt.markmerkk.app.mvp.painter.SpritesPresenter
-import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.screens.GameScreen
 import rx.concurrency.GdxScheduler
 import rx.schedulers.Schedulers
@@ -22,26 +19,33 @@ import rx.schedulers.Schedulers
 class RacerGame(
         private val isHost: Boolean
 ) : Game() {
-    private val camera: CameraHelper = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
+    lateinit var camera: CameraHelper
+    lateinit var world: World
+    lateinit var componentFactory: PhysicsComponentFactory
+    lateinit var worldPresenter: WorldPresenter
+    lateinit var debugPresenter: DebugPresenter
+    lateinit var playerProvider: PlayerProvider
+    lateinit var serverPresenter: ServerPresenter
 
-    private val world: World = World(Vector2(0.0f, 0.0f), true)
-    private val componentFactory = PhysicsComponentFactory(world, camera)
     private val players = mutableListOf<Player>()
-    private val playerInteractor: PlayerInteractor = PlayerInteractorImpl(
-            world,
-            players
-    )
-    private val worldPresenter: WorldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
-    private val debugPresenter: DebugPresenter = DebugPresenterImpl(world, camera)
-    private val serverPresenter: ServerPresenter = ServerPresenterImpl(
-            serverInteractor = ServerInteractorImpl(),
-            playerInteractor = playerInteractor,
-            players = players,
-            uiScheduler = GdxScheduler.get(),
-            ioScheduler = Schedulers.io()
-    )
+    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(players)
 
     override fun create() {
+        camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
+        world = World(Vector2(0.0f, 0.0f), true)
+        componentFactory= PhysicsComponentFactory(world, camera)
+        worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
+        debugPresenter = DebugPresenterImpl(world, camera)
+        playerProvider = PlayerProviderServerImpl(world)
+        serverPresenter = ServerPresenterImpl(
+                serverInteractor = ServerInteractorImpl(),
+                playerProvider = playerProvider,
+                playerPresenter = playerPresenter,
+                players = players,
+                uiScheduler = GdxScheduler.get(),
+                ioScheduler = Schedulers.io()
+        )
+
         worldPresenter.onAttach()
         debugPresenter.onAttach()
         serverPresenter.onAttach()

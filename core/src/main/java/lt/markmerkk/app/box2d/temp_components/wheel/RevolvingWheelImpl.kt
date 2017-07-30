@@ -2,7 +2,7 @@ package lt.markmerkk.app.box2d.temp_components.wheel
 
 import com.badlogic.gdx.physics.box2d.*
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef
-import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarBox2D
 
 /**
  * @author mariusmerkevicius
@@ -10,16 +10,16 @@ import lt.markmerkk.app.box2d.Car
  */
 class RevolvingWheelImpl(
         world: World,
-        car: Car,
+        carBox2D: CarBox2D,
         posX: Float,
         posY: Float,
         width: Float,
         height: Float
-) : BaseWheelImpl(world, car, posX, posY, width, height, true) {
+) : BaseWheelImpl(world, carBox2D, posX, posY, width, height, true) {
 
-    override fun initJoint(world: World, car: Car) {
+    override fun initJoint(world: World, carBox2D: CarBox2D) {
         val jointdef = RevoluteJointDef()
-        jointdef.initialize(car.body, body, body.worldCenter)
+        jointdef.initialize(carBox2D.body, body, body.worldCenter)
         jointdef.enableMotor = false
         world.createJoint(jointdef)
     }

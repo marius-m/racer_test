@@ -15,7 +15,7 @@ import rx.Subscription
  */
 class ClientPresenterImpl(
         private val clientInteractor: ClientInteractor,
-        private val playerInteractor: PlayerInteractor,
+        private val playerPresenter: PlayerPresenter,
         private val players: List<Player>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
@@ -35,40 +35,41 @@ class ClientPresenterImpl(
     override fun update() {
     }
 
+
     //region Client events
 
     override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
-        subscription?.unsubscribe()
-        val currentPlayers = players
-        val newPlayersFilterObservable = Observable.from(reportPlayers)
-                .subscribeOn(ioScheduler)
-                .filter {
-                    val reportPlayerId = it.id
-                    currentPlayers.find { it.id == reportPlayerId } == null
-                }
-                .observeOn(uiScheduler)
-                .doOnNext {
-                    val newPlayer = playerInteractor.createPlayer(it.id)
-                    playerInteractor.addPlayer(newPlayer)
-                }
-        val oldPlayersFilterObservable = Observable.from(currentPlayers)
-                .subscribeOn(ioScheduler)
-                .filter {
-                    val currentPlayer = it
-                    reportPlayers.find { currentPlayer.id == it.id } == null
-                }
-                .observeOn(uiScheduler)
-                .doOnNext {
-                    playerInteractor.removePlayerByConnectionId(it.id)
-                }
-        subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
-                .subscribe({
-                    logger.info("Player update complete!")
-                })
+//        subscription?.unsubscribe()
+//        val currentPlayers = players
+//        val newPlayersFilterObservable = Observable.from(reportPlayers)
+//                .subscribeOn(ioScheduler)
+//                .filter {
+//                    val reportPlayerId = it.id
+//                    currentPlayers.find { it.id == reportPlayerId } == null
+//                }
+//                .observeOn(uiScheduler)
+//                .doOnNext {
+//                    val newPlayer = playerInteractor.createPlayer(it.id)
+//                    playerInteractor.addPlayer(newPlayer)
+//                }
+//        val oldPlayersFilterObservable = Observable.from(currentPlayers)
+//                .subscribeOn(ioScheduler)
+//                .filter {
+//                    val currentPlayer = it
+//                    reportPlayers.find { currentPlayer.id == it.id } == null
+//                }
+//                .observeOn(uiScheduler)
+//                .doOnNext {
+//                    playerInteractor.removePlayerByConnectionId(it.id)
+//                }
+//        subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
+//                .subscribe({
+//                    logger.info("Player update complete!")
+//                })
     }
 
     override fun onConnected(connectionId: Int) {
-        clientInteractor.sendHello()
+//        clientInteractor.sendHello()
     }
 
     override fun onDisconnected(connectionId: Int) {

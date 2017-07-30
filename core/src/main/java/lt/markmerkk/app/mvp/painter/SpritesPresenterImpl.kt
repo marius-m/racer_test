@@ -27,7 +27,7 @@ class SpritesPresenterImpl(
 
     override fun render() {
         spriteBatch.begin()
-        players.forEach { it.carSprite.draw(spriteBatch) }
+//        players.forEach { it.carSprite.draw(spriteBatch) }
         spriteBatch.end()
     }
 

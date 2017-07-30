@@ -1,10 +1,8 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.entities.Player
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
-import lt.markmerkk.app.network.events.models.ReportPlayer
 import org.slf4j.LoggerFactory
 import rx.Observable
 import rx.Scheduler
@@ -16,7 +14,8 @@ import rx.Subscription
  */
 class ServerPresenterImpl(
         private val serverInteractor: ServerInteractor,
-        private val playerInteractor: PlayerInteractor,
+        private val playerProvider: PlayerProvider,
+        private val playerPresenter: PlayerPresenter,
         private val players: List<Player>,
         private val uiScheduler: Scheduler,
         private val ioScheduler: Scheduler
@@ -44,9 +43,9 @@ class ServerPresenterImpl(
                 .subscribeOn(ioScheduler)
                 .observeOn(uiScheduler)
                 .subscribe({
-                    val newPlayer = playerInteractor.createPlayer(it)
-                    playerInteractor.addPlayer(newPlayer)
-                    sendPlayerUpdate(players)
+//                    val newPlayer = playerProvider.create(it)
+//                    playerPresenter.addPlayer(newPlayer)
+//                    sendPlayerUpdate(players)
                 }, {
                     logger.error("Error creating client", it)
                 }).apply { subscriptions.add(this) }
@@ -56,8 +55,8 @@ class ServerPresenterImpl(
         // Will not work with threading targets ??
         Observable.just(connectionId)
                 .subscribe({
-                    playerInteractor.removePlayerByConnectionId(it)
-                    sendPlayerUpdate(players)
+//                    playerPresenter.removePlayerByConnectionId(it)
+//                    sendPlayerUpdate(players)
                 }, {
                     logger.error("Error disconnecting client", it)
                 })
@@ -73,23 +72,23 @@ class ServerPresenterImpl(
      * Updates position whenever its needed
      */
     fun updatePosition(players: List<Player>) {
-        val playersDirty = players.find { it.dirty == true } != null
-        if (playersDirty) {
-            logger.info("Found dirty players")
-            serverInteractor.sendPositionUpdate()
-            players.forEach { it.dirty = false }
-        }
+//        val playersDirty = players.find { it.dirty == true } != null
+//        if (playersDirty) {
+//            logger.info("Found dirty players")
+//            serverInteractor.sendPositionUpdate()
+//            players.forEach { it.dirty = false }
+//        }
     }
 
     fun sendPlayerUpdate(players: List<Player>) {
-        if (players.size == 0) return
-        val reportPlayers = players.map {
-            ReportPlayer().apply {
-                id = it.id
-                name = it.name
-            }
-        }
-        serverInteractor.sendPlayerUpdate(reportPlayers)
+//        if (players.size == 0) return
+//        val reportPlayers = players.map {
+//            ReportPlayer().apply {
+//                id = it.id
+//                name = it.name
+//            }
+//        }
+//        serverInteractor.sendPlayerUpdate(reportPlayers)
     }
 
     companion object {

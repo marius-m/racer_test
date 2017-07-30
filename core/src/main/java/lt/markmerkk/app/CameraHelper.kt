@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Matrix4
  * Responsible for moving user camera
  */
 class CameraHelper(
-        val virtualWidth : Int,
-        val virtualHeight : Int
+        private val virtualWidth : Int,
+        private val virtualHeight : Int
 ) {
     var viewportWidth: Int = 0
     var viewportHeight: Int = 0

@@ -9,17 +9,14 @@ import org.slf4j.LoggerFactory
  * @since 2016-10-31
  */
 class PlayerPresenterImpl(
-        private val interactor: PlayerInteractor,
         private val players: MutableList<Player>
 ) : PlayerPresenter {
 
     //region Life-cycle
 
-    override fun onAttach() {
-    }
+    override fun onAttach() { }
 
-    override fun onDetach() {
-    }
+    override fun onDetach() { }
 
     override fun render(deltaTime: Float) {
         players.forEach {
@@ -27,20 +24,21 @@ class PlayerPresenterImpl(
         }
     }
 
-    override fun createPlayer(connectionId: Int): Player {
-        return interactor.createPlayer(connectionId)
-    }
-
     override fun addPlayer(player: Player) {
-        interactor.addPlayer(player)
+        players.add(player)
     }
 
     override fun removePlayer(player: Player) {
-        interactor.removePlayer(player)
+        players.remove(
+                player.apply {
+                    destroy()
+                }
+        )
     }
 
     override fun removePlayerByConnectionId(connectionId: Int) {
-        interactor.removePlayerByConnectionId(connectionId)
+        players.find { it.id == connectionId }
+                .let { removePlayer(it!!) }
     }
 
     //endregion

@@ -2,13 +2,9 @@ package lt.markmerkk.app.screens
 
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Screen
-import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.CameraHelper
 import lt.markmerkk.app.entities.Player
-import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpritesPresenter
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
@@ -23,7 +19,7 @@ import rx.schedulers.Schedulers
 class GameScreen(
         private val camera: CameraHelper
 ) : Screen, SpritesView, WorldView, DebugView, InputView,
-        CarView, ServerView, ClientView, PlayerView {
+        ServerView, ClientView {
 
     private val players = mutableListOf<Player>()
     private val spritesPresenter: SpritesPresenter = SpritesPresenterImpl(
@@ -31,25 +27,22 @@ class GameScreen(
             SpriteBatch(),
             players
     )
-
+    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(players)
     private val clientPresenter: ClientPresenter = ClientPresenterImpl(
             clientInteractor = ClientInteractorImpl(),
-            playerInteractor = playerInteractor,
+            playerPresenter = playerPresenter,
             players = players,
             uiScheduler = GdxScheduler.get(),
             ioScheduler = Schedulers.io()
     )
-    private val playerPresenter: PlayerPresenter = PlayerPresenterImpl(
-            playerInteractor,
-            players
-    )
+
     private val inputPresenter: InputPresenter = InputPresenterImpl(Gdx.input)
 
     fun create() {
         spritesPresenter.onAttach()
-//        inputPresenter.onAttach()
-//        clientPresenter.onAttach()
-//        playerPresenter.onAttach()
+        inputPresenter.onAttach()
+        clientPresenter.onAttach()
+        playerPresenter.onAttach()
 
         // Adding a test car
 //        if (isHost) {
@@ -72,9 +65,9 @@ class GameScreen(
 
     override fun render(delta: Float) {
         spritesPresenter.render()
-//        inputPresenter.render()
-//        clientPresenter.update()
-//        playerPresenter.render(delta)
+        inputPresenter.render()
+        clientPresenter.update()
+        playerPresenter.render(delta)
     }
 
     override fun resize(width: Int, height: Int) {
@@ -84,6 +77,9 @@ class GameScreen(
     }
 
     override fun dispose() {
+        playerPresenter.onDetach()
+        clientPresenter.onDetach()
+        inputPresenter.onDetach()
         spritesPresenter.onDetach()
     }
 
