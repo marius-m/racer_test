@@ -13,5 +13,5 @@ interface ClientInteractor {
     /**
      * Sends a [lt.markmerkk.app.entities.Movement] code
      */
-    fun sendMovementEventCode(movementEvent: Movement)
+    fun sendMovementEventCode(connectionId: Int, movementEvent: Movement)
 }

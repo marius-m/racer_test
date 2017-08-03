@@ -10,7 +10,7 @@ import lt.markmerkk.app.entities.Movement
  */
 class InputPresenterToClientImpl(
         private val input: Input,
-        private val clientInteractor: ClientInteractor
+        private val clientPresenter: ClientPresenter
 ) : InputPresenter {
 
     override fun onAttach() {
@@ -36,8 +36,8 @@ class InputPresenterToClientImpl(
 
         override fun keyUp(keycode: Int): Boolean {
             when (keycode) {
-                Input.Keys.UP -> clientInteractor.sendMovementEventCode(Movement.FORWARD_STOP)
-                Input.Keys.DOWN -> clientInteractor.sendMovementEventCode(Movement.BACKWARD_STOP)
+                Input.Keys.UP -> clientPresenter.updateInputMovement(Movement.FORWARD_STOP)
+                Input.Keys.DOWN -> clientPresenter.updateInputMovement(Movement.BACKWARD_STOP)
             }
             return false
         }
@@ -46,8 +46,8 @@ class InputPresenterToClientImpl(
 
         override fun keyDown(keycode: Int): Boolean {
             when (keycode) {
-                Input.Keys.UP -> clientInteractor.sendMovementEventCode(Movement.FORWARD_START)
-                Input.Keys.DOWN -> clientInteractor.sendMovementEventCode(Movement.BACKWARD_START)
+                Input.Keys.UP -> clientPresenter.updateInputMovement(Movement.FORWARD_START)
+                Input.Keys.DOWN -> clientPresenter.updateInputMovement(Movement.BACKWARD_START)
             }
             return false
         }

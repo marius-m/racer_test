@@ -1,13 +1,12 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
-import rx.Observable
-import rx.Scheduler
 import rx.Subscription
 
 /**
@@ -19,7 +18,8 @@ class ClientPresenterImpl(
         private val players: MutableList<PlayerClient>
 ) : ClientPresenter {
 
-    var subscription: Subscription? = null
+    private var connectionId: Int = NO_ID
+    private var subscription: Subscription? = null
 
     override fun onAttach() {
         clientInteractor.start(NetworkEventProviderClientImpl(clientEventListener))
@@ -32,13 +32,20 @@ class ClientPresenterImpl(
 
     override fun update() { }
 
+    override fun updateInputMovement(movement: Movement) {
+        clientInteractor.sendMovementEventCode(connectionId, movement)
+    }
 
     //region Listeners
 
     val clientEventListener: ClientEventListener = object : ClientEventListener {
-        override fun onConnected(connectionId: Int) { }
+        override fun onConnected(connectionId: Int) {
+            this@ClientPresenterImpl.connectionId = connectionId
+        }
 
-        override fun onDisconnected(connectionId: Int) { }
+        override fun onDisconnected(connectionId: Int) {
+            this@ClientPresenterImpl.connectionId = NO_ID
+        }
 
         override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
             players.clear()
@@ -57,6 +64,8 @@ class ClientPresenterImpl(
 
     companion object {
         val logger = LoggerFactory.getLogger(ClientPresenterImpl::class.java)!!
+
+        const val NO_ID = -1
     }
 
 }

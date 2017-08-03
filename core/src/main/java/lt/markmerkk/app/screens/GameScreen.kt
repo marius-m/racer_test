@@ -32,7 +32,7 @@ class GameScreen(
             players = players
     )
 
-    private val inputPresenter: InputPresenter = InputPresenterToClientImpl(Gdx.input, clientInteractor)
+    private val inputPresenter: InputPresenter = InputPresenterToClientImpl(Gdx.input, clientPresenter)
 
     //region Callback methods
 

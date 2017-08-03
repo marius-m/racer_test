@@ -63,9 +63,8 @@ class ClientInteractorImpl : ClientInteractor {
 
     //region Sent Events
 
-    override fun sendMovementEventCode(movement: Movement) {
-        // todo : Provide proper client connection id
-        client.sendTCP(EventPlayerMovement(1, movement.toCode()))
+    override fun sendMovementEventCode(connectionId: Int, movementEvent: Movement) {
+        client.sendTCP(EventPlayerMovement(connectionId, movementEvent.toCode()))
     }
 
     //endregion
