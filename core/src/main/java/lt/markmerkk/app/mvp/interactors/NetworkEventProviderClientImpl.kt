@@ -2,6 +2,7 @@ package lt.markmerkk.app.mvp.interactors
 
 import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.mvp.NetworkEventProvider
+import lt.markmerkk.app.network.events.EventPlayersPosition
 import lt.markmerkk.app.network.events.EventPlayersRegister
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.slf4j.LoggerFactory
@@ -18,6 +19,7 @@ class NetworkEventProviderClientImpl(
         Gdx.app.postRunnable {
             when (eventObject) {
                 is EventPlayersRegister -> listener.onPlayersRegister(eventObject.registerPlayers)
+                is EventPlayersPosition -> listener.onPlayersPosition(eventObject.playersPosition)
                 else -> logger.debug("Undefined event received: $eventObject")
             }
         }

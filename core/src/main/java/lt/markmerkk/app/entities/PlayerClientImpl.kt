@@ -26,8 +26,12 @@ class PlayerClientImpl(
             positionY: Float,
             angle: Float
     ) {
-        sprite.setPosition(positionX, positionY)
-        sprite.rotation = angle
+//        sprite.setPosition(positionX, positionY)
+        sprite.setPosition(
+                positionX / GameScreen.PIXELS_PER_METER,
+                positionY / GameScreen.PIXELS_PER_METER
+        )
+//        sprite.rotation = angle
     }
 
     override fun draw(spriteBatch: SpriteBatch) {

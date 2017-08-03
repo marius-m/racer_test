@@ -7,6 +7,10 @@ interface PlayerServer {
     val id: Int
     val name: String
 
+    fun getPositionX(): Float
+
+    fun getPositionY(): Float
+
     /**
      * Updates box 2d position
      */

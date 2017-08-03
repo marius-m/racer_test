@@ -3,6 +3,8 @@ package lt.markmerkk.app.box2d
 interface Car {
     fun update(deltaTime: Float)
     fun destroy()
+    fun positionX(): Float
+    fun positionY(): Float
 
     // movement
     fun accForward()

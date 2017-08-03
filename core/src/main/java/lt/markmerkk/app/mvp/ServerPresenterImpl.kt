@@ -3,6 +3,7 @@ package lt.markmerkk.app.mvp
 import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
+import lt.markmerkk.app.network.events.models.PlayerPosition
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 import rx.Observable
@@ -17,7 +18,7 @@ class ServerPresenterImpl(
         private val playerPresenterServer: PlayerPresenterServer
 ) : ServerPresenter {
 
-    val subscriptions = mutableListOf<Subscription>()
+    private val subscriptions = mutableListOf<Subscription>()
 
     override fun onAttach() {
         serverInteractor.start(NetworkEventProviderServerImpl(serverEventListener))
@@ -29,6 +30,13 @@ class ServerPresenterImpl(
     }
 
     override fun update() {
+        val playersPosition = playerPresenterServer.players()
+                .map { PlayerPosition(
+                        it.id,
+                        it.getPositionX(),
+                        it.getPositionY()
+                ) }
+        serverInteractor.sendPlayerPosition(playersPosition)
     }
 
     //region Listeners

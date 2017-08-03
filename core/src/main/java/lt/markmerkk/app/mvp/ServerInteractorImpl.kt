@@ -5,8 +5,10 @@ import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.Const
 import lt.markmerkk.app.network.GameServer
 import lt.markmerkk.app.network.Network
+import lt.markmerkk.app.network.events.EventPlayersPosition
 import lt.markmerkk.app.network.events.EventPlayersRegister
 import lt.markmerkk.app.network.events.NetworkEvent
+import lt.markmerkk.app.network.events.models.PlayerPosition
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 
@@ -34,6 +36,10 @@ class ServerInteractorImpl : ServerInteractor {
 
     override fun sendPlayerRegister(registeredPlayers: List<PlayerRegister>) {
         server.sendToAllTCP(EventPlayersRegister(registeredPlayers))
+    }
+
+    override fun sendPlayerPosition(playersPosition: List<PlayerPosition>) {
+        server.sendToAllUDP(EventPlayersPosition(playersPosition))
     }
 
     //region Listeners

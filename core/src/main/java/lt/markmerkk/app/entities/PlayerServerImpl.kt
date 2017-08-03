@@ -1,7 +1,7 @@
 package lt.markmerkk.app.entities
 
 import lt.markmerkk.app.box2d.Car
-import lt.markmerkk.app.mvp.ServerPresenterImpl
+import lt.markmerkk.app.screens.GameScreen
 import org.slf4j.LoggerFactory
 
 /**
@@ -58,6 +58,14 @@ class PlayerServerImpl(
 //
 //        carSprite.setPosition(newPositionX, newPositionY)
 //        carSprite.rotation = newAngle
+    }
+
+    override fun getPositionX(): Float {
+        return GameScreen.PIXELS_PER_METER * car.positionX()
+    }
+
+    override fun getPositionY(): Float {
+        return GameScreen.PIXELS_PER_METER * car.positionY()
     }
 
     override fun destroy() {

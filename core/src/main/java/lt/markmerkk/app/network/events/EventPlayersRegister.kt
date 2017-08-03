@@ -8,6 +8,4 @@ import lt.markmerkk.app.network.events.models.ReportPlayer
  */
 class EventPlayersRegister(
         var registerPlayers: List<PlayerRegister> = emptyList()
-) : NetworkEvent {
-    constructor() : this(emptyList())
-}
+) : NetworkEvent

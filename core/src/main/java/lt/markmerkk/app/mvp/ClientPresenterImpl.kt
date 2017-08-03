@@ -5,6 +5,7 @@ import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
+import lt.markmerkk.app.network.events.models.PlayerPosition
 import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 import rx.Subscription
@@ -58,6 +59,26 @@ class ClientPresenterImpl(
                     }
             )
         }
+
+        override fun onPlayersPosition(playersPosition: List<PlayerPosition>) {
+            for (positionFromRemote in playersPosition) {
+                val localPlayer = players.find { it.id == positionFromRemote.connectionId }
+                if (localPlayer == null) continue
+                logger.debug(
+                        String.format(
+                                "Update position: %f x %f",
+                                positionFromRemote.positionX,
+                                positionFromRemote.positionY
+                        )
+                )
+                localPlayer.update(
+                        positionFromRemote.positionX,
+                        positionFromRemote.positionY,
+                        0.0f
+                )
+            }
+        }
+
     }
 
     //endregion

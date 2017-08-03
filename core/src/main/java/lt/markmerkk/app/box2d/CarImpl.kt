@@ -36,6 +36,14 @@ class CarImpl(
         carBox2D.update(deltaTime)
     }
 
+    override fun positionX(): Float {
+        return carBox2D.body.position.x
+    }
+
+    override fun positionY(): Float {
+        return carBox2D.body.position.y
+    }
+
     override fun destroy() {
         carBox2D.destroy()
     }
