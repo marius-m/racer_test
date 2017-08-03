@@ -39,6 +39,7 @@ class PlayerPresenterServerImpl(
     override fun removePlayerByConnectionId(connectionId: Int) {
         val playerById = players.find { it.id == connectionId }
         if (playerById != null) {
+            playerById.destroy()
             players.remove(playerById)
         }
     }

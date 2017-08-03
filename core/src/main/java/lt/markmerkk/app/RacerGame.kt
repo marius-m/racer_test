@@ -31,25 +31,27 @@ class RacerGame(
 
     override fun create() {
         camera = CameraHelper(GameScreen.VIRTUAL_WIDTH, GameScreen.VIRTUAL_HEIGHT)
-        world = World(Vector2(0.0f, 0.0f), true)
-        componentFactory = PhysicsComponentFactory(world, camera)
-        worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
-        debugPresenter = DebugPresenterImpl(world, camera)
-        playerPresenterServer = PlayerPresenterServerImpl(
-                WorldProviderImpl(world),
-                players
-        )
-        serverPresenter = ServerPresenterImpl(
-                serverInteractor = ServerInteractorImpl(),
-                playerPresenterServer = playerPresenterServer
-        )
+        if (isHost) {
+            world = World(Vector2(0.0f, 0.0f), true)
+            componentFactory = PhysicsComponentFactory(world, camera)
+            worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
+            debugPresenter = DebugPresenterImpl(world, camera)
+            playerPresenterServer = PlayerPresenterServerImpl(
+                    WorldProviderImpl(world),
+                    players
+            )
+            serverPresenter = ServerPresenterImpl(
+                    serverInteractor = ServerInteractorImpl(),
+                    playerPresenterServer = playerPresenterServer
+            )
 
-        worldPresenter.onAttach()
-        debugPresenter.onAttach()
-        serverPresenter.onAttach()
+            worldPresenter.onAttach()
+            debugPresenter.onAttach()
+            serverPresenter.onAttach()
 
-        componentFactory.createBoundWalls()
-        componentFactory.createPen()
+            componentFactory.createBoundWalls()
+            componentFactory.createPen()
+        }
 
         setScreen(GameScreen(camera))
     }
@@ -58,16 +60,20 @@ class RacerGame(
         super.render()
         val deltaTime = Gdx.graphics.deltaTime
 
-        worldPresenter.render(deltaTime)
-        debugPresenter.render()
-        serverPresenter.update()
-        playerPresenterServer.render(deltaTime)
+        if (isHost) {
+            worldPresenter.render(deltaTime)
+            debugPresenter.render()
+            serverPresenter.update()
+            playerPresenterServer.render(deltaTime)
+        }
     }
 
     override fun dispose() {
-        serverPresenter.onDetach()
-        debugPresenter.onDetach()
-        worldPresenter.onDetach()
+        if (isHost) {
+            serverPresenter.onDetach()
+            debugPresenter.onDetach()
+            worldPresenter.onDetach()
+        }
         super.dispose()
     }
 
