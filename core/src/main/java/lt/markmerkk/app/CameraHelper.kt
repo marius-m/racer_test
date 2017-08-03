@@ -61,8 +61,8 @@ class CameraHelper(
     }
 
     fun update(x : Float, y : Float) {
-        camera.position.set(x, y, 0f)
-        camera.update()
+//        camera.position.set(x, y, 0f)
+//        camera.update()
     }
 
     companion object {

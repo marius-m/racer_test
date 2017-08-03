@@ -5,6 +5,7 @@ interface Car {
     fun destroy()
     fun positionX(): Float
     fun positionY(): Float
+    fun angle(): Float
 
     // movement
     fun accForward()

@@ -67,7 +67,7 @@ class ClientPresenterImpl(
                 localPlayer.update(
                         positionFromRemote.positionX,
                         positionFromRemote.positionY,
-                        0.0f
+                        positionFromRemote.angle
                 )
             }
         }

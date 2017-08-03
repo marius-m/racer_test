@@ -15,10 +15,10 @@ class PlayerClientImpl(
     private val sprite: Sprite = Sprite(texture)
 
     init {
-        sprite.setSize(
-                sprite.width / GameScreen.PIXELS_PER_METER,
-                sprite.height / GameScreen.PIXELS_PER_METER
-        )
+        val width = sprite.width / GameScreen.PIXELS_PER_METER
+        val height = sprite.height / GameScreen.PIXELS_PER_METER
+        sprite.setSize(width, height)
+        sprite.setOrigin(width / 2, height / 2)
     }
 
     override fun update(
@@ -26,12 +26,11 @@ class PlayerClientImpl(
             positionY: Float,
             angle: Float
     ) {
-//        sprite.setPosition(positionX, positionY)
         sprite.setPosition(
-                positionX / GameScreen.PIXELS_PER_METER,
-                positionY / GameScreen.PIXELS_PER_METER
+                positionX / GameScreen.PIXELS_PER_METER - sprite.width / 2,
+                positionY / GameScreen.PIXELS_PER_METER - sprite.height / 2
         )
-//        sprite.rotation = angle
+        sprite.rotation = angle
     }
 
     override fun draw(spriteBatch: SpriteBatch) {

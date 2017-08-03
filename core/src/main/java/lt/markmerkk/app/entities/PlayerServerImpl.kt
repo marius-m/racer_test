@@ -68,6 +68,10 @@ class PlayerServerImpl(
         return GameScreen.PIXELS_PER_METER * car.positionY()
     }
 
+    override fun getAngle(): Float {
+        return Math.toDegrees(car.angle().toDouble()).toFloat()
+    }
+
     override fun destroy() {
         car.destroy()
     }

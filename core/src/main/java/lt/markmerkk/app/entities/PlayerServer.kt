@@ -7,9 +7,20 @@ interface PlayerServer {
     val id: Int
     val name: String
 
+    /**
+     * Returns position coordinate x in the world
+     */
     fun getPositionX(): Float
 
+    /**
+     * Returns position coordinate y in the world
+     */
     fun getPositionY(): Float
+
+    /**
+     * Returns angle that car is in, in the world
+     */
+    fun getAngle(): Float
 
     /**
      * Updates box 2d position

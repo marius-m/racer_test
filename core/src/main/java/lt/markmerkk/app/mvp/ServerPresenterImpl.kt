@@ -34,7 +34,8 @@ class ServerPresenterImpl(
                 .map { PlayerPosition(
                         it.id,
                         it.getPositionX(),
-                        it.getPositionY()
+                        it.getPositionY(),
+                        it.getAngle()
                 ) }
         serverInteractor.sendPlayerPosition(playersPosition)
     }

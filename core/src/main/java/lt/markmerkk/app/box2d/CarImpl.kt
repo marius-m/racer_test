@@ -44,6 +44,10 @@ class CarImpl(
         return carBox2D.body.position.y
     }
 
+    override fun angle(): Float {
+        return carBox2D.body.angle
+    }
+
     override fun destroy() {
         carBox2D.destroy()
     }
