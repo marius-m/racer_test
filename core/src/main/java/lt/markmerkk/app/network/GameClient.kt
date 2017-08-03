@@ -18,8 +18,8 @@ class GameClient : Client() {
     }
 
     init {
-//        Log.set(Const.LOG_LEVEL)
-//        Log.setLogger(serverLogger)
+        Log.set(Const.LOG_LEVEL)
+        Log.setLogger(serverLogger)
     }
 
     private val logger = LoggerFactory.getLogger(GameClient::class.java)!!

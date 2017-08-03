@@ -19,8 +19,8 @@ class GameServer : Server() {
     }
 
     init {
-//        Log.set(Const.LOG_LEVEL)
-//        Log.setLogger(serverLogger)
+        Log.set(Const.LOG_LEVEL)
+        Log.setLogger(serverLogger)
     }
 
     override fun newConnection(): Connection {

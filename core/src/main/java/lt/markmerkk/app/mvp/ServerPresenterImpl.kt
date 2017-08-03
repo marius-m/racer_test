@@ -1,6 +1,7 @@
 package lt.markmerkk.app.mvp
 
 import lt.markmerkk.app.entities.Movement
+import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
 import lt.markmerkk.app.network.events.models.PlayerPosition
@@ -8,6 +9,9 @@ import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 import rx.Observable
 import rx.Subscription
+import rx.schedulers.Schedulers
+import rx.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
 /**
  * @author mariusmerkevicius
@@ -19,9 +23,19 @@ class ServerPresenterImpl(
 ) : ServerPresenter {
 
     private val subscriptions = mutableListOf<Subscription>()
+    private val updateSubject = PublishSubject.create<List<PlayerServer>>()
 
     override fun onAttach() {
         serverInteractor.start(NetworkEventProviderServerImpl(serverEventListener))
+        updateSubject
+                .throttleLast(10L, TimeUnit.MILLISECONDS)
+                .map {
+                    it.map { PlayerPosition.fromPlayer(it) }
+                }
+                .subscribe({
+                    serverInteractor.sendPlayerPosition(it)
+                })
+                .let { subscriptions.add(it) }
     }
 
     override fun onDetach() {
@@ -30,14 +44,7 @@ class ServerPresenterImpl(
     }
 
     override fun update() {
-        val playersPosition = playerPresenterServer.players()
-                .map { PlayerPosition(
-                        it.id,
-                        it.getPositionX(),
-                        it.getPositionY(),
-                        it.getAngle()
-                ) }
-        serverInteractor.sendPlayerPosition(playersPosition)
+        updateSubject.onNext(playerPresenterServer.players())
     }
 
     //region Listeners
