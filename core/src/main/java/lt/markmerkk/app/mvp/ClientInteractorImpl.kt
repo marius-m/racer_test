@@ -15,7 +15,9 @@ import java.net.InetAddress
  * @author mariusmerkevicius
  * @since 2016-10-23
  */
-class ClientInteractorImpl : ClientInteractor {
+class ClientInteractorImpl(
+        private val serverIp: String = Const.DEFAULT_SERVER_IP
+) : ClientInteractor {
 
     lateinit private var eventProvider: NetworkEventProvider
     private val client = GameClient()
@@ -27,7 +29,7 @@ class ClientInteractorImpl : ClientInteractor {
         client.addListener(listener)
         client.connect(
                 Const.CONN_TIMEOUT_MILLIS,
-                InetAddress.getByName("127.0.0.1"),
+                InetAddress.getByName(serverIp),
                 Const.PORT_TCP,
                 Const.PORT_UDP
         )

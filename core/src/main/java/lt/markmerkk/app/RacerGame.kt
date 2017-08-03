@@ -15,7 +15,8 @@ import lt.markmerkk.app.screens.GameScreen
  * @since 2016-06-04
  */
 class RacerGame(
-        private val isHost: Boolean
+        private val isHost: Boolean,
+        private val serverIp: String = Const.DEFAULT_SERVER_IP
 ) : Game() {
 
     lateinit var camera: CameraHelper

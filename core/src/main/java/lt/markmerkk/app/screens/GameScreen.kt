@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen
 import com.badlogic.gdx.graphics.GL20
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import lt.markmerkk.app.CameraHelper
+import lt.markmerkk.app.Const
 import lt.markmerkk.app.entities.PlayerClient
 import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpritesPresenter
@@ -16,7 +17,8 @@ import lt.markmerkk.app.mvp.painter.SpritesView
  * @since 2016-06-04
  */
 class GameScreen(
-        private val camera: CameraHelper
+        private val camera: CameraHelper,
+        private val serverIp: String = Const.DEFAULT_SERVER_IP
 ) : Screen, SpritesView, WorldView, DebugView, InputView,
         ServerView, ClientView {
 
@@ -26,7 +28,7 @@ class GameScreen(
             SpriteBatch(),
             players
     )
-    private val clientInteractor: ClientInteractor = ClientInteractorImpl()
+    private val clientInteractor: ClientInteractor = ClientInteractorImpl(serverIp)
     private val clientPresenter: ClientPresenter = ClientPresenterImpl(
             clientInteractor = clientInteractor,
             players = players
