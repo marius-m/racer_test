@@ -11,6 +11,10 @@ enum class Movement(
     FORWARD_STOP(1),
     BACKWARD_START(2),
     BACKWARD_STOP(3),
+    LEFT_START(4),
+    LEFT_STOP(5),
+    RIGHT_START(6),
+    RIGHT_STOP(7),
     ;
 
     fun toCode(): Int = eventCode
@@ -22,6 +26,10 @@ enum class Movement(
                 1 -> return FORWARD_STOP
                 2 -> return BACKWARD_START
                 3 -> return BACKWARD_STOP
+                4 -> return LEFT_START
+                5 -> return LEFT_STOP
+                6 -> return RIGHT_START
+                7 -> return RIGHT_STOP
                 else -> return UNKNOWN
             }
         }

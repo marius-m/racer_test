@@ -1,12 +1,16 @@
 package lt.markmerkk.app.box2d
 
 interface Car {
-    val carBox2D: CarBox2D
-
-    val x: Float
-    val y: Float
-    val angle: Float
-
     fun update(deltaTime: Float)
     fun destroy()
+
+    // movement
+    fun accForward()
+    fun accBackward()
+    fun accStop()
+
+    // steering
+    fun steerLeft()
+    fun steerRight()
+    fun steerNone()
 }

@@ -1,7 +1,8 @@
 package lt.markmerkk.app.entities
 
 import lt.markmerkk.app.box2d.Car
-import lt.markmerkk.app.box2d.CarBox2D
+import lt.markmerkk.app.mvp.ServerPresenterImpl
+import org.slf4j.LoggerFactory
 
 /**
  * @author mariusmerkevicius
@@ -14,10 +15,33 @@ class PlayerServerImpl(
 ) : PlayerServer {
 
     override fun updateMovement(movement: Movement) {
+        // Acceleration
         when (movement) {
-            Movement.FORWARD_START -> car.carBox2D.accelerate = CarBox2D.ACC_FORWARD
-            Movement.BACKWARD_START -> car.carBox2D.accelerate = CarBox2D.ACC_BACKWARD
-            else -> car.carBox2D.accelerate = CarBox2D.ACC_NONE
+            Movement.FORWARD_START,
+            Movement.FORWARD_STOP,
+            Movement.BACKWARD_START,
+            Movement.BACKWARD_STOP -> {
+                when (movement) {
+                    Movement.FORWARD_START -> car.accForward()
+                    Movement.BACKWARD_START -> car.accBackward()
+                    else -> car.accStop()
+                }
+            }
+            Movement.LEFT_START,
+            Movement.LEFT_STOP,
+            Movement.RIGHT_START,
+            Movement.RIGHT_STOP -> {
+                when (movement) {
+                    Movement.LEFT_START -> car.steerLeft()
+                    Movement.RIGHT_START -> car.steerRight()
+                    else -> car.steerNone()
+                }
+            }
+            else -> {
+                logger.debug("[ERROR] Car unidentified car movement!")
+                car.accStop()
+                car.steerNone()
+            }
         }
     }
 
@@ -38,5 +62,9 @@ class PlayerServerImpl(
 
     override fun destroy() {
         car.destroy()
+    }
+
+    companion object {
+        val logger = LoggerFactory.getLogger(PlayerServerImpl::class.java)
     }
 }

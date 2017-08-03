@@ -38,6 +38,8 @@ class InputPresenterToClientImpl(
             when (keycode) {
                 Input.Keys.UP -> clientPresenter.updateInputMovement(Movement.FORWARD_STOP)
                 Input.Keys.DOWN -> clientPresenter.updateInputMovement(Movement.BACKWARD_STOP)
+                Input.Keys.LEFT -> clientPresenter.updateInputMovement(Movement.LEFT_STOP)
+                Input.Keys.RIGHT -> clientPresenter.updateInputMovement(Movement.RIGHT_STOP)
             }
             return false
         }
@@ -48,6 +50,8 @@ class InputPresenterToClientImpl(
             when (keycode) {
                 Input.Keys.UP -> clientPresenter.updateInputMovement(Movement.FORWARD_START)
                 Input.Keys.DOWN -> clientPresenter.updateInputMovement(Movement.BACKWARD_START)
+                Input.Keys.LEFT -> clientPresenter.updateInputMovement(Movement.LEFT_START)
+                Input.Keys.RIGHT -> clientPresenter.updateInputMovement(Movement.RIGHT_START)
             }
             return false
         }
