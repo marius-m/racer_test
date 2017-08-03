@@ -1,100 +1,90 @@
 package lt.markmerkk.app.mvp
 
-import com.badlogic.gdx.Gdx
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.Movement
+import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
-import lt.markmerkk.app.network.events.models.ReportPlayer
+import lt.markmerkk.app.network.events.models.PlayerPosition
+import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
 import rx.Observable
-import rx.Scheduler
 import rx.Subscription
+import rx.schedulers.Schedulers
+import rx.subjects.PublishSubject
+import java.util.concurrent.TimeUnit
 
 /**
  * @author mariusmerkevicius
  * @since 2016-10-23
  */
 class ServerPresenterImpl(
-        private val isHost: Boolean,
-        private val view: ServerView,
         private val serverInteractor: ServerInteractor,
-        private val playerInteractor: PlayerInteractor,
-        private val players: List<Player>,
-        private val uiScheduler: Scheduler,
-        private val ioScheduler: Scheduler
-) : ServerPresenter, ServerEventListener {
+        private val playerPresenterServer: PlayerPresenterServer
+) : ServerPresenter {
 
-    val subscriptions = mutableListOf<Subscription>()
+    private val subscriptions = mutableListOf<Subscription>()
+    private val updateSubject = PublishSubject.create<List<PlayerServer>>()
 
     override fun onAttach() {
-        if (!isHost) return
-        serverInteractor.start(NetworkEventProviderServerImpl(this))
+        serverInteractor.start(NetworkEventProviderServerImpl(serverEventListener))
+        updateSubject
+                .throttleLast(10L, TimeUnit.MILLISECONDS)
+                .map {
+                    it.map { PlayerPosition.fromPlayer(it) }
+                }
+                .subscribe({
+                    serverInteractor.sendPlayerPosition(it)
+                })
+                .let { subscriptions.add(it) }
     }
 
     override fun onDetach() {
-        if (!isHost) return
         serverInteractor.stop()
         subscriptions.forEach { it.unsubscribe() }
     }
 
     override fun update() {
-//        updatePosition(players)
+        updateSubject.onNext(playerPresenterServer.players())
     }
 
-    //region Network events
+    //region Listeners
 
-    override fun onClientConnected(connectionId: Int) {
-        Observable.just(connectionId)
-                .subscribeOn(ioScheduler)
-                .observeOn(uiScheduler)
-                .subscribe({
-                    val newPlayer = playerInteractor.createPlayer(it)
-                    playerInteractor.addPlayer(newPlayer)
-                    sendPlayerUpdate(players)
-                }, {
-                    logger.error("Error creating client", it)
-                }).apply { subscriptions.add(this) }
-    }
+    val serverEventListener: ServerEventListener = object : ServerEventListener {
+        override fun onClientConnected(connectionId: Int) {
+            Observable.just(connectionId)
+                    .subscribe({
+                        playerPresenterServer.createPlayerById(connectionId)
+                        serverInteractor.sendPlayerRegister(
+                                playerPresenterServer
+                                        .players()
+                                        .map { PlayerRegister(it.id, it.name) }
+                        )
+                    }, {
+                        logger.error("Error creating client", it)
+                    }).apply { subscriptions.add(this) }
+        }
 
-    override fun onClientDisconnected(connectionId: Int) {
-        // Will not work with threading targets ??
-        Observable.just(connectionId)
-                .subscribe({
-                    playerInteractor.removePlayerByConnectionId(it)
-                    sendPlayerUpdate(players)
-                }, {
-                    logger.error("Error disconnecting client", it)
-                })
-    }
+        override fun onClientDisconnected(connectionId: Int) {
+            Observable.just(connectionId)
+                    .subscribe({
+                        playerPresenterServer.removePlayerByConnectionId(it)
+                        serverInteractor.sendPlayerRegister(
+                                playerPresenterServer
+                                        .players()
+                                        .map { PlayerRegister(it.id, it.name) }
+                        )
+                    }, {
+                        logger.error("Error disconnecting client", it)
+                    }).apply { subscriptions.add(this) }
+        }
 
-    override fun onClientHello() {
-//        sendPlayerUpdate(players)
+        override fun onClientMovementEvent(connectionId: Int, movement: Movement) {
+            playerPresenterServer.movePlayerWithMovement(connectionId, movement)
+        }
+
     }
 
     //endregion
-
-    /**
-     * Updates position whenever its needed
-     */
-    fun updatePosition(players: List<Player>) {
-        val playersDirty = players.find { it.dirty == true } != null
-        if (playersDirty) {
-            logger.info("Found dirty players")
-            serverInteractor.sendPositionUpdate()
-            players.forEach { it.dirty = false }
-        }
-    }
-
-    fun sendPlayerUpdate(players: List<Player>) {
-        if (players.size == 0) return
-        val reportPlayers = players.map {
-            ReportPlayer().apply {
-                id = it.id
-                name = it.name
-            }
-        }
-        serverInteractor.sendPlayerUpdate(reportPlayers)
-    }
 
     companion object {
         val logger = LoggerFactory.getLogger(ServerPresenterImpl::class.java)

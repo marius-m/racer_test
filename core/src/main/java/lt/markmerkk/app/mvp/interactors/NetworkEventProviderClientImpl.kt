@@ -1,7 +1,9 @@
 package lt.markmerkk.app.mvp.interactors
 
+import com.badlogic.gdx.Gdx
 import lt.markmerkk.app.mvp.NetworkEventProvider
-import lt.markmerkk.app.network.events.EventPlayersUpdate
+import lt.markmerkk.app.network.events.EventPlayersPosition
+import lt.markmerkk.app.network.events.EventPlayersRegister
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.slf4j.LoggerFactory
 
@@ -14,18 +16,25 @@ class NetworkEventProviderClientImpl(
 ) : NetworkEventProvider {
 
     override fun event(eventObject: NetworkEvent) {
-        when (eventObject) {
-            is EventPlayersUpdate -> listener.onPlayersUpdate(eventObject.reportPlayers)
-            else -> logger.debug("Undefined event received: $eventObject")
+        Gdx.app.postRunnable {
+            when (eventObject) {
+                is EventPlayersRegister -> listener.onPlayersRegister(eventObject.registerPlayers)
+                is EventPlayersPosition -> listener.onPlayersPosition(eventObject.playersPosition)
+                else -> logger.debug("Undefined event received: $eventObject")
+            }
         }
     }
 
     override fun connected(connectionId: Int) {
-        listener.onConnected(connectionId)
+        Gdx.app.postRunnable {
+            listener.onConnected(connectionId)
+        }
     }
 
     override fun disconnected(connectionId: Int) {
-        listener.onDisconnected(connectionId)
+        Gdx.app.postRunnable {
+            listener.onDisconnected(connectionId)
+        }
     }
 
     companion object {

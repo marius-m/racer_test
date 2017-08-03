@@ -9,11 +9,11 @@ import org.junit.Test
  * *
  * @since 2016-10-21
  */
-class InputPresenterImplHandleSteerTest {
+class InputPresenterBox2dImplHandleSteerTest {
     val carInputInteractor = mock<CarInputInteractor>()
     val input: Input = mock()
-    val presenter = InputPresenterImpl(input).apply {
-        carInputInteractor = this@InputPresenterImplHandleSteerTest.carInputInteractor
+    val presenter = InputPresenterBox2dImpl(input).apply {
+        carInputInteractor = this@InputPresenterBox2dImplHandleSteerTest.carInputInteractor
     }
 
     @Test

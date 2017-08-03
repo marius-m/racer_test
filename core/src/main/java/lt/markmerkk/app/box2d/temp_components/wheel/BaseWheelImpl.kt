@@ -2,7 +2,7 @@ package lt.markmerkk.app.box2d.temp_components.wheel
 
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.*
-import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarBox2D
 
 /**
  * @author mariusmerkevicius
@@ -10,7 +10,7 @@ import lt.markmerkk.app.box2d.Car
  */
 abstract class BaseWheelImpl(
         override val world: World,
-        override val car: Car,
+        override val carBox2D: CarBox2D,
         override var posX: Float,
         override var posY: Float,
         override val width: Float,
@@ -24,8 +24,8 @@ abstract class BaseWheelImpl(
         //init body
         val bodyDef = BodyDef()
         bodyDef.type = BodyDef.BodyType.DynamicBody
-        bodyDef.position.set(car.body.getWorldPoint(Vector2(posX, posY)))
-        bodyDef.angle = car.body.angle
+        bodyDef.position.set(carBox2D.body.getWorldPoint(Vector2(posX, posY)))
+        bodyDef.angle = carBox2D.body.angle
         this.body = world.createBody(bodyDef)
 
         //init shape
@@ -40,13 +40,13 @@ abstract class BaseWheelImpl(
         this.body.createFixture(fixtureDef)
         wheelShape.dispose()
 
-        initJoint(world, car)
+        initJoint(world, carBox2D)
     }
 
-    abstract fun initJoint(world: World, car: Car)
+    abstract fun initJoint(world: World, carBox2D: CarBox2D)
 
     override fun localVelocity(): Vector2 {
-        return car.body.getLocalVector(car.body.getLinearVelocityFromLocalPoint(body.position))
+        return carBox2D.body.getLocalVector(carBox2D.body.getLinearVelocityFromLocalPoint(body.position))
     }
 
     override fun directionVector(): Vector2 {
@@ -59,7 +59,7 @@ abstract class BaseWheelImpl(
     }
 
     override fun changeAngle(angle: Float) {
-        body.setTransform(body.position, car.body.angle + Math.toRadians(angle.toDouble()).toFloat())
+        body.setTransform(body.position, carBox2D.body.angle + Math.toRadians(angle.toDouble()).toFloat())
     }
 
     override fun killSidewayVector() {

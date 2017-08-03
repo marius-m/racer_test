@@ -1,7 +1,10 @@
 package lt.markmerkk.app.mvp.interactors
 
+import com.badlogic.gdx.Gdx
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.mvp.NetworkEventProvider
 import lt.markmerkk.app.network.events.EventHello
+import lt.markmerkk.app.network.events.EventPlayerMovement
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.slf4j.LoggerFactory
 
@@ -15,7 +18,10 @@ class NetworkEventProviderServerImpl(
 
     override fun event(eventObject: NetworkEvent) {
         when(eventObject) {
-            is EventHello -> listener.onClientHello()
+            is EventPlayerMovement -> listener.onClientMovementEvent(
+                    eventObject.connectionId,
+                    Movement.fromCode(eventObject.movementEventCode)
+            )
             else -> logger.debug("Undefined event received: $eventObject")
         }
     }

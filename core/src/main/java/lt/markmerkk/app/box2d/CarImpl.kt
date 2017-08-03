@@ -1,137 +1,54 @@
 package lt.markmerkk.app.box2d
 
-import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.*
-import lt.markmerkk.app.box2d.temp_components.wheel.RevolvingWheelImpl
-import lt.markmerkk.app.box2d.temp_components.wheel.Wheel
-import lt.markmerkk.app.box2d.temp_components.wheel.WheelImpl
-
 /**
  * @author mariusmerkevicius
- * @since 2016-06-04
+ * @since 2016-11-01
  */
 class CarImpl(
-        val world: World,
-        val position: Vector2
+        private val carBox2D: CarBox2D
 ) : Car {
-    override val body : Body
-    val width = 1f
-    val height = 2f
-    val maxSteerAngle = 30f
-    val minSteerAngle = 15f
-    val power = 5f
-    val maxSpeed = 20f
-    val angle = Math.PI.toFloat()
-    lateinit var wheels: List<Wheel>
 
-    override var steer = Car.STEER_NONE
-    override var accelerate = Car.ACC_NONE
-    var wheelAngle: Float = 0f
-    var speed = 0f
-        set(value) {
-            var velocity = body.linearVelocity
-            velocity = velocity.nor()
-            velocity = Vector2(
-                    velocity.x * (speed * 1000.0f / 3600.0f),
-                    velocity.y * (speed * 1000.0f / 3600.0f)
-            )
-            this.body.linearVelocity = velocity
-        }
-
-    init {
-        val bodyDef = BodyDef()
-        bodyDef.type = BodyDef.BodyType.DynamicBody
-        bodyDef.position.set(position)
-        bodyDef.angle = angle
-        body = world.createBody(bodyDef)
-
-        val fixtureDef = FixtureDef()
-        fixtureDef.density = 1.0f
-        fixtureDef.friction = 0.1f
-        fixtureDef.restitution = 0.2f
-
-        val carShape = PolygonShape()
-        carShape.setAsBox(width / 2, height / 2)
-        fixtureDef.shape = carShape
-        body.createFixture(fixtureDef)
-
-        wheels = listOf <Wheel>(
-                RevolvingWheelImpl(world = world, car = this,
-                        posX = -0.5f, posY = -0.6f,
-                        width = 0.2f, height = 0.4f),
-                RevolvingWheelImpl(world = world, car = this,
-                        posX = 0.5f, posY = -0.6f,
-                        width = 0.2f, height = 0.4f),
-                WheelImpl(world = world, car = this,
-                        posX = -0.5f, posY = 0.6f,
-                        width = 0.2f, height = 0.4f),
-                WheelImpl(world = world, car = this,
-                        posX = 0.5f, posY = 0.6f,
-                        width = 0.2f, height = 0.4f)
-        )
+    override fun accForward() {
+        carBox2D.accelerate = CarBox2D.ACC_FORWARD
     }
 
-    fun getSpeedKMH(): Float {
-        val velocity = this.body.linearVelocity
-        val len = velocity.len()
-        return len / 1000 * 3600
+    override fun accBackward() {
+        carBox2D.accelerate = CarBox2D.ACC_BACKWARD
     }
 
-    fun getLocalVelocity(): Vector2 {
-        return this.body.getLocalVector(body.getLinearVelocityFromLocalPoint(Vector2(0f, 0f)))
+    override fun accStop() {
+        carBox2D.accelerate = CarBox2D.ACC_NONE
+    }
+
+    override fun steerLeft() {
+        carBox2D.steer = CarBox2D.STEER_LEFT
+    }
+
+    override fun steerRight() {
+        carBox2D.steer = CarBox2D.STEER_RIGHT
+    }
+
+    override fun steerNone() {
+        carBox2D.steer = CarBox2D.STEER_NONE
     }
 
     override fun update(deltaTime: Float) {
-        wheels.forEach { it.killSidewayVector() }
+        carBox2D.update(deltaTime)
+    }
 
-        val increase = maxSteerAngle * deltaTime * 5f
-        when (steer) {
-            Car.STEER_LEFT -> wheelAngle = Math.min((Math.max(wheelAngle, 0f) + increase).toFloat(), maxSteerAngle)
-            Car.STEER_RIGHT -> wheelAngle = Math.max(Math.min(wheelAngle, 0f) - increase, -maxSteerAngle)
-            else -> wheelAngle = 0f
-        }
-        wheels.filterIsInstance<RevolvingWheelImpl>()
-                .forEach { it.changeAngle(wheelAngle) }
+    override fun positionX(): Float {
+        return carBox2D.body.position.x
+    }
 
-        var baseVector: Vector2
-        if (accelerate == Car.ACC_FORWARD && this.getSpeedKMH() < this.maxSpeed) {
-            baseVector = Vector2(0f, -1f)
-        } else if (accelerate == Car.ACC_BACKWARD) {
-            if (getLocalVelocity().y < 0) {
-                baseVector = Vector2(0f, 1.3f)
-            } else {
-                baseVector = Vector2(0f, 0.7f)
-            }
-        } else if (accelerate == Car.ACC_NONE) {
-            baseVector = Vector2(0f, 0f)
-            if (getSpeedKMH() < 7) {
-                speed = 0f
-            } else if (this.getLocalVelocity().y < 0) {
-                baseVector = Vector2(0f, 0.7f)
+    override fun positionY(): Float {
+        return carBox2D.body.position.y
+    }
 
-            } else if (this.getLocalVelocity().y > 0) {
-                baseVector = Vector2(0f, -0.7f)
-
-            }
-        } else {
-            baseVector = Vector2(0f, 0f)
-        }
-
-        val forceVector = Vector2(power * baseVector.x, power * baseVector.y)
-        wheels.filterIsInstance<RevolvingWheelImpl>()
-                .forEach {
-                    val position = it.body.worldCenter
-                    it.body.applyForce(
-                            it.body.getWorldVector(Vector2(forceVector.x, forceVector.y)),
-                            position,
-                            true
-                    )
-                }
+    override fun angle(): Float {
+        return carBox2D.body.angle
     }
 
     override fun destroy() {
-        world.destroyBody(body)
-        wheels.forEach { world.destroyBody(it.body) }
+        carBox2D.destroy()
     }
-
 }

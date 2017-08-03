@@ -1,6 +1,7 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.network.events.models.ReportPlayer
+import lt.markmerkk.app.network.events.models.PlayerPosition
+import lt.markmerkk.app.network.events.models.PlayerRegister
 
 /**
  * @author mariusmerkevicius
@@ -9,6 +10,6 @@ import lt.markmerkk.app.network.events.models.ReportPlayer
 interface ServerInteractor {
     fun start(eventProvider: NetworkEventProvider)
     fun stop()
-    fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>)
-    fun sendPositionUpdate()
+    fun sendPlayerRegister(registeredPlayers: List<PlayerRegister>)
+    fun sendPlayerPosition(playersPosition: List<PlayerPosition>)
 }

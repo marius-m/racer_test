@@ -1,11 +1,8 @@
 package lt.markmerkk.app.mvp
 
 /**
- * @author mariusmerkevicius
- * @since 2016-10-21
+ * Translates raw input into car movement triggers through [CarInputInteractor]
  */
 interface InputPresenter : Presenter {
-    var carInputInteractor: CarInputInteractor?
-
     fun render()
 }

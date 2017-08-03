@@ -1,12 +1,13 @@
 package lt.markmerkk.app.mvp
 
-import lt.markmerkk.app.entities.Player
+import lt.markmerkk.app.entities.Movement
+import lt.markmerkk.app.entities.PlayerClient
+import lt.markmerkk.app.entities.PlayerClientImpl
 import lt.markmerkk.app.mvp.interactors.ClientEventListener
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderClientImpl
-import lt.markmerkk.app.network.events.models.ReportPlayer
+import lt.markmerkk.app.network.events.models.PlayerPosition
+import lt.markmerkk.app.network.events.models.PlayerRegister
 import org.slf4j.LoggerFactory
-import rx.Observable
-import rx.Scheduler
 import rx.Subscription
 
 /**
@@ -14,74 +15,71 @@ import rx.Subscription
  * @since 2016-10-23
  */
 class ClientPresenterImpl(
-        private val isHost: Boolean,
-        private val view: ClientView,
         private val clientInteractor: ClientInteractor,
-        private val playerInteractor: PlayerInteractor,
-        private val players: List<Player>,
-        private val uiScheduler: Scheduler,
-        private val ioScheduler: Scheduler
-) : ClientPresenter, ClientEventListener {
+        private val players: MutableList<PlayerClient>
+) : ClientPresenter {
 
-    var subscription: Subscription? = null
+    private var connectionId: Int = NO_ID
+    private var subscription: Subscription? = null
 
     override fun onAttach() {
-        if (isHost) return
-        clientInteractor.start(NetworkEventProviderClientImpl(this))
+        clientInteractor.start(NetworkEventProviderClientImpl(clientEventListener))
     }
 
     override fun onDetach() {
         subscription?.unsubscribe()
-        if (isHost) return
         clientInteractor.stop()
     }
 
-    override fun update() {
+    override fun update() { }
+
+    override fun updateInputMovement(movement: Movement) {
+        clientInteractor.sendMovementEventCode(connectionId, movement)
     }
 
-    //region Client events
+    //region Listeners
 
-    override fun onPlayersUpdate(reportPlayers: List<ReportPlayer>) {
-        subscription?.unsubscribe()
-        val currentPlayers = players
-        val newPlayersFilterObservable = Observable.from(reportPlayers)
-                .subscribeOn(ioScheduler)
-                .filter {
-                    val reportPlayerId = it.id
-                    currentPlayers.find { it.id == reportPlayerId } == null
-                }
-                .observeOn(uiScheduler)
-                .doOnNext {
-                    val newPlayer = playerInteractor.createPlayer(it.id)
-                    playerInteractor.addPlayer(newPlayer)
-                }
-        val oldPlayersFilterObservable = Observable.from(currentPlayers)
-                .subscribeOn(ioScheduler)
-                .filter {
-                    val currentPlayer = it
-                    reportPlayers.find { currentPlayer.id == it.id } == null
-                }
-                .observeOn(uiScheduler)
-                .doOnNext {
-                    playerInteractor.removePlayerByConnectionId(it.id)
-                }
-        subscription = Observable.merge(newPlayersFilterObservable, oldPlayersFilterObservable)
-                .subscribe({
-                    logger.info("Player update complete!")
-                })
-    }
+    val clientEventListener: ClientEventListener = object : ClientEventListener {
+        override fun onConnected(connectionId: Int) {
+            this@ClientPresenterImpl.connectionId = connectionId
+        }
 
-    override fun onConnected(connectionId: Int) {
-        clientInteractor.sendHello()
-    }
+        override fun onDisconnected(connectionId: Int) {
+            this@ClientPresenterImpl.connectionId = NO_ID
+        }
 
-    override fun onDisconnected(connectionId: Int) {
+        override fun onPlayersRegister(registeredPlayers: List<PlayerRegister>) {
+            players.clear()
+            players.addAll(
+                    registeredPlayers.map {
+                        PlayerClientImpl(
+                                it.connectionId,
+                                it.name
+                        )
+                    }
+            )
+        }
+
+        override fun onPlayersPosition(playersPosition: List<PlayerPosition>) {
+            for (positionFromRemote in playersPosition) {
+                val localPlayer = players.find { it.id == positionFromRemote.connectionId }
+                if (localPlayer == null) continue
+                localPlayer.update(
+                        positionFromRemote.positionX,
+                        positionFromRemote.positionY,
+                        positionFromRemote.angle
+                )
+            }
+        }
+
     }
 
     //endregion
 
     companion object {
         val logger = LoggerFactory.getLogger(ClientPresenterImpl::class.java)!!
+
+        const val NO_ID = -1
     }
 
 }

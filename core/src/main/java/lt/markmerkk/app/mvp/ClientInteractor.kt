@@ -1,5 +1,7 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Movement
+
 /**
  * @author mariusmerkevicius
  * @since 2016-10-23
@@ -7,8 +9,9 @@ package lt.markmerkk.app.mvp
 interface ClientInteractor {
     fun start(eventProvider: NetworkEventProvider)
     fun stop()
+
     /**
-     * Send an event to the server with a greet
+     * Sends a [lt.markmerkk.app.entities.Movement] code
      */
-    fun sendHello()
+    fun sendMovementEventCode(connectionId: Int, movementEvent: Movement)
 }
