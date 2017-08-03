@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.math.Vector2
 import com.badlogic.gdx.physics.box2d.World
+import lt.markmerkk.app.box2d.WorldProviderImpl
 import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.factory.PhysicsComponentFactory
 import lt.markmerkk.app.mvp.*
@@ -34,7 +35,10 @@ class RacerGame(
         componentFactory = PhysicsComponentFactory(world, camera)
         worldPresenter = WorldPresenterImpl(WorldInteractorImpl(world))
         debugPresenter = DebugPresenterImpl(world, camera)
-        playerPresenterServer = PlayerPresenterServerImpl(world, players)
+        playerPresenterServer = PlayerPresenterServerImpl(
+                WorldProviderImpl(world),
+                players
+        )
         serverPresenter = ServerPresenterImpl(
                 serverInteractor = ServerInteractorImpl(),
                 playerPresenterServer = playerPresenterServer
@@ -57,6 +61,7 @@ class RacerGame(
         worldPresenter.render(deltaTime)
         debugPresenter.render()
         serverPresenter.update()
+        playerPresenterServer.render(deltaTime)
     }
 
     override fun dispose() {

@@ -26,9 +26,7 @@ class ClientPresenterImplOnRegisterTest {
         MockitoAnnotations.initMocks(this)
         presenter = ClientPresenterImpl(
                 clientInteractor,
-                players,
-                Schedulers.immediate(),
-                Schedulers.immediate()
+                players
         )
     }
 

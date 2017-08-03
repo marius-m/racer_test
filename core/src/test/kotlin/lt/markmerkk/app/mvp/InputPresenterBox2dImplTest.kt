@@ -4,7 +4,6 @@ import com.badlogic.gdx.Input
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
-import org.junit.Assert.*
 import org.junit.Test
 
 /**
@@ -12,14 +11,14 @@ import org.junit.Test
  * *
  * @since 2016-10-22
  */
-class InputPresenterImplTest {
+class InputPresenterBox2dImplTest {
     val carInputInteractor = mock<CarInputInteractor>()
     val input: Input = mock()
 
     @Test
     fun interactorValid_triggerEvents() {
         // Arrange
-        val presenter = InputPresenterImpl(input)
+        val presenter = InputPresenterBox2dImpl(input)
         presenter.carInputInteractor = this.carInputInteractor
 
         // Act
@@ -33,7 +32,7 @@ class InputPresenterImplTest {
     @Test
     fun carInputValid_steerNone() {
         // Arrange
-        val presenter = InputPresenterImpl(input)
+        val presenter = InputPresenterBox2dImpl(input)
 
         // Act
         presenter.render()

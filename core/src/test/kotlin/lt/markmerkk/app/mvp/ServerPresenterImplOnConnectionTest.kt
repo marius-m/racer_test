@@ -17,9 +17,7 @@ class ServerPresenterImplOnConnectionTest {
     val serverInteractor: ServerInteractor = mock()
     val presenter = ServerPresenterImpl(
             serverInteractor,
-            playerPresenterServer,
-            Schedulers.immediate(),
-            Schedulers.immediate()
+            playerPresenterServer
     )
 
     val players = mutableListOf<PlayerServer>()

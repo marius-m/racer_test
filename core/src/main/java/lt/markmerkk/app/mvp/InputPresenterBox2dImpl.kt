@@ -6,11 +6,14 @@ import com.badlogic.gdx.Input
  * @author mariusmerkevicius
  * @since 2016-10-21
  */
-class InputPresenterImpl(
+class InputPresenterBox2dImpl(
         private val input: Input
 ) : InputPresenter {
 
-    override var carInputInteractor: CarInputInteractor? = null
+    init {
+    }
+
+    var carInputInteractor: CarInputInteractor? = null
 
     override fun onAttach() {
     }

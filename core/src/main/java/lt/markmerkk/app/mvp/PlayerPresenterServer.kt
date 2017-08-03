@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.entities.PlayerServer
 
 /**
@@ -23,4 +24,10 @@ interface PlayerPresenterServer {
      * Returns all players
      */
     fun players(): List<PlayerServer>
+
+    /**
+     * Tries to move the player with input movement action
+     */
+    fun movePlayerWithMovement(connectionId: Int, movement: Movement)
+
 }

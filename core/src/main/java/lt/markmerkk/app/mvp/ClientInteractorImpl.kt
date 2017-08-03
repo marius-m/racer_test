@@ -3,8 +3,10 @@ package lt.markmerkk.app.mvp
 import com.esotericsoftware.kryonet.Connection
 import com.esotericsoftware.kryonet.Listener
 import lt.markmerkk.app.Const
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.network.GameClient
 import lt.markmerkk.app.network.Network
+import lt.markmerkk.app.network.events.EventPlayerMovement
 import lt.markmerkk.app.network.events.NetworkEvent
 import org.slf4j.LoggerFactory
 import java.net.InetAddress
@@ -55,6 +57,15 @@ class ClientInteractorImpl : ClientInteractor {
             if (eventObject !is NetworkEvent) return
             eventProvider.event(eventObject)
         }
+    }
+
+    //endregion
+
+    //region Sent Events
+
+    override fun sendMovementEventCode(movement: Movement) {
+        // todo : Provide proper client connection id
+        client.sendTCP(EventPlayerMovement(1, movement.toCode()))
     }
 
     //endregion

@@ -1,5 +1,6 @@
 package lt.markmerkk.app.mvp
 
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.mvp.interactors.NetworkEventProviderServerImpl
 import lt.markmerkk.app.mvp.interactors.ServerEventListener
 import lt.markmerkk.app.network.events.models.PlayerRegister
@@ -61,28 +62,8 @@ class ServerPresenterImpl(
                     }).apply { subscriptions.add(this) }
         }
 
-        override fun onForwardStart(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onForwardStop(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onLeftStart(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onLeftStop(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onRightStart(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-        }
-
-        override fun onRightStop(connectionId: Int) {
-            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        override fun onClientMovementEvent(connectionId: Int, movement: Movement) {
+            playerPresenterServer.movePlayerWithMovement(connectionId, movement)
         }
 
     }

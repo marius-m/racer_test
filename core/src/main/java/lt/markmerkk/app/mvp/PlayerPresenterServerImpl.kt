@@ -1,9 +1,10 @@
 package lt.markmerkk.app.mvp
 
 import com.badlogic.gdx.math.Vector2
-import com.badlogic.gdx.physics.box2d.World
 import lt.markmerkk.app.box2d.CarBox2DImpl
 import lt.markmerkk.app.box2d.CarImpl
+import lt.markmerkk.app.box2d.WorldProvider
+import lt.markmerkk.app.entities.Movement
 import lt.markmerkk.app.entities.PlayerServer
 import lt.markmerkk.app.entities.PlayerServerImpl
 import org.slf4j.LoggerFactory
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory
  * @since 2016-10-31
  */
 class PlayerPresenterServerImpl(
-        private val world: World,
+        private val worldProvider: WorldProvider,
         private val players: MutableList<PlayerServer>
 ) : PlayerPresenterServer {
 
@@ -30,7 +31,7 @@ class PlayerPresenterServerImpl(
         val playerServerImpl = PlayerServerImpl(
                 id = connectionId,
                 name = "Player " + playerCounter,
-                car = CarImpl(CarBox2DImpl(world, Vector2(2.0f, 5.0f)))
+                car = CarImpl(CarBox2DImpl(worldProvider.get(), Vector2(2.0f, 5.0f)))
         )
         players.add(playerServerImpl)
     }
@@ -44,6 +45,11 @@ class PlayerPresenterServerImpl(
 
     override fun players(): List<PlayerServer> {
         return players
+    }
+
+    override fun movePlayerWithMovement(connectionId: Int, movement: Movement) {
+        players.find { it.id == connectionId }
+                .let { it?.updateMovement(movement) }
     }
 
     companion object {

@@ -10,8 +10,6 @@ import lt.markmerkk.app.mvp.*
 import lt.markmerkk.app.mvp.painter.SpritesPresenter
 import lt.markmerkk.app.mvp.painter.SpritesPresenterImpl
 import lt.markmerkk.app.mvp.painter.SpritesView
-import rx.Scheduler
-import rx.schedulers.Schedulers
 
 /**
  * @author mariusmerkevicius
@@ -28,12 +26,13 @@ class GameScreen(
             SpriteBatch(),
             players
     )
+    private val clientInteractor: ClientInteractor = ClientInteractorImpl()
     private val clientPresenter: ClientPresenter = ClientPresenterImpl(
-            clientInteractor = ClientInteractorImpl(),
+            clientInteractor = clientInteractor,
             players = players
     )
 
-    private val inputPresenter: InputPresenter = InputPresenterImpl(Gdx.input)
+    private val inputPresenter: InputPresenter = InputPresenterToClientImpl(Gdx.input, clientInteractor)
 
     //region Callback methods
 

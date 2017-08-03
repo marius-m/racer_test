@@ -18,4 +18,10 @@ interface PlayerServer {
      * Destroys its physical body and releases memory
      */
     fun destroy()
+
+    /**
+     * Updates player movement
+     */
+    fun updateMovement(movement: Movement)
+
 }

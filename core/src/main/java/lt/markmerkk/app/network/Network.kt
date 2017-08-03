@@ -2,6 +2,7 @@ package lt.markmerkk.app.network
 
 import com.esotericsoftware.kryonet.EndPoint
 import lt.markmerkk.app.network.events.EventHello
+import lt.markmerkk.app.network.events.EventPlayerMovement
 import lt.markmerkk.app.network.events.EventPlayersRegister
 import lt.markmerkk.app.network.events.EventPlayersUpdate
 import lt.markmerkk.app.network.events.models.PlayerRegister
@@ -23,5 +24,6 @@ object Network {
         // Registering player
         kryo.register(EventPlayersRegister::class.java)
         kryo.register(PlayerRegister::class.java)
+        kryo.register(EventPlayerMovement::class.java)
     }
 }

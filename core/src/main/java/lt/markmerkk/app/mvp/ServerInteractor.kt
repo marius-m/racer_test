@@ -10,7 +10,5 @@ import lt.markmerkk.app.network.events.models.ReportPlayer
 interface ServerInteractor {
     fun start(eventProvider: NetworkEventProvider)
     fun stop()
-    fun sendPlayerUpdate(reportPlayers: List<ReportPlayer>)
-    fun sendPositionUpdate()
     fun sendPlayerRegister(registeredPlayers: List<PlayerRegister>)
 }

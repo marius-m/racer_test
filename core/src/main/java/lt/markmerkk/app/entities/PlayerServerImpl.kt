@@ -1,6 +1,7 @@
 package lt.markmerkk.app.entities
 
 import lt.markmerkk.app.box2d.Car
+import lt.markmerkk.app.box2d.CarBox2D
 
 /**
  * @author mariusmerkevicius
@@ -11,6 +12,14 @@ class PlayerServerImpl(
         override val name: String,
         private val car: Car
 ) : PlayerServer {
+
+    override fun updateMovement(movement: Movement) {
+        when (movement) {
+            Movement.FORWARD_START -> car.carBox2D.accelerate = CarBox2D.ACC_FORWARD
+            Movement.BACKWARD_START -> car.carBox2D.accelerate = CarBox2D.ACC_BACKWARD
+            else -> car.carBox2D.accelerate = CarBox2D.ACC_NONE
+        }
+    }
 
     override fun update(deltaTime: Float) {
         car.update(deltaTime)

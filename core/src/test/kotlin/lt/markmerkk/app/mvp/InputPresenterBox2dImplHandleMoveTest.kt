@@ -5,7 +5,6 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import org.junit.Assert.*
 import org.junit.Test
 
 /**
@@ -13,11 +12,11 @@ import org.junit.Test
  * *
  * @since 2016-10-22
  */
-class InputPresenterImplHandleMoveTest {
+class InputPresenterBox2dImplHandleMoveTest {
     val carInputInteractor = mock<CarInputInteractor>()
     val input: Input = mock()
-    val presenter = InputPresenterImpl(input).apply {
-        carInputInteractor = this@InputPresenterImplHandleMoveTest.carInputInteractor
+    val presenter = InputPresenterBox2dImpl(input).apply {
+        carInputInteractor = this@InputPresenterBox2dImplHandleMoveTest.carInputInteractor
     }
 
     @Test
