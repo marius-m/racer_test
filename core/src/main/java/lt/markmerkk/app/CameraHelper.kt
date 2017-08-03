@@ -3,6 +3,7 @@ package lt.markmerkk.app
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.math.Matrix4
+import org.slf4j.LoggerFactory
 
 /**
  * @author mariusmerkevicius
@@ -42,11 +43,30 @@ class CameraHelper(
         }
 
         camera.setToOrtho(false, viewportWidth.toFloat(), viewportHeight.toFloat())
+        logger.debug(String.format(
+                "Screen: virtualWidth: %d x %d",
+                virtualWidth,
+                virtualHeight
+        ))
+        logger.debug(String.format(
+                "Screen: screen: %d x %d",
+                screenWidth,
+                screenHeight
+        ))
+        logger.debug(String.format(
+                "Screen: view port: %d x %d",
+                viewportWidth,
+                viewportHeight
+        ))
     }
 
     fun update(x : Float, y : Float) {
         camera.position.set(x, y, 0f)
         camera.update()
+    }
+
+    companion object {
+        val logger = LoggerFactory.getLogger(CameraHelper::class.java)
     }
 
 }

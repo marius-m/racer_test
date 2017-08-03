@@ -64,13 +64,6 @@ class ClientPresenterImpl(
             for (positionFromRemote in playersPosition) {
                 val localPlayer = players.find { it.id == positionFromRemote.connectionId }
                 if (localPlayer == null) continue
-                logger.debug(
-                        String.format(
-                                "Update position: %f x %f",
-                                positionFromRemote.positionX,
-                                positionFromRemote.positionY
-                        )
-                )
                 localPlayer.update(
                         positionFromRemote.positionX,
                         positionFromRemote.positionY,
